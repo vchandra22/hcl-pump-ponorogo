@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Repositories\Homepage\HomepageRepository;
+use App\Repositories\Homepage\HomepageRepositoryInterface;
+use App\Repositories\Meta\MetaRepository;
+use App\Repositories\Meta\MetaRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(MetaRepositoryInterface::class, MetaRepository::class);
+        $this->app->bind(HomepageRepositoryInterface::class, HomepageRepository::class);
     }
 
     /**

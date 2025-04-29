@@ -3,13 +3,13 @@
 namespace App\Models\Meta;
 
 use App\Models\Homepage\HomepageModel;
-use App\Traits\Uuid;
+use App\Traits\InteractsWithUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class MetaModel extends Model
 {
-    use HasFactory, Uuid;
+    use HasFactory, InteractsWithUuid;
 
     protected $table = 'm_meta';
     protected $primaryKey = 'id';

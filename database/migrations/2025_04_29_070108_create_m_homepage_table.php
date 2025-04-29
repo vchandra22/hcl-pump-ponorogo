@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('title');
             $table->text('description');
-            $table->text('banner_image');
+            $table->text('banner_image')->nullable();
             $table->string('meta_id');
             $table->timestamps();
         });
