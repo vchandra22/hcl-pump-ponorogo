@@ -3,13 +3,13 @@
 namespace App\Models\Homepage;
 
 use App\Models\Meta\MetaModel;
-use App\Traits\Uuid;
+use App\Traits\InteractsWithUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class HomepageModel extends Model
 {
-    use HasFactory, Uuid;
+    use HasFactory, InteractsWithUuid;
 
     protected $table = 'm_homepage';
     protected $primaryKey = 'id';
