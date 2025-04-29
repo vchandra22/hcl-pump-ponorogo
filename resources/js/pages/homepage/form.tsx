@@ -29,7 +29,6 @@ interface HomepageFormProps {
 
 export default function HomepageForm({ homepage, errors }: HomepageFormProps) {
     const isEditMode = !!homepage?.id;
-
     // Define breadcrumbs based on whether we're editing or creating
     const breadcrumbs: BreadcrumbItem[] = [
         {

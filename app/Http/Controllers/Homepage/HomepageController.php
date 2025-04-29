@@ -26,7 +26,6 @@ class HomepageController extends Controller
     public function index()
     {
         $homepages = $this->homepageService->getAllHomepages();
-
         return Inertia::render('homepage/index', [
             'homepages' => $homepages
         ]);
@@ -73,11 +72,7 @@ class HomepageController extends Controller
      */
     public function show($id)
     {
-        $homepage = $this->homepageService->getHomepageWithMeta($id);
-
-        return Inertia::render('homepage/show', [
-            'homepage' => $homepage
-        ]);
+        //
     }
 
     /**
@@ -87,9 +82,19 @@ class HomepageController extends Controller
     {
         $homepage = $this->homepageService->getHomepageWithMeta($id);
 
-        return Inertia::render('homepage/form', [
-            'homepage' => $homepage
-        ]);
+        $data = [
+            'id' =>  $homepage->id,
+            'title' => $homepage->title,
+            'description' => $homepage->description,
+            'banner_image' =>  $homepage->banner_image,
+            'meta_title' => $homepage->meta->meta_title,
+            'meta_description' => $homepage->meta->meta_description, 
+            'meta_keywords' => $homepage->meta->meta_keywords,
+            'og_image' => $homepage->meta->og_image,
+            'image_alt' => $homepage->meta->image_alt
+        ];
+
+        return Inertia::render('homepage/form', ['homepage' => $data]);
     }
 
     /**

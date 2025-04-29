@@ -24,7 +24,7 @@ class HomepageService
 
     public function getHomepageWithMeta($id)
     {
-        return $this->homepageRepository->getWithMeta($id);
+        return $this->homepageRepository->find($id);
     }
 
     public function createHomepageWithMeta(array $data)
@@ -87,7 +87,7 @@ class HomepageService
             $this->homepageRepository->update($id, $homepageData);
 
             DB::commit();
-            return $this->homepageRepository->getWithMeta($id);
+            return $this->homepageRepository->find($id);
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;

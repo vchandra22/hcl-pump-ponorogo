@@ -1,30 +1,3 @@
-import { useState } from 'react';
-import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle
-} from '@/components/ui/card';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -33,10 +6,18 @@ import {
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
-    AlertDialogTitle
+    AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
+import { Head, Link, router } from '@inertiajs/react';
+import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
-import { MoreHorizontal, Plus, Pencil, Trash2, Eye } from 'lucide-react';
 
 // Define the Homepage interface
 interface Homepage {
@@ -79,7 +60,7 @@ export default function HomepageIndex({ homepages, message }: HomepageIndexProps
     // Show success message toast if available
     if (message) {
         toast({
-            title: "Notifikasi",
+            title: 'Notifikasi',
             description: message,
             duration: 3000,
         });
@@ -92,7 +73,7 @@ export default function HomepageIndex({ homepages, message }: HomepageIndexProps
 
     const handleDelete = () => {
         if (deleteId) {
-            router.delete(`/homepage/${deleteId}`, {
+            router.delete(`/homepage/${deleteId}/delete`, {
                 onSuccess: () => {
                     setIsDeleteDialogOpen(false);
                     setDeleteId(null);
@@ -108,20 +89,21 @@ export default function HomepageIndex({ homepages, message }: HomepageIndexProps
             <div className="flex h-full flex-1 flex-col gap-4 p-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold">Homepage Management</h1>
-                    <Button asChild>
+                    {homepages.length < 1 && (
+                     <Button asChild>
                         <Link href="/homepage/create">
                             <Plus className="mr-2 h-4 w-4" />
                             Tambah Homepage
                         </Link>
                     </Button>
+                       
+                    )}
                 </div>
 
                 <Card>
                     <CardHeader>
                         <CardTitle>Daftar Homepage</CardTitle>
-                        <CardDescription>
-                            Kelola semua homepage website Anda dari sini.
-                        </CardDescription>
+                        <CardDescription>Kelola semua homepage website Anda dari sini.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <Table>
@@ -152,12 +134,6 @@ export default function HomepageIndex({ homepages, message }: HomepageIndexProps
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent align="end">
                                                         <DropdownMenuItem asChild>
-                                                            <Link href={`/homepage/${homepage.id}`}>
-                                                                <Eye className="mr-2 h-4 w-4" />
-                                                                Lihat
-                                                            </Link>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem asChild>
                                                             <Link href={`/homepage/${homepage.id}/edit`}>
                                                                 <Pencil className="mr-2 h-4 w-4" />
                                                                 Edit
@@ -174,7 +150,7 @@ export default function HomepageIndex({ homepages, message }: HomepageIndexProps
                                     ))
                                 ) : (
                                     <TableRow>
-                                        <TableCell colSpan={5} className="text-center py-8">
+                                        <TableCell colSpan={5} className="py-8 text-center">
                                             Belum ada homepage yang dibuat.
                                         </TableCell>
                                     </TableRow>

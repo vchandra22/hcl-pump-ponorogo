@@ -3,6 +3,7 @@
 namespace App\Repositories\Homepage;
 
 use App\Models\Homepage\HomepageModel;
+use Illuminate\Database\Eloquent\Collection;
 
 class HomepageRepository implements HomepageRepositoryInterface
 {
@@ -13,14 +14,14 @@ class HomepageRepository implements HomepageRepositoryInterface
         $this->model = $model;
     }
 
-    public function all()
+    public function all(): Collection
     {
-        return $this->model->all();
+        return $this->model->with('meta')->get();
     }
 
     public function find($id)
     {
-        return $this->model->findOrFail($id);
+        return $this->model->with('meta')->findOrFail($id);
     }
 
     public function create(array $data)
@@ -38,10 +39,5 @@ class HomepageRepository implements HomepageRepositoryInterface
     public function delete($id)
     {
         return $this->model->findOrFail($id)->delete();
-    }
-
-    public function getWithMeta($id)
-    {
-        return $this->model->with('meta')->findOrFail($id);
     }
 }

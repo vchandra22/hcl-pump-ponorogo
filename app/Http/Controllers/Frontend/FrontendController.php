@@ -18,7 +18,7 @@ class FrontendController extends Controller
 
     public function home() {
         $homepages = $this->homepageService->getAllHomepages();
-
+        
         return Inertia::render('frontends/index', [
             'homepages' => $homepages
         ]);

@@ -19,7 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/store', [HomepageController::class, 'store'])->name('homepage.store');
         Route::get('/{id}/edit', [HomepageController::class, 'edit'])->name('homepage.edit');
         Route::put('/{id}/update', [HomepageController::class, 'update'])->name('homepage.update');
-        Route::get('/{id}/delete', [HomepageController::class, 'delete'])->name('homepage.delete');
+        Route::delete('/{id}/delete', [HomepageController::class, 'destroy'])->name('homepage.delete');
     });
 });
 
