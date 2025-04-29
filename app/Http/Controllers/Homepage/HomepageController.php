@@ -26,8 +26,10 @@ class HomepageController extends Controller
     public function index()
     {
         $homepages = $this->homepageService->getAllHomepages();
+
         return Inertia::render('homepage/index', [
-            'homepages' => $homepages
+            'homepages' => $homepages,
+            'status' => session('status'),
         ]);
     }
 
@@ -64,7 +66,7 @@ class HomepageController extends Controller
         $homepage = $this->homepageService->createHomepageWithMeta($request->all());
 
         return redirect()->route('homepage.index')
-            ->with('message', 'Homepage berhasil dibuat!');
+            ->with('status', 'Homepage berhasil dibuat!');
     }
 
     /**
@@ -88,13 +90,13 @@ class HomepageController extends Controller
             'description' => $homepage->description,
             'banner_image' =>  $homepage->banner_image,
             'meta_title' => $homepage->meta->meta_title,
-            'meta_description' => $homepage->meta->meta_description, 
+            'meta_description' => $homepage->meta->meta_description,
             'meta_keywords' => $homepage->meta->meta_keywords,
             'og_image' => $homepage->meta->og_image,
             'image_alt' => $homepage->meta->image_alt
         ];
 
-        return Inertia::render('homepage/form', ['homepage' => $data, 'message' =>'tes']);
+        return Inertia::render('homepage/form', ['homepage' => $data]);
     }
 
     /**
@@ -122,7 +124,7 @@ class HomepageController extends Controller
         $homepage = $this->homepageService->updateHomepageWithMeta($id, $request->all());
 
         return redirect()->route('homepage.index')
-            ->with('message', 'Homepage berhasil diperbarui!');
+            ->with('success', 'Homepage berhasil diperbarui!');
     }
 
     /**
@@ -133,6 +135,6 @@ class HomepageController extends Controller
         $this->homepageService->deleteHomepageWithMeta($id);
 
         return redirect()->route('homepage.index')
-            ->with('message', 'Homepage berhasil dihapus!');
+            ->with('status', 'Homepage berhasil dihapus!');
     }
 }

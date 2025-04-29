@@ -7,17 +7,19 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
+    AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { EmptyState } from '@/components/ui/empty-state';
+import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
-import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Toaster, toast } from 'sonner';
 
 // Define the Homepage interface
 interface Homepage {
@@ -37,9 +39,9 @@ interface Homepage {
 }
 
 // Define the props interface
-interface HomepageIndexProps {
+interface PageProps {
     homepages: Homepage[];
-    message?: string;
+    status?: string;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -53,131 +55,166 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function HomepageIndex({ homepages, message }: HomepageIndexProps) {
-    const [deleteId, setDeleteId] = useState<number | null>(null);
-    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+export default function HomepageIndex() {
+    const { homepages, status } = usePage<PageProps>().props;
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredHomepages, setFilteredHomepages] = useState<Homepage[]>(homepages);
 
     // Show success message toast if available
-
-    if (message) {
-        toast(message, {
-            description: 'otomatis hilang dalam 3 detik',
-            duration: 3000,
-        });
-        console.log('tes');
-    }
-
-    const confirmDelete = (id: number) => {
-        setDeleteId(id);
-        setIsDeleteDialogOpen(true);
-    };
-
-    const handleDelete = () => {
-        if (deleteId) {
-            router.delete(`/homepage/${deleteId}/delete`, {
-                onSuccess: () => {
-                    setIsDeleteDialogOpen(false);
-                    setDeleteId(null);
-                },
-            });
+    useEffect(() => {
+        if (status) {
+            toast.success(status);
         }
-    };
+    }, [status]);
+
+    // Filter homepages based on search term
+    useEffect(() => {
+        const results = homepages.filter(homepage =>
+            Object.values(homepage).some(
+                value =>
+                    value &&
+                    typeof value === 'string' &&
+                    value.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+        );
+        setFilteredHomepages(results);
+    }, [searchTerm, homepages]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Homepage Management" />
+            <Toaster position="bottom-right" richColors />
 
-            <div className="flex h-full flex-1 flex-col gap-4 p-4">
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold">Homepage Management</h1>
+                    <div>
+                        <h1 className="text-2xl font-bold">Homepage Management</h1>
+                    </div>
                     {homepages.length < 1 && (
                         <Button asChild>
                             <Link href="/homepage/create">
-                                <Plus className="mr-2 h-4 w-4" />
+                                <PlusIcon className="mr-2 h-4 w-4" />
                                 Tambah Homepage
                             </Link>
                         </Button>
                     )}
                 </div>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Daftar Homepage</CardTitle>
-                        <CardDescription>Kelola semua homepage website Anda dari sini.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Judul</TableHead>
-                                    <TableHead>Deskripsi</TableHead>
-                                    <TableHead>Tanggal Dibuat</TableHead>
-                                    <TableHead>Tanggal Diperbarui</TableHead>
-                                    <TableHead className="w-24 text-right">Aksi</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {homepages.length > 0 ? (
-                                    homepages.map((homepage) => (
+                <div className="w-full md:w-1/3">
+                    <Input
+                        type="text"
+                        placeholder="Cari homepage..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+
+                <div>
+                    {filteredHomepages.length === 0 ? (
+                        <EmptyState
+                            title={searchTerm ? "Homepage tidak ditemukan" : "Belum ada homepage"}
+                            description={searchTerm ?
+                                "Tidak ada homepage yang sesuai dengan pencarian Anda" :
+                                "Mulai dengan menambahkan homepage baru"}
+                            action={
+                                <Button asChild>
+                                    <Link href="/homepage/create">
+                                        <PlusIcon className="mr-2 h-4 w-4" />
+                                        Tambah Homepage
+                                    </Link>
+                                </Button>
+                            }
+                        />
+                    ) : (
+                        <div className="rounded-md border">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Judul</TableHead>
+                                        <TableHead>Deskripsi</TableHead>
+                                        <TableHead>Tanggal Dibuat</TableHead>
+                                        <TableHead>Tanggal Diperbarui</TableHead>
+                                        <TableHead>Status</TableHead>
+                                        <TableHead>Aksi</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {filteredHomepages.map((homepage) => (
                                         <TableRow key={homepage.id}>
                                             <TableCell className="font-medium">{homepage.title}</TableCell>
                                             <TableCell className="max-w-md truncate">{homepage.description}</TableCell>
-                                            <TableCell>{new Date(homepage.created_at).toLocaleDateString('id-ID')}</TableCell>
-                                            <TableCell>{new Date(homepage.updated_at).toLocaleDateString('id-ID')}</TableCell>
-                                            <TableCell className="text-right">
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="icon">
-                                                            <MoreHorizontal className="h-4 w-4" />
-                                                            <span className="sr-only">Buka menu</span>
+                                            <TableCell>
+                                                {new Date(homepage.created_at).toLocaleDateString('id-ID', {
+                                                    day: '2-digit',
+                                                    month: 'long',
+                                                    year: 'numeric'
+                                                })}
+                                            </TableCell>
+                                            <TableCell>
+                                                {new Date(homepage.updated_at).toLocaleDateString('id-ID', {
+                                                    day: '2-digit',
+                                                    month: 'long',
+                                                    year: 'numeric'
+                                                })}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Badge variant="default">
+                                                    Aktif
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell className="flex justify-start gap-2">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    asChild
+                                                    className="hover:bg-neutral-100"
+                                                >
+                                                    <Link href={`/homepage/${homepage.id}/edit`}>
+                                                        <PencilIcon className="h-4 w-4" />
+                                                    </Link>
+                                                </Button>
+
+                                                <AlertDialog>
+                                                    <AlertDialogTrigger asChild>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                                                        >
+                                                            <Trash2Icon className="h-4 w-4" />
                                                         </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
-                                                        <DropdownMenuItem asChild>
-                                                            <Link href={`/homepage/${homepage.id}/edit`}>
-                                                                <Pencil className="mr-2 h-4 w-4" />
-                                                                Edit
-                                                            </Link>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => confirmDelete(homepage.id)}>
-                                                            <Trash2 className="mr-2 h-4 w-4" />
-                                                            Hapus
-                                                        </DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
+                                                    </AlertDialogTrigger>
+                                                    <AlertDialogContent>
+                                                        <AlertDialogHeader>
+                                                            <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
+                                                            <AlertDialogDescription>
+                                                                Data homepage akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.
+                                                            </AlertDialogDescription>
+                                                        </AlertDialogHeader>
+                                                        <AlertDialogFooter>
+                                                            <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                            <AlertDialogAction asChild>
+                                                                <Link
+                                                                    href={`/homepage/${homepage.id}/delete`}
+                                                                    method="delete"
+                                                                    as="button"
+                                                                    preserveScroll
+                                                                >
+                                                                    Hapus
+                                                                </Link>
+                                                            </AlertDialogAction>
+                                                        </AlertDialogFooter>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
                                             </TableCell>
                                         </TableRow>
-                                    ))
-                                ) : (
-                                    <TableRow>
-                                        <TableCell colSpan={5} className="py-8 text-center">
-                                            Belum ada homepage yang dibuat.
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    )}
+                </div>
             </div>
-
-            {/* Delete Confirmation Dialog */}
-            <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Hapus Homepage</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Apakah Anda yakin ingin menghapus homepage ini? Tindakan ini tidak dapat dibatalkan.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Batal</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
-                            Hapus
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
         </AppLayout>
     );
 }
