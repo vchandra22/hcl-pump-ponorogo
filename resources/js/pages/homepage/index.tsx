@@ -58,12 +58,13 @@ export default function HomepageIndex({ homepages, message }: HomepageIndexProps
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     // Show success message toast if available
+
     if (message) {
-        toast({
-            title: 'Notifikasi',
-            description: message,
+        toast(message, {
+            description: 'otomatis hilang dalam 3 detik',
             duration: 3000,
         });
+        console.log('tes');
     }
 
     const confirmDelete = (id: number) => {
@@ -90,13 +91,12 @@ export default function HomepageIndex({ homepages, message }: HomepageIndexProps
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold">Homepage Management</h1>
                     {homepages.length < 1 && (
-                     <Button asChild>
-                        <Link href="/homepage/create">
-                            <Plus className="mr-2 h-4 w-4" />
-                            Tambah Homepage
-                        </Link>
-                    </Button>
-                       
+                        <Button asChild>
+                            <Link href="/homepage/create">
+                                <Plus className="mr-2 h-4 w-4" />
+                                Tambah Homepage
+                            </Link>
+                        </Button>
                     )}
                 </div>
 
