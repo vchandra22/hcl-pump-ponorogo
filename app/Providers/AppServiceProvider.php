@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\About\AboutRepository;
+use App\Repositories\About\AboutRepositoryInterface;
 use App\Repositories\Contact\ContactRepository;
 use App\Repositories\Contact\ContactRepositoryInterface;
 use App\Repositories\Homepage\HomepageRepository;
@@ -21,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(HomepageRepositoryInterface::class, HomepageRepository::class);
 
         $this->app->bind(ContactRepositoryInterface::class, ContactRepository::class);
+        $this->app->bind(AboutRepositoryInterface::class, AboutRepository::class);
     }
 
     /**
