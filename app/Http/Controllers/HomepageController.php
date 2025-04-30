@@ -122,7 +122,7 @@ class HomepageController extends Controller
         $homepage = $this->homepageService->updateHomepageWithMeta($id, $request->all());
 
         return redirect()->route('homepage.index')
-            ->with('success', 'Homepage berhasil diperbarui!');
+            ->with('status', 'Homepage berhasil diperbarui!');
     }
 
     /**
