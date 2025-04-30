@@ -21,7 +21,6 @@ import { PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'sonner';
 
-// Define the Homepage interface
 interface Homepage {
     id: number;
     title: string;
@@ -36,9 +35,9 @@ interface Homepage {
         og_image: string | null;
         image_alt: string | null;
     };
+    status: string;
 }
 
-// Define the props interface
 interface PageProps {
     homepages: Homepage[];
     status?: string;
@@ -60,14 +59,13 @@ export default function HomepageIndex() {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredHomepages, setFilteredHomepages] = useState<Homepage[]>(homepages);
 
-    // Show success message toast if available
     useEffect(() => {
         if (status) {
             toast.success(status);
         }
+
     }, [status]);
 
-    // Filter homepages based on search term
     useEffect(() => {
         const results = homepages.filter(homepage =>
             Object.values(homepage).some(
@@ -83,7 +81,7 @@ export default function HomepageIndex() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Homepage Management" />
-            <Toaster position="bottom-right" richColors />
+            <Toaster />
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">

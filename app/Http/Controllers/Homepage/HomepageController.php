@@ -65,8 +65,7 @@ class HomepageController extends Controller
 
         $homepage = $this->homepageService->createHomepageWithMeta($request->all());
 
-        return redirect()->route('homepage.index')
-            ->with('status', 'Homepage berhasil dibuat!');
+        return redirect()->route('homepage.index')->with('status', 'Homepage berhasil dibuat!');
     }
 
     /**
