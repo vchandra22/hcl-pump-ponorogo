@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('m_social_media', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->text('icon_social_media');
+            $table->text('icon_social_media')->nullable();
             $table->string('platform');
             $table->string('title');
             $table->text('social_media_link');

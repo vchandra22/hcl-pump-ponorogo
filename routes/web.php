@@ -4,6 +4,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\SocialMediaController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/{id}/update', [ContactController::class, 'update'])->name('contact.update');
         Route::delete('/{id}/delete', [ContactController::class, 'destroy'])->name('contact.delete');
     });
+
     Route::prefix('/about_us')->group(function () {
         Route::get('/', [AboutController::class, 'index'])->name('about.index');
         Route::get('/create', [AboutController::class, 'create'])->name('about.create');
@@ -39,6 +41,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{id}/edit', [AboutController::class, 'edit'])->name('about.edit');
         Route::put('/{id}/update', [AboutController::class, 'update'])->name('about.update');
         Route::delete('/{id}/delete', [AboutController::class, 'destroy'])->name('about.delete');
+    });
+
+    Route::prefix('/social-media')->group(function () {
+        Route::get('/', [SocialMediaController::class, 'index'])->name('social_media.index');
+        Route::get('/create', [SocialMediaController::class, 'create'])->name('social_media.create');
+        Route::post('/store', [SocialMediaController::class, 'store'])->name('social_media.store');
+        Route::get('/{id}/edit', [SocialMediaController::class, 'edit'])->name('social_media.edit');
+        Route::put('/{id}/update', [SocialMediaController::class, 'update'])->name('social_media.update');
+        Route::delete('/{id}/delete', [SocialMediaController::class, 'destroy'])->name('social_media.delete');
     });
 });
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories\Homepage;
+namespace App\Repositories\SocialMedia;
 
-interface HomepageRepositoryInterface
+interface SocialMediaRepositoryInterface
 {
     public function all();
     public function find($id);
