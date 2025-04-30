@@ -94,7 +94,9 @@ class HomepageController extends Controller
             'image_alt' => $homepage->meta->image_alt
         ];
 
-        return Inertia::render('homepage/form', ['homepage' => $data]);
+        return Inertia::render('homepage/form', [
+            'homepage' => $data
+        ]);
     }
 
     /**

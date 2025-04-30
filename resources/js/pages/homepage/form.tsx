@@ -5,7 +5,7 @@ import { useForm, Head, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import InputError from '@/components/input-error';
-import { ArrowLeft, Save, Image } from 'lucide-react';
+import { Image } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\HomepageController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{id}/edit', [HomepageController::class, 'edit'])->name('homepage.edit');
         Route::put('/{id}/update', [HomepageController::class, 'update'])->name('homepage.update');
         Route::delete('/{id}/delete', [HomepageController::class, 'destroy'])->name('homepage.delete');
+    });
+
+    Route::prefix('/contacts')->group(function () {
+        Route::get('/', [ContactController::class, 'index'])->name('contact.index');
+        Route::get('/create', [ContactController::class, 'create'])->name('contact.create');
+        Route::post('/store', [ContactController::class, 'store'])->name('contact.store');
+        Route::get('/{id}/edit', [ContactController::class, 'edit'])->name('contact.edit');
+        Route::put('/{id}/update', [ContactController::class, 'update'])->name('contact.update');
+        Route::delete('/{id}/delete', [ContactController::class, 'destroy'])->name('contact.delete');
     });
 });
 
