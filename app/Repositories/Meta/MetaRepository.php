@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Meta;
 
-use App\Models\Meta\MetaModel;
+use App\Models\MetaModel;
 
 class MetaRepository implements MetaRepositoryInterface
 {

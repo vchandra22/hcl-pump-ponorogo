@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Homepage;
 
-use App\Models\Homepage\HomepageModel;
+use App\Models\HomepageModel;
 use Illuminate\Database\Eloquent\Collection;
 
 class HomepageRepository implements HomepageRepositoryInterface

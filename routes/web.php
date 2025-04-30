@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Frontend\FrontendController;
-use App\Http\Controllers\Homepage\HomepageController;
+use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\HomepageController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 

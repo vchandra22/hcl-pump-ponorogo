@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Frontend;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Services\HomepageService;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class FrontendController extends Controller
@@ -18,7 +16,7 @@ class FrontendController extends Controller
 
     public function home() {
         $homepages = $this->homepageService->getAllHomepages();
-        
+
         return Inertia::render('frontends/index', [
             'homepages' => $homepages
         ]);

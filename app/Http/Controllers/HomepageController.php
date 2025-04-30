@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Homepage;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Services\HomepageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
-use App\Services\HomepageService;
 
 class HomepageController extends Controller
 {

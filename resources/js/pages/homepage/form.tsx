@@ -9,7 +9,6 @@ import { ArrowLeft, Save, Image } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-// Define the Homepage interface
 interface Homepage {
     id?: number;
     title: string;
@@ -29,7 +28,6 @@ interface HomepageFormProps {
 
 export default function HomepageForm({ homepage, errors }: HomepageFormProps) {
     const isEditMode = !!homepage?.id;
-    // Define breadcrumbs based on whether we're editing or creating
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
@@ -45,7 +43,6 @@ export default function HomepageForm({ homepage, errors }: HomepageFormProps) {
         },
     ];
 
-    // Set up form with default values
     const { data, setData, post, put, processing } = useForm<Homepage>({
         title: homepage?.title || '',
         description: homepage?.description || '',
@@ -57,7 +54,6 @@ export default function HomepageForm({ homepage, errors }: HomepageFormProps) {
         image_alt: homepage?.image_alt || null,
     });
 
-    // Handle form submission
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -75,18 +71,8 @@ export default function HomepageForm({ homepage, errors }: HomepageFormProps) {
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <Button variant="outline" size="icon" asChild>
-                            <Link href={route('homepage.index')}>
-                                <ArrowLeft className="h-4 w-4" />
-                            </Link>
-                        </Button>
                         <h1 className="text-2xl font-bold">{isEditMode ? 'Edit Homepage' : 'Tambah Homepage'}</h1>
                     </div>
-
-                    <Button type="submit" form="homepage-form">
-                        <Save className="mr-2 h-4 w-4" />
-                        Simpan
-                    </Button>
                 </div>
 
                 <div>

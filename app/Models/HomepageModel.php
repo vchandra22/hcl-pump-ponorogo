@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Models\Homepage;
+namespace App\Models;
 
-use App\Models\Meta\MetaModel;
 use App\Traits\InteractsWithUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
