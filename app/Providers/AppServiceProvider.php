@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\About\AboutRepository;
+use App\Repositories\About\AboutRepositoryInterface;
 use App\Repositories\Homepage\HomepageRepository;
 use App\Repositories\Homepage\HomepageRepositoryInterface;
 use App\Repositories\Meta\MetaRepository;
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(MetaRepositoryInterface::class, MetaRepository::class);
         $this->app->bind(HomepageRepositoryInterface::class, HomepageRepository::class);
+        $this->app->bind(AboutRepositoryInterface::class, AboutRepository::class);
     }
 
     /**

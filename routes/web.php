@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\HomepageController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{id}/edit', [HomepageController::class, 'edit'])->name('homepage.edit');
         Route::put('/{id}/update', [HomepageController::class, 'update'])->name('homepage.update');
         Route::delete('/{id}/delete', [HomepageController::class, 'destroy'])->name('homepage.delete');
+    });
+    Route::prefix('/about_us')->group(function () {
+        Route::get('/', [AboutController::class, 'index'])->name('about.index');
+        Route::get('/create', [AboutController::class, 'create'])->name('about.create');
+        Route::post('/store', [AboutController::class, 'store'])->name('about.store');
+        Route::get('/{id}/edit', [AboutController::class, 'edit'])->name('about.edit');
+        Route::put('/{id}/update', [AboutController::class, 'update'])->name('about.update');
+        Route::delete('/{id}/delete', [AboutController::class, 'destroy'])->name('about.delete');
     });
 });
 
