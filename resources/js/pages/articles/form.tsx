@@ -7,7 +7,7 @@ import { type BreadcrumbItem } from '@/types';
 import InputError from '@/components/input-error';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertCircle, Image as ImageIcon, Info, Upload } from 'lucide-react';
+import { AlertCircle, Image as ImageIcon, Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
@@ -48,7 +48,7 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
         },
     ];
 
-    const { data, setData, post, put, processing } = useForm<Article>({
+    const { data, setData, post, processing } = useForm<Article>({
         title: article?.title || '',
         summary: article?.summary || '',
         content: article?.content || '',

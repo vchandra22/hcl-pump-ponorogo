@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\SocialMedia\SocialMediaRepository;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class SocialMediaService
 {
@@ -28,6 +29,11 @@ class SocialMediaService
     {
         DB::beginTransaction();
         try {
+
+            if (isset($data['icon_social_media']) && is_object($data['icon_social_media']) && method_exists($data['icon_social_media'], 'isValid') && $data['icon_social_media']->isValid()) {
+                $data['icon_social_media'] = $data['icon_social_media']->store('social-media/icon', 'public');
+            }
+
             $socialMediaData = [
                 'icon_social_media' => $data['icon_social_media'],
                 'platform' => $data['platform'],
@@ -51,11 +57,22 @@ class SocialMediaService
         try {
             $socialMedia = $this->SocialMediaRepository->find($id);
 
+            if (isset($data['icon_social_media'])) {
+                if (is_object($data['icon_social_media']) && method_exists($data['icon_social_media'], 'isValid') && $data['icon_social_media']->isValid()) {
+                    if ($socialMedia->icon_social_media && Storage::disk('public')->exists($socialMedia->icon_social_media)) {
+                        Storage::disk('public')->delete($socialMedia->icon_social_media);
+                    }
+                    $data['icon_social_media'] = $data['icon_social_media']->store('social-media/icon', 'public');
+                }
+            } else {
+                $data['icon_social_media'] = $socialMedia->icon_social_media;
+            }
+
             $socialMediaData = [
-                'icon_social_media' => $data['icon_social_media'],
-                'platform' => $data['platform'],
-                'title' => $data['title'],
-                'social_media_link' => $data['social_media_link'],
+                'icon_social_media' => $data['icon_social_media'] ?? null,
+                'platform' => $data['platform'] ?? null,
+                'title' => $data['title'] ?? null,
+                'social_media_link' => $data['social_media_link'] ?? null,
             ];
 
             $this->SocialMediaRepository->update($id, $socialMediaData);

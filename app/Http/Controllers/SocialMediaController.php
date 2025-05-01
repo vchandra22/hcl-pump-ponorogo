@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\SocialMediaService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -55,7 +56,13 @@ class SocialMediaController extends Controller
                 ->withInput();
         }
 
-        $socialMedia = $this->socialMediaService->createSocialMedia($request->all());
+        $data = $request->only(['platform', 'title', 'social_media_link']);
+
+        if ($request->hasFile('icon_social_media')) {
+            $data['icon_social_media'] = $request->file('icon_social_media')->store('social-media', 'public');
+        }
+
+        $this->socialMediaService->createSocialMedia($data);
 
         return redirect()->route('social_media.index')->with('status', 'Social Media berhasil ditambahkan!');
     }
@@ -106,7 +113,27 @@ class SocialMediaController extends Controller
                 ->withInput();
         }
 
-        $socialMedia = $this->socialMediaService->updateSocialMedia($id, $request->all());
+        $socialMedia = $this->socialMediaService->getSocialMediaById($id);
+        $data = $request->only(['platform', 'title', 'social_media_link']);
+
+        // Handle icon_social_media
+        if ($request->hasFile('icon_social_media')) {
+            // Delete old image if exists
+            if ($socialMedia->icon_social_media && Storage::disk('public')->exists($socialMedia->icon_social_media)) {
+                Storage::disk('public')->delete($socialMedia->icon_social_media);
+            }
+            // Store new image
+            $data['icon_social_media'] = $request->file('icon_social_media')->store('social-media', 'public');
+        } elseif ($request->input('keep_image') === 'false') {
+            // Delete image if keep_image is false
+            if ($socialMedia->icon_social_media && Storage::disk('public')->exists($socialMedia->icon_social_media)) {
+                Storage::disk('public')->delete($socialMedia->icon_social_media);
+            }
+            $data['icon_social_media'] = null;
+        }
+        // If keep_image is true or not specified, don't update the image field
+
+        $this->socialMediaService->updateSocialMedia($id, $data);
 
         return redirect()->route('social_media.index')
             ->with('status', 'Social Media berhasil diupdate!');

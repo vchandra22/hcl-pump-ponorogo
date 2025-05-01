@@ -33,12 +33,10 @@ class ArticleService
     {
         DB::beginTransaction();
         try {
-            // Process og_image if it's a file upload
             if (isset($data['og_image']) && is_object($data['og_image']) && method_exists($data['og_image'], 'isValid') && $data['og_image']->isValid()) {
                 $data['og_image'] = $data['og_image']->store('articles/og', 'public');
             }
 
-            // Process image_article if it's a file upload
             if (isset($data['image_article']) && is_object($data['image_article']) && method_exists($data['image_article'], 'isValid') && $data['image_article']->isValid()) {
                 $data['image_article'] = $data['image_article']->store('articles/content', 'public');
             }
@@ -80,7 +78,6 @@ class ArticleService
 
             if (isset($data['og_image'])) {
                 if (is_object($data['og_image']) && method_exists($data['og_image'], 'isValid') && $data['og_image']->isValid()) {
-                    // Hapus og_image lama jika ada
                     if ($article->meta->og_image && Storage::disk('public')->exists($article->meta->og_image)) {
                         Storage::disk('public')->delete($article->meta->og_image);
                     }
@@ -90,7 +87,6 @@ class ArticleService
                 $data['og_image'] = $article->meta->og_image;
             }
 
-            // Process image_article if it's a file upload - sama seperti di create
             if (isset($data['image_article'])) {
                 if (is_object($data['image_article']) && method_exists($data['image_article'], 'isValid') && $data['image_article']->isValid()) {
                     // Hapus image_article lama jika ada

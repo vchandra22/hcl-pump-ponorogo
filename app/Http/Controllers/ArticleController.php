@@ -64,12 +64,10 @@ class ArticleController extends Controller
 
         $data = $request->all();
 
-        // Upload image_article
         if ($request->hasFile('image_article')) {
             $data['image_article'] = $request->file('image_article')->store('articles', 'public');
         }
 
-        // Upload og_image jika ada
         if ($request->hasFile('og_image')) {
             $data['og_image'] = $request->file('og_image')->store('og-images', 'public');
         }
@@ -144,31 +142,25 @@ class ArticleController extends Controller
 
         // Handle image_article
         if ($request->hasFile('image_article')) {
-            // Delete old image if exists
             if ($article->image_article && Storage::disk('public')->exists($article->image_article)) {
                 Storage::disk('public')->delete($article->image_article);
             }
             $data['image_article'] = $request->file('image_article')->store('articles/content', 'public');
         } elseif ($request->input('keep_image') === 'true') {
-            // Keep existing image
             $data['image_article'] = $article->image_article;
         } else {
-            // No image provided and not keeping existing - set to null
             $data['image_article'] = null;
         }
 
         // Handle og_image
         if ($request->hasFile('og_image')) {
-            // Delete old og image if exists
             if ($article->meta->og_image && Storage::disk('public')->exists($article->meta->og_image)) {
                 Storage::disk('public')->delete($article->meta->og_image);
             }
             $data['og_image'] = $request->file('og_image')->store('articles/og', 'public');
         } elseif ($request->input('keep_og_image') === 'true') {
-            // Keep existing og image
             $data['og_image'] = $article->meta->og_image;
         } else {
-            // No og image provided and not keeping existing - set to null
             $data['og_image'] = null;
         }
 
