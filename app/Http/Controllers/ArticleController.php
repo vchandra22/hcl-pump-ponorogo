@@ -98,11 +98,11 @@ class ArticleController extends Controller
             'summary' => $article->summary,
             'content' => $article->content,
             'image_article' => $article->image_article,
-            'meta_title' => $article->meta_title,
-            'meta_description' => $article->meta_description,
-            'meta_keywords' => $article->meta_keywords,
-            'og_image' => $article->og_image,
-            'image_alt' => $article->image_alt,
+            'meta_title' => $article->meta->meta_title,
+            'meta_description' => $article->meta->meta_description,
+            'meta_keywords' => $article->meta->meta_keywords,
+            'og_image' => $article->meta->og_image,
+            'image_alt' => $article->meta->image_alt,
         ];
 
         return Inertia::render('articles/form', [
@@ -165,7 +165,7 @@ class ArticleController extends Controller
         }
 
         // Update article
-        $article = $this->articleService->updateArticleWithMeta($id, $data);
+        $this->articleService->updateArticleWithMeta($id, $data);
 
         return redirect()->route('articles.index')
             ->with('status', 'Artikel berhasil diubah!');

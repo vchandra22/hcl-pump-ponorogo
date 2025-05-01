@@ -89,7 +89,6 @@ class ArticleService
 
             if (isset($data['image_article'])) {
                 if (is_object($data['image_article']) && method_exists($data['image_article'], 'isValid') && $data['image_article']->isValid()) {
-                    // Hapus image_article lama jika ada
                     if ($article->image_article && Storage::disk('public')->exists($article->image_article)) {
                         Storage::disk('public')->delete($article->image_article);
                     }

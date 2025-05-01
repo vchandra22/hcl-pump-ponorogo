@@ -130,7 +130,6 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
             setData(field, file);
             setData(`keep_${field}` as any, 'false');
 
-            // Create preview URL
             const previewUrl = URL.createObjectURL(file);
             setData(`${field}_url` as any, previewUrl);
         }
@@ -146,10 +145,10 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
         const url = data[`${field}_url`];
         const hasFile = data[field] instanceof File;
 
-        if (data[field] === null) {
+        if (!url && data[`keep_${field}`] === 'false') {
             return (
                 <div className="mt-2 p-4 border rounded-md bg-gray-50 text-center">
-                    <p className="text-sm text-gray-500">Gambar akan dihapus</p>
+                    <p className="text-sm text-gray-500">Tidak ada gambar</p>
                 </div>
             );
         }
@@ -172,7 +171,7 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
             );
         }
 
-        if (!hasFile && url && isEditMode) {
+        if (url && isEditMode) {
             return (
                 <div className="mt-2">
                     <div className="relative rounded-md border overflow-hidden max-w-lg">
@@ -422,6 +421,7 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
                                             'Gambar Open Graph',
                                             'Gambar yang ditampilkan saat dibagikan di media sosial'
                                         )}
+
                                     </div>
                                 </TabsContent>
 

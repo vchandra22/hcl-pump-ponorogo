@@ -76,7 +76,7 @@ export default function SocialMediaForm({ social_media, errors }: SocialMediaFor
         if (data.icon_social_media === null) {
             return (
                 <div className="mt-2 p-4 border rounded-md bg-gray-50 text-center">
-                    <p className="text-sm text-gray-500">Gambar akan dihapus</p>
+                    <p className="text-sm text-gray-500">Tidak ada gambar</p>
                 </div>
             );
         }
