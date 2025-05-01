@@ -30,7 +30,7 @@ class MetaModel extends Model
 
     public function article()
     {
-        return $this->belongsTo(ArticleModel::class, 'id', 'meta_id');
+        return $this->belongsTo(ArticleModel::class);
     }
 
     public function contact()

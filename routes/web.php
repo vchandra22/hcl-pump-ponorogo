@@ -49,7 +49,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', [SocialMediaController::class, 'create'])->name('social_media.create');
         Route::post('/store', [SocialMediaController::class, 'store'])->name('social_media.store');
         Route::get('/{id}/edit', [SocialMediaController::class, 'edit'])->name('social_media.edit');
-        Route::put('/{id}/update', [SocialMediaController::class, 'update'])->name('social_media.update');
+        Route::post('/{id}/update', [SocialMediaController::class, 'update'])->name('social_media.update');
         Route::delete('/{id}/delete', [SocialMediaController::class, 'destroy'])->name('social_media.delete');
     });
 
@@ -58,7 +58,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', [ArticleController::class, 'create'])->name('articles.create');
         Route::post('/store', [ArticleController::class, 'store'])->name('articles.store');
         Route::get('/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
-        Route::put('/{id}/update', [ArticleController::class, 'update'])->name('articles.update');
+        Route::post('/{id}/update', [ArticleController::class, 'update'])->name('articles.update');
         Route::delete('/{id}/delete', [ArticleController::class, 'destroy'])->name('articles.delete');
     });
 });

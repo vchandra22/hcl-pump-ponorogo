@@ -5,22 +5,25 @@ import { useForm, Head, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import InputError from '@/components/input-error';
-import { Image } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AlertCircle, Image as ImageIcon, Info, Upload } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 interface Article {
     id?: number;
     title: string;
     summary: string;
     content: string;
-    image_article: string | null;
-    author: string;
-    meta_title: string | null;
-    meta_description: string | null;
-    meta_keywords: string | null;
-    og_image: string | null;
-    image_alt: string | null;
+    image_article?: File | null;
+    image_article_url?: string | null;
+    og_image?: File | null;
+    og_image_url?: string | null;
+    meta_title?: string;
+    meta_description?: string;
+    meta_keywords?: string;
+    image_alt?: string;
 }
 
 interface ArticleFormProps {
@@ -49,26 +52,179 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
         title: article?.title || '',
         summary: article?.summary || '',
         content: article?.content || '',
-        image_article: article?.image_article || null,
-        author: article?.author || '',
-        meta_title: article?.meta_title || null,
-        meta_description: article?.meta_description || null,
-        meta_keywords: article?.meta_keywords || null,
-        og_image: article?.og_image || null,
-        image_alt: article?.image_alt || null,
+        image_article: null,
+        image_article_url: article?.image_article_url || null,
+        og_image: null,
+        og_image_url: article?.og_image_url || null,
+        meta_title: article?.meta_title || '',
+        meta_description: article?.meta_description || '',
+        meta_keywords: article?.meta_keywords || '',
+        image_alt: article?.image_alt || '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (!data.title.trim() || !data.summary.trim() || !data.content.trim()) {
+            alert('Please fill in all required fields');
+            return;
+        }
+
+        const formData = new FormData();
+        Object.entries(data).forEach(([key, value]) => {
+            if (value !== null && value !== undefined && !key.endsWith('_url')) {
+                formData.append(key, value instanceof File ? value : String(value));
+            }
+        });
+
         if (isEditMode) {
-            put(route('articles.update', article.id));
+            post(route('articles.update', article.id), {
+                data: formData,
+                forceFormData: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    setData({
+                        ...data,
+                        image_article: null,
+                        og_image: null,
+                    });
+                },
+            });
         } else {
-            post(route('articles.store'));
+            post(route('articles.store'), {
+                data: formData,
+                forceFormData: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    setData({
+                        title: '',
+                        summary: '',
+                        content: '',
+                        image_article: null,
+                        og_image: null,
+                        image_article_url: null,
+                        og_image_url: null,
+                        meta_title: '',
+                        meta_description: '',
+                        meta_keywords: '',
+                        image_alt: '',
+                    });
+                },
+            });
         }
     };
 
+    const handleImageChange = (field: 'Dolores et commodo vimage_article' | 'og_image', e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0] || null;
+        if (file) {
+            setData(field, file);
 
+            // Create preview URL
+            const previewUrl = URL.createObjectURL(file);
+            setData(`${field}_url` as any, previewUrl);
+        }
+    };
+
+    const renderImagePreview = (field: 'image_article' | 'og_image') => {
+        const url = data[`${field}_url`];
+        const hasFile = data[field] instanceof File;
+
+        // Jika ada file baru yang diupload, tampilkan preview
+        if (hasFile && url) {
+            return (
+                <div className="mt-2">
+                    <div className="relative rounded-md border overflow-hidden max-w-lg">
+                        <img
+                            src={url}
+                            alt={`${field} preview`}
+                            className="w-full h-auto max-h-72 object-cover"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 truncate">
+                            {data[field]?.name || 'Preview'}
+                        </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Preview gambar baru</p>
+                </div>
+            );
+        }
+
+        // Jika tidak ada file baru tapi ada URL gambar dari database (mode edit)
+        if (!hasFile && url && isEditMode) {
+            return (
+                <div className="mt-2">
+                    <div className="relative rounded-md border overflow-hidden max-w-lg">
+                        <img
+                            src={url}
+                            alt={`Current ${field}`}
+                            className="w-full h-auto max-h-72 object-cover"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 truncate">
+                            Gambar saat ini
+                        </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Gambar yang tersimpan</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
+    const renderImageUpload = (
+        field: 'image_article' | 'og_image',
+        label: string,
+        description: string,
+        accept = 'image/*'
+    ) => {
+        const error = errors?.[field];
+
+        return (
+            <div className="space-y-2">
+                <Label htmlFor={field} className="flex items-center gap-2">
+                    {label}
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Info className="h-4 w-4 text-muted-foreground" />
+                            </TooltipTrigger>
+                            <TooltipContent className="max-w-sm">
+                                <p>{description}</p>
+                                <p className="text-xs mt-1">Format yang didukung: JPEG, PNG, JPG, WEBP. Maksimal 2MB.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </Label>
+
+                <div className="flex gap-2">
+                    <div className="flex-1">
+                        <Input
+                            type="file"
+                            id={field}
+                            onChange={(e) => handleImageChange(field, e)}
+                            accept={accept}
+                            className={cn(error && "border-destructive")}
+                        />
+                    </div>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => document.getElementById(field)?.click()}
+                    >
+                        <ImageIcon className="mr-2 h-4 w-4" />
+                        {data[`${field}_url`] ? 'Ganti' : 'Upload'}
+                    </Button>
+                </div>
+
+                <InputError message={error} />
+
+                {renderImagePreview(field)}
+
+                <span className="text-xs text-gray-400">
+                    {isEditMode ? 'Biarkan kosong untuk mempertahankan gambar saat ini' : description}
+                </span>
+            </div>
+        );
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -77,183 +233,181 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <h1 className="text-2xl font-bold">{isEditMode ? 'Edit Artikel' : 'Tambah Artikel'}</h1>
+                        <h1 className="text-2xl font-bold">{isEditMode ? 'Edit Artikel' : 'Tambah Artikel Baru'}</h1>
                     </div>
                 </div>
 
-                <div>
-                    <Tabs defaultValue="content" className="w-full">
-                        <TabsList className="grid w-full grid-cols-2">
-                            <TabsTrigger value="content">Konten</TabsTrigger>
-                            <TabsTrigger value="seo">SEO & Meta</TabsTrigger>
-                        </TabsList>
+                <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+                    <div>
+                        <Tabs defaultValue="content" className="w-full">
+                            <TabsList className="grid w-full grid-cols-2 mb-6">
+                                <TabsTrigger value="content">Konten</TabsTrigger>
+                                <TabsTrigger value="seo">SEO & Meta</TabsTrigger>
+                            </TabsList>
 
-                        <form id="article-form" onSubmit={handleSubmit} className="space-y-6 mt-6">
-                            <TabsContent value="content">
-                                <div className="grid grid-cols-1 gap-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="title">Judul Artikel *</Label>
-                                        <Input
-                                            id="title"
-                                            value={data.title}
-                                            onChange={(e) => setData('title', e.target.value)}
-                                            placeholder="Masukkan judul artikel"
-                                        />
-                                        <InputError message={errors?.title} />
-                                    </div>
+                            <form onSubmit={handleSubmit} className="space-y-8">
+                                <TabsContent value="content">
+                                    <div className="grid grid-cols-1 gap-6">
+                                        <div className="space-y-6">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="title">
+                                                    Judul Artikel <span className="text-destructive">*</span>
+                                                </Label>
+                                                <Input
+                                                    id="title"
+                                                    value={data.title}
+                                                    onChange={(e) => setData('title', e.target.value)}
+                                                    className={cn(errors?.title && "border-destructive")}
+                                                    required
+                                                />
+                                                <InputError message={errors?.title} />
+                                                <p className="text-sm text-muted-foreground">
+                                                    Judul utama artikel Anda (maksimal 255 karakter)
+                                                </p>
+                                            </div>
 
-                                    <div className="space-y-2">
-                                        <Label htmlFor="author">Penulis *</Label>
-                                        <Input
-                                            id="author"
-                                            value={data.author}
-                                            onChange={(e) => setData('author', e.target.value)}
-                                            placeholder="Nama penulis artikel"
-                                        />
-                                        <InputError message={errors?.author} />
-                                    </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="summary">
+                                                    Ringkasan <span className="text-destructive">*</span>
+                                                </Label>
+                                                <Textarea
+                                                    id="summary"
+                                                    value={data.summary}
+                                                    onChange={(e) => setData('summary', e.target.value)}
+                                                    className={cn(errors?.summary && "border-destructive")}
+                                                    rows={3}
+                                                    required
+                                                />
+                                                <InputError message={errors?.summary} />
+                                                <p className="text-sm text-muted-foreground">
+                                                    Ringkasan singkat yang muncul di daftar artikel
+                                                </p>
+                                            </div>
 
-                                    <div className="space-y-2">
-                                        <Label htmlFor="summary">Ringkasan Artikel *</Label>
-                                        <Textarea
-                                            id="summary"
-                                            value={data.summary}
-                                            onChange={(e) => setData('summary', e.target.value)}
-                                            placeholder="Ringkasan singkat artikel yang akan ditampilkan di daftar artikel"
-                                            rows={3}
-                                        />
-                                        <InputError message={errors?.summary} />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="content">Konten Artikel *</Label>
-                                        <Textarea
-                                            id="content"
-                                            value={data.content}
-                                            onChange={(e) => setData('content', e.target.value)}
-                                            placeholder="Tulis konten artikel lengkap di sini..."
-                                            rows={10}
-                                            className="min-h-[200px]"
-                                        />
-                                        <InputError message={errors?.content} />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="image_article">Gambar Artikel *</Label>
-                                        <div className="flex gap-2">
-                                            <Input
-                                                id="image_article"
-                                                value={data.image_article || ''}
-                                                onChange={(e) => setData('image_article', e.target.value)}
-                                                placeholder="URL gambar artikel"
-                                                className="flex-1"
-                                            />
-                                            <Button type="button" variant="outline">
-                                                <Image className="mr-2 h-4 w-4" />
-                                                Upload
-                                            </Button>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="content">
+                                                    Konten <span className="text-destructive">*</span>
+                                                </Label>
+                                                <Textarea
+                                                    id="content"
+                                                    value={data.content}
+                                                    onChange={(e) => setData('content', e.target.value)}
+                                                    className={cn(errors?.content && "border-destructive")}
+                                                    rows={8}
+                                                    required
+                                                />
+                                                <InputError message={errors?.content} />
+                                                <p className="text-sm text-muted-foreground">
+                                                    Konten lengkap artikel Anda
+                                                </p>
+                                            </div>
                                         </div>
-                                        <InputError message={errors?.image_article} />
-                                        <span className="text-xs text-gray-400">
-                                            Gambar utama yang akan ditampilkan di artikel
-                                        </span>
-                                    </div>
-                                </div>
-                            </TabsContent>
 
-                            <TabsContent value="seo">
-                                <div className="grid grid-cols-1 gap-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="meta_title">Meta Title</Label>
-                                        <Input
-                                            id="meta_title"
-                                            value={data.meta_title || ''}
-                                            onChange={(e) => setData('meta_title', e.target.value)}
-                                            placeholder="Meta title untuk SEO"
-                                        />
-                                        <InputError message={errors?.meta_title} />
-                                        <span className="text-xs text-gray-400">
-                                            Judul yang akan muncul di hasil pencarian (50-60 karakter). Jika kosong, akan menggunakan judul artikel.
-                                        </span>
-                                    </div>
+                                        {renderImageUpload(
+                                            'image_article',
+                                            'Gambar Utama',
+                                            'Gambar utama untuk artikel'
+                                        )}
 
-                                    <div className="space-y-2">
-                                        <Label htmlFor="meta_description">Meta Description</Label>
-                                        <Textarea
-                                            id="meta_description"
-                                            value={data.meta_description || ''}
-                                            onChange={(e) => setData('meta_description', e.target.value)}
-                                            placeholder="Deskripsi untuk SEO"
-                                            rows={3}
-                                        />
-                                        <InputError message={errors?.meta_description} />
-                                        <span className="text-xs text-gray-400">
-                                            Deskripsi yang akan muncul di hasil pencarian (120-160 karakter). Jika kosong, akan menggunakan ringkasan artikel.
-                                        </span>
+                                        {errors && Object.keys(errors).some(key => !['title', 'summary', 'content', 'image_article'].includes(key)) && (
+                                            <div className="bg-destructive/10 p-3 rounded-md flex items-start gap-2">
+                                                <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
+                                                <div>
+                                                    <p className="font-medium text-destructive">Harap perbaiki kesalahan di kedua tab sebelum mengirim</p>
+                                                    <p className="text-sm text-muted-foreground">Terdapat kesalahan validasi di tab SEO & Meta</p>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
+                                </TabsContent>
 
-                                    <div className="space-y-2">
-                                        <Label htmlFor="meta_keywords">Meta Keywords</Label>
-                                        <Input
-                                            id="meta_keywords"
-                                            value={data.meta_keywords || ''}
-                                            onChange={(e) => setData('meta_keywords', e.target.value)}
-                                            placeholder="Kata kunci (dipisahkan dengan koma)"
-                                        />
-                                        <InputError message={errors?.meta_keywords} />
-                                    </div>
+                                <TabsContent value="seo">
+                                    <div className="grid grid-cols-1 gap-6">
+                                        <div className="space-y-6">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="meta_title">Judul Meta</Label>
+                                                <Input
+                                                    id="meta_title"
+                                                    value={data.meta_title || ''}
+                                                    onChange={(e) => setData('meta_title', e.target.value)}
+                                                    className={cn(errors?.meta_title && "border-destructive")}
+                                                />
+                                                <InputError message={errors?.meta_title} />
+                                                <p className="text-sm text-muted-foreground">
+                                                    Judul untuk mesin pencari (biarkan kosong untuk menggunakan judul artikel)
+                                                </p>
+                                            </div>
 
-                                    <div className="space-y-2">
-                                        <Label htmlFor="og_image">Open Graph Image URL</Label>
-                                        <div className="flex gap-2">
-                                            <Input
-                                                id="og_image"
-                                                value={data.og_image || ''}
-                                                onChange={(e) => setData('og_image', e.target.value)}
-                                                placeholder="URL gambar untuk social sharing"
-                                                className="flex-1"
-                                            />
-                                            <Button type="button" variant="outline">
-                                                <Image className="mr-2 h-4 w-4" />
-                                                Upload
-                                            </Button>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="meta_description">Deskripsi Meta</Label>
+                                                <Textarea
+                                                    id="meta_description"
+                                                    value={data.meta_description || ''}
+                                                    onChange={(e) => setData('meta_description', e.target.value)}
+                                                    className={cn(errors?.meta_description && "border-destructive")}
+                                                    rows={3}
+                                                />
+                                                <InputError message={errors?.meta_description} />
+                                                <p className="text-sm text-muted-foreground">
+                                                    Deskripsi untuk mesin pencari (panjang optimal: 150-160 karakter)
+                                                </p>
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <Label htmlFor="meta_keywords">Kata Kunci Meta</Label>
+                                                <Input
+                                                    id="meta_keywords"
+                                                    value={data.meta_keywords || ''}
+                                                    onChange={(e) => setData('meta_keywords', e.target.value)}
+                                                    className={cn(errors?.meta_keywords && "border-destructive")}
+                                                />
+                                                <InputError message={errors?.meta_keywords} />
+                                                <p className="text-sm text-muted-foreground">
+                                                    Kata kunci untuk SEO yang dipisahkan dengan koma
+                                                </p>
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <Label htmlFor="image_alt">Teks Alt Gambar</Label>
+                                                <Input
+                                                    id="image_alt"
+                                                    value={data.image_alt || ''}
+                                                    onChange={(e) => setData('image_alt', e.target.value)}
+                                                    className={cn(errors?.image_alt && "border-destructive")}
+                                                />
+                                                <InputError message={errors?.image_alt} />
+                                                <p className="text-sm text-muted-foreground">
+                                                    Teks deskriptif untuk aksesibilitas dan SEO
+                                                </p>
+                                            </div>
                                         </div>
-                                        <InputError message={errors?.og_image} />
-                                        <span className="text-xs text-gray-400">
-                                            Gambar yang ditampilkan saat artikel dibagikan di media sosial. Jika kosong, akan menggunakan gambar artikel utama.
-                                        </span>
-                                    </div>
 
-                                    <div className="space-y-2">
-                                        <Label htmlFor="image_alt">Image Alt Text</Label>
-                                        <Input
-                                            id="image_alt"
-                                            value={data.image_alt || ''}
-                                            onChange={(e) => setData('image_alt', e.target.value)}
-                                            placeholder="Teks alternatif untuk gambar"
-                                        />
-                                        <InputError message={errors?.image_alt} />
-                                        <span className="text-xs text-gray-400">
-                                            Teks alternatif untuk aksesibilitas dan SEO.
-                                        </span>
+                                        {renderImageUpload(
+                                            'og_image',
+                                            'Gambar Open Graph',
+                                            'Gambar yang ditampilkan saat dibagikan di media sosial'
+                                        )}
                                     </div>
+                                </TabsContent>
+
+                                <div className="flex justify-end gap-2 pt-6">
+                                    <Button
+                                        variant="outline"
+                                        type="button"
+                                        asChild
+                                    >
+                                        <Link href={route('articles.index')}>Batal</Link>
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        disabled={processing}
+                                    >
+                                        {processing ? 'Menyimpan...' : isEditMode ? 'Perbarui' : 'Simpan'}
+                                    </Button>
                                 </div>
-                            </TabsContent>
-
-                            <div className="flex justify-end gap-2 pt-6">
-                                <Button
-                                    variant="outline"
-                                    type="button"
-                                    asChild
-                                >
-                                    <Link href={route('articles.index')}>Batal</Link>
-                                </Button>
-                                <Button type="submit" disabled={processing}>
-                                    {processing ? 'Menyimpan...' : 'Simpan'}
-                                </Button>
-                            </div>
-                        </form>
-                    </Tabs>
+                            </form>
+                        </Tabs>
+                    </div>
                 </div>
             </div>
         </AppLayout>

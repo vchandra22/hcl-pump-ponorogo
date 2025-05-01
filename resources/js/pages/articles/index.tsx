@@ -16,7 +16,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
+import { ImageOff, PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
@@ -127,11 +127,17 @@ export default function ArticlesIndex() {
                                     {filteredArticles.map((article) => (
                                         <TableRow key={article.id}>
                                             <TableCell>
-                                                <img
-                                                    src={article.image_article}
-                                                    alt={article.image_alt || article.title}
-                                                    className="h-16 w-24 object-cover rounded-md"
-                                                />
+                                                {article.image_article ? (
+                                                    <img
+                                                        src={`/storage/${article.image_article}`}
+                                                        alt={article.image_alt || article.title}
+                                                        className="h-16 w-24 object-cover rounded-md"
+                                                    />
+                                                ) : (
+                                                    <div className="flex items-center justify-center h-16 w-24">
+                                                        <ImageOff className="text-gray-400 h-8 w-8" />
+                                                    </div>
+                                                )}
                                             </TableCell>
                                             <TableCell>
                                                 <div className="font-medium">{article.title}</div>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Services\ArticleService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -43,15 +45,14 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required||max:255',
+            'title' => 'required|max:255',
             'summary' => 'required',
             'content' => 'required',
-            'image_article' => 'required',
-            'author' => 'required',
+            'image_article' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string',
-            'og_image' => 'nullable|string',
             'image_alt' => 'nullable|string',
         ]);
 
@@ -61,7 +62,19 @@ class ArticleController extends Controller
                 ->withInput();
         }
 
-        $article = $this->articleService->createArticleWithMeta($request->all());
+        $data = $request->all();
+
+        // Upload image_article
+        if ($request->hasFile('image_article')) {
+            $data['image_article'] = $request->file('image_article')->store('articles', 'public');
+        }
+
+        // Upload og_image jika ada
+        if ($request->hasFile('og_image')) {
+            $data['og_image'] = $request->file('og_image')->store('og-images', 'public');
+        }
+
+        $this->articleService->createArticleWithMeta($data);
 
         return redirect()->route('articles.index')->with('status', 'Artikel berhasil ditambahkan!');
     }
@@ -86,7 +99,6 @@ class ArticleController extends Controller
             'title' => $article->title,
             'summary' => $article->summary,
             'content' => $article->content,
-            'author' => $article->author,
             'image_article' => $article->image_article,
             'meta_title' => $article->meta_title,
             'meta_description' => $article->meta_description,
@@ -106,15 +118,14 @@ class ArticleController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required||max:255',
-            'summary' => 'required',
-            'content' => 'required',
-            'image_article' => 'required',
-            'author' => 'required',
+            'title' => 'required|string|max:255',
+            'summary' => 'required|string',
+            'content' => 'required|string',
+            'image_article' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string',
-            'og_image' => 'nullable|string',
             'image_alt' => 'nullable|string',
         ]);
 
@@ -124,7 +135,45 @@ class ArticleController extends Controller
                 ->withInput();
         }
 
-        $article = $this->articleService->updateArticleWithMeta($id, $request->all());
+        $article = $this->articleService->getArticleWithMeta($id);
+
+        $data = $request->only([
+            'title', 'summary', 'content',
+            'meta_title', 'meta_description', 'meta_keywords', 'image_alt'
+        ]);
+
+        // Handle image_article
+        if ($request->hasFile('image_article')) {
+            // Delete old image if exists
+            if ($article->image_article && Storage::disk('public')->exists($article->image_article)) {
+                Storage::disk('public')->delete($article->image_article);
+            }
+            $data['image_article'] = $request->file('image_article')->store('articles/content', 'public');
+        } elseif ($request->input('keep_image') === 'true') {
+            // Keep existing image
+            $data['image_article'] = $article->image_article;
+        } else {
+            // No image provided and not keeping existing - set to null
+            $data['image_article'] = null;
+        }
+
+        // Handle og_image
+        if ($request->hasFile('og_image')) {
+            // Delete old og image if exists
+            if ($article->meta->og_image && Storage::disk('public')->exists($article->meta->og_image)) {
+                Storage::disk('public')->delete($article->meta->og_image);
+            }
+            $data['og_image'] = $request->file('og_image')->store('articles/og', 'public');
+        } elseif ($request->input('keep_og_image') === 'true') {
+            // Keep existing og image
+            $data['og_image'] = $article->meta->og_image;
+        } else {
+            // No og image provided and not keeping existing - set to null
+            $data['og_image'] = null;
+        }
+
+        // Update article
+        $article = $this->articleService->updateArticleWithMeta($id, $data);
 
         return redirect()->route('articles.index')
             ->with('status', 'Artikel berhasil diubah!');
