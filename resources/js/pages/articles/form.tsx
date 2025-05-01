@@ -24,6 +24,8 @@ interface Article {
     meta_description?: string;
     meta_keywords?: string;
     image_alt?: string;
+    keep_image_article?: string;
+    keep_og_image?: string;
 }
 
 interface ArticleFormProps {
@@ -52,14 +54,20 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
         title: article?.title || '',
         summary: article?.summary || '',
         content: article?.content || '',
-        image_article: null,
-        image_article_url: article?.image_article_url || null,
-        og_image: null,
-        og_image_url: article?.og_image_url || null,
+        image_article: article?.image_article,
+        image_article_url: article?.image_article
+            ? `/storage/${article.image_article}`
+            : null,
+        og_image: article?.og_image,
+        og_image_url: article?.og_image
+            ? `/storage/${article.og_image}`
+            : null,
         meta_title: article?.meta_title || '',
         meta_description: article?.meta_description || '',
         meta_keywords: article?.meta_keywords || '',
         image_alt: article?.image_alt || '',
+        keep_image_article: 'true',
+        keep_og_image: 'true',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -108,16 +116,19 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
                         meta_description: '',
                         meta_keywords: '',
                         image_alt: '',
+                        keep_image_article: 'true',
+                        keep_og_image: 'true',
                     });
                 },
             });
         }
     };
 
-    const handleImageChange = (field: 'Dolores et commodo vimage_article' | 'og_image', e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageChange = (field: 'image_article' | 'og_image', e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
         if (file) {
             setData(field, file);
+            setData(`keep_${field}` as any, 'false');
 
             // Create preview URL
             const previewUrl = URL.createObjectURL(file);
@@ -125,11 +136,24 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
         }
     };
 
+    const handleRemoveImage = (field: 'image_article' | 'og_image') => {
+        setData(field, null);
+        setData(`${field}_url` as any, undefined);
+        setData(`keep_${field}` as any, 'false');
+    };
+
     const renderImagePreview = (field: 'image_article' | 'og_image') => {
         const url = data[`${field}_url`];
         const hasFile = data[field] instanceof File;
 
-        // Jika ada file baru yang diupload, tampilkan preview
+        if (data[field] === null) {
+            return (
+                <div className="mt-2 p-4 border rounded-md bg-gray-50 text-center">
+                    <p className="text-sm text-gray-500">Gambar akan dihapus</p>
+                </div>
+            );
+        }
+
         if (hasFile && url) {
             return (
                 <div className="mt-2">
@@ -148,7 +172,6 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
             );
         }
 
-        // Jika tidak ada file baru tapi ada URL gambar dari database (mode edit)
         if (!hasFile && url && isEditMode) {
             return (
                 <div className="mt-2">
@@ -157,6 +180,9 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
                             src={url}
                             alt={`Current ${field}`}
                             className="w-full h-auto max-h-72 object-cover"
+                            onError={(e) => {
+                                (e.target as HTMLImageElement).src = '/placeholder-image.jpg';
+                            }}
                         />
                         <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 truncate">
                             Gambar saat ini
@@ -213,6 +239,15 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
                         <ImageIcon className="mr-2 h-4 w-4" />
                         {data[`${field}_url`] ? 'Ganti' : 'Upload'}
                     </Button>
+                    {isEditMode && data[`${field}_url`] && (
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => handleRemoveImage(field)}
+                        >
+                            Hapus
+                        </Button>
+                    )}
                 </div>
 
                 <InputError message={error} />

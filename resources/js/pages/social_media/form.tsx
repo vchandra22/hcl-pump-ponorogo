@@ -16,7 +16,7 @@ interface SocialMedia {
     title: string | null;
     social_media_link: string | null;
     icon_social_media_url?: string;
-    keep_image?: string; // Added keep_image field
+    keep_image?: string;
 }
 
 interface SocialMediaFormProps {
@@ -41,7 +41,7 @@ export default function SocialMediaForm({ social_media, errors }: SocialMediaFor
         },
     ];
 
-    const { data, setData, post, put, processing } = useForm<SocialMedia>({
+    const { data, setData, post, processing } = useForm<SocialMedia>({
         icon_social_media: social_media?.icon_social_media || null,
         platform: social_media?.platform || null,
         title: social_media?.title || null,
@@ -49,14 +49,14 @@ export default function SocialMediaForm({ social_media, errors }: SocialMediaFor
         icon_social_media_url: social_media?.icon_social_media
             ? `/storage/${social_media.icon_social_media}`
             : undefined,
-        keep_image: 'true' // Default to keep existing image when in edit mode
+        keep_image: 'true'
     });
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
         if (file) {
             setData('icon_social_media', file);
-            setData('keep_image', 'false'); // If new image is selected, don't keep old one
+            setData('keep_image', 'false');
 
             const previewUrl = URL.createObjectURL(file);
             setData('icon_social_media_url', previewUrl);
@@ -73,7 +73,6 @@ export default function SocialMediaForm({ social_media, errors }: SocialMediaFor
         const url = data.icon_social_media_url;
         const hasFile = data.icon_social_media instanceof File;
 
-        // If user removed the image
         if (data.icon_social_media === null) {
             return (
                 <div className="mt-2 p-4 border rounded-md bg-gray-50 text-center">
@@ -82,7 +81,6 @@ export default function SocialMediaForm({ social_media, errors }: SocialMediaFor
             );
         }
 
-        // If there's a new file uploaded, show preview
         if (hasFile && url) {
             return (
                 <div className="mt-2">

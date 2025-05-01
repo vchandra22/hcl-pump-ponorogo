@@ -114,24 +114,25 @@ class SocialMediaController extends Controller
         }
 
         $socialMedia = $this->socialMediaService->getSocialMediaById($id);
-        $data = $request->only(['platform', 'title', 'social_media_link']);
+        $data = $request->only([
+            'platform',
+            'title',
+            'social_media_link'
+        ]);
 
-        // Handle icon_social_media
         if ($request->hasFile('icon_social_media')) {
-            // Delete old image if exists
             if ($socialMedia->icon_social_media && Storage::disk('public')->exists($socialMedia->icon_social_media)) {
                 Storage::disk('public')->delete($socialMedia->icon_social_media);
             }
-            // Store new image
+
             $data['icon_social_media'] = $request->file('icon_social_media')->store('social-media', 'public');
         } elseif ($request->input('keep_image') === 'false') {
-            // Delete image if keep_image is false
             if ($socialMedia->icon_social_media && Storage::disk('public')->exists($socialMedia->icon_social_media)) {
                 Storage::disk('public')->delete($socialMedia->icon_social_media);
             }
             $data['icon_social_media'] = null;
         }
-        // If keep_image is true or not specified, don't update the image field
+
 
         $this->socialMediaService->updateSocialMedia($id, $data);
 
