@@ -28,6 +28,11 @@ class MetaModel extends Model
         return $this->belongsTo(HomePageModel::class, 'id', 'meta_id');
     }
 
+    public function article()
+    {
+        return $this->belongsTo(ArticleModel::class, 'id', 'meta_id');
+    }
+
     public function contact()
     {
         return $this->belongsTo(ContactModel::class, 'id', 'meta_id');

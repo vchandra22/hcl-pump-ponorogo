@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\FrontendController;
@@ -50,6 +51,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{id}/edit', [SocialMediaController::class, 'edit'])->name('social_media.edit');
         Route::put('/{id}/update', [SocialMediaController::class, 'update'])->name('social_media.update');
         Route::delete('/{id}/delete', [SocialMediaController::class, 'destroy'])->name('social_media.delete');
+    });
+
+    Route::prefix('/articles')->group(function () {
+        Route::get('/', [ArticleController::class, 'index'])->name('articles.index');
+        Route::get('/create', [ArticleController::class, 'create'])->name('articles.create');
+        Route::post('/store', [ArticleController::class, 'store'])->name('articles.store');
+        Route::get('/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
+        Route::put('/{id}/update', [ArticleController::class, 'update'])->name('articles.update');
+        Route::delete('/{id}/delete', [ArticleController::class, 'destroy'])->name('articles.delete');
     });
 });
 
