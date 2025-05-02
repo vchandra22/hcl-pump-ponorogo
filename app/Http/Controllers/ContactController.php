@@ -49,16 +49,16 @@ class ContactController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'email' => 'required|string|email|max:255',
-            'phone' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => ['required', 'regex:/^[0-9+\-\s()]+$/', 'max:20'],
             'address' => 'required|string|max:255',
             'business_hours' => 'required|string|max:255',
-            'gmaps_embed_code' => 'required|string|max:255',
+            'gmaps_embed_code' => 'required|string',
             'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string',
-            'meta_keywords' => 'nullable|string',
+            'meta_description' => 'nullable|string|max:500',
+            'meta_keywords' => 'nullable|string|max:255',
             'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'image_alt' => 'nullable|string',
+            'image_alt' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -122,16 +122,16 @@ class ContactController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'email' => 'required|string|email|max:255',
-            'phone' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => ['required', 'regex:/^[0-9+\-\s()]+$/', 'max:20'],
             'address' => 'required|string|max:255',
             'business_hours' => 'required|string|max:255',
-            'gmaps_embed_code' => 'required|string|max:255',
+            'gmaps_embed_code' => 'required|string',
             'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string',
-            'meta_keywords' => 'nullable|string',
+            'meta_description' => 'nullable|string|max:500',
+            'meta_keywords' => 'nullable|string|max:255',
             'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'image_alt' => 'nullable|string',
+            'image_alt' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {

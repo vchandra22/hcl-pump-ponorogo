@@ -44,10 +44,10 @@ class SocialMediaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'icon_social_media' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'platform' => 'nullable|string',
-            'title' => 'nullable|string',
-            'social_media_link' => 'nullable|string',
+            'icon_social_media' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'platform' => 'nullable|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'social_media_link' => 'nullable|url|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -101,10 +101,10 @@ class SocialMediaController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'icon_social_media' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'platform' => 'nullable|string',
-            'title' => 'nullable|string',
-            'social_media_link' => 'nullable|string',
+            'icon_social_media' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'platform' => 'nullable|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'social_media_link' => 'nullable|url|max:255',
         ]);
 
         if ($validator->fails()) {

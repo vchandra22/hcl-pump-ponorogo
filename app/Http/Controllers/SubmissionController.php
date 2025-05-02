@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Services\SubmissionService;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -8,22 +9,22 @@ use Illuminate\Support\Facades\Validator;
 
 class SubmissionController extends Controller
 {
-    
+
     /**
      * Constructor
      */
-     protected $submissionService;
+    protected $submissionService;
 
-     /**
+    /**
      * Display a listing of the resource.
      */
-    
-     public function __construct(SubmissionService $submissionService)
-     {
-         $this->submissionService = $submissionService;
-     }
 
-     public function index()
+    public function __construct(SubmissionService $submissionService)
+    {
+        $this->submissionService = $submissionService;
+    }
+
+    public function index()
     {
         $submissions = $this->submissionService->getAllSubmission();
 
@@ -49,7 +50,7 @@ class SubmissionController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|string|max:20|regex:/^[0-9+\-\s()]+$/',
             'message' => 'required|string',
         ]);
 
@@ -70,7 +71,7 @@ class SubmissionController extends Controller
     public function show(string $id)
     {
         $submission = $this->submissionService->getSubmissionById($id);
-        
+
         return Inertia::render('submission/show', [
             'submission' => $submission
         ]);
@@ -82,6 +83,6 @@ class SubmissionController extends Controller
     public function destroy(string $id)
     {
         $this->submissionService->deleteSubmission($id);
-        return redirect()->route('submission.index')->with('status','Submission Berhasil di delete');
+        return redirect()->route('submission.index')->with('status', 'Submission Berhasil di delete');
     }
 }

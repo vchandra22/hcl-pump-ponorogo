@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\ArticleService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -45,14 +44,14 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|max:255',
-            'summary' => 'required',
-            'content' => 'required',
+            'title' => 'required|string|min:10|max:255',
+            'summary' => 'required|string|min:10',
+            'content' => 'required|string|min:20',
             'image_article' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
             'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
-            'meta_keywords' => 'nullable|string',
+            'meta_keywords' => 'nullable|string|regex:/^[a-zA-Z0-9,\s]+$/',
             'image_alt' => 'nullable|string',
         ]);
 
@@ -116,9 +115,9 @@ class ArticleController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'summary' => 'required|string',
-            'content' => 'required|string',
+            'title' => 'required|string|min:10|max:255',
+            'summary' => 'required|string|min:10',
+            'content' => 'required|string|min:20',
             'image_article' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'meta_title' => 'nullable|string|max:255',

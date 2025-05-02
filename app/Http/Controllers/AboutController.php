@@ -49,16 +49,15 @@ class AboutController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'title' => 'required|string|min:10|max:255',
+            'description' => 'nullable|string',
             'image_company' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
-            'meta_keywords' => 'nullable|string',
+            'meta_keywords' => 'nullable|string|regex:/^[a-zA-Z0-9,\s]+$/',
             'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'image_alt' => 'nullable|string',
         ]);
-
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -118,12 +117,12 @@ class AboutController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|min:10|max:255',
             'description' => 'required|string',
             'image_company' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
-            'meta_keywords' => 'nullable|string',
+            'meta_keywords' => 'nullable|string|regex:/^[a-zA-Z0-9,\s]+$/',
             'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'image_alt' => 'nullable|string',
         ]);
