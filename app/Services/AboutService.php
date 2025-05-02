@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\About\AboutRepository;
 use App\Repositories\Meta\MetaRepository;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AboutService{
     protected $aboutRepository;
@@ -30,6 +31,14 @@ class AboutService{
     {
         DB::beginTransaction();
         try {
+            if (isset($data['og_image']) && is_object($data['og_image']) && method_exists($data['og_image'], 'isValid') && $data['og_image']->isValid()) {
+                $data['og_image'] = $data['og_image']->store('about-us/og', 'public');
+            }
+
+            if (isset($data['image_company']) && is_object($data['image_company']) && method_exists($data['image_company'], 'isValid') && $data['image_company']->isValid()) {
+                $data['image_company'] = $data['image_company']->store('about-us/content', 'public');
+            }
+
             // Buat meta data dahulu
             $metaData = [
                 'meta_title' => $data['meta_title'] ?? null,
@@ -64,6 +73,29 @@ class AboutService{
         DB::beginTransaction();
         try {
             $about = $this->aboutRepository->find($id);
+
+            if (isset($data['og_image'])) {
+                if (is_object($data['og_image']) && method_exists($data['og_image'], 'isValid') && $data['og_image']->isValid()) {
+                    if ($about->meta->og_image && Storage::disk('public')->exists($about->meta->og_image)) {
+                        Storage::disk('public')->delete($about->meta->og_image);
+                    }
+                    $data['og_image'] = $data['og_image']->store('about-us/og', 'public');
+                }
+            } else {
+                $data['og_image'] = $about->meta->og_image;
+            }
+
+            if (isset($data['image_company'])) {
+                if (is_object($data['image_company']) && method_exists($data['image_company'], 'isValid') && $data['image_company']->isValid()) {
+                    if ($about->image_company && Storage::disk('public')->exists($about->image_company)) {
+                        Storage::disk('public')->delete($about->image_company);
+                    }
+                    $data['image_company'] = $data['image_company']->store('about-us/content', 'public');
+                }
+            } else {
+                $data['image_company'] = $about->image_company;
+            }
+
 
             // Update meta data
             $metaData = [

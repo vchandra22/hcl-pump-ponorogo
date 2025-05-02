@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\Homepage\HomepageRepository;
 use App\Repositories\Meta\MetaRepository;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class HomepageService
 {
@@ -31,6 +32,14 @@ class HomepageService
     {
         DB::beginTransaction();
         try {
+            if (isset($data['og_image']) && is_object($data['og_image']) && method_exists($data['og_image'], 'isValid') && $data['og_image']->isValid()) {
+                $data['og_image'] = $data['og_image']->store('homepage/og', 'public');
+            }
+
+            if (isset($data['banner_image']) && is_object($data['banner_image']) && method_exists($data['banner_image'], 'isValid') && $data['banner_image']->isValid()) {
+                $data['banner_image'] = $data['banner_image']->store('homepage/content', 'public');
+            }
+
             // Buat meta data dahulu
             $metaData = [
                 'meta_title' => $data['meta_title'] ?? null,
@@ -65,6 +74,28 @@ class HomepageService
         DB::beginTransaction();
         try {
             $homepage = $this->homepageRepository->find($id);
+
+            if (isset($data['og_image'])) {
+                if (is_object($data['og_image']) && method_exists($data['og_image'], 'isValid') && $data['og_image']->isValid()) {
+                    if ($homepage->meta->og_image && Storage::disk('public')->exists($homepage->meta->og_image)) {
+                        Storage::disk('public')->delete($homepage->meta->og_image);
+                    }
+                    $data['og_image'] = $data['og_image']->store('homepage/og', 'public');
+                }
+            } else {
+                $data['og_image'] = $homepage->meta->og_image;
+            }
+
+            if (isset($data['banner_image'])) {
+                if (is_object($data['banner_image']) && method_exists($data['banner_image'], 'isValid') && $data['banner_image']->isValid()) {
+                    if ($homepage->banner_image && Storage::disk('public')->exists($homepage->banner_image)) {
+                        Storage::disk('public')->delete($homepage->banner_image);
+                    }
+                    $data['banner_image'] = $data['banner_image']->store('homepage/content', 'public');
+                }
+            } else {
+                $data['banner_image'] = $homepage->banner_image;
+            }
 
             // Update meta data
             $metaData = [

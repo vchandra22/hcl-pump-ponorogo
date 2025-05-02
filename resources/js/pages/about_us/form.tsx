@@ -221,6 +221,16 @@ export default function AboutForm({ about, errors }: AboutFormProps) {
                     </div>
                 </div>
 
+                {errors && Object.keys(errors).some(key => !['title', 'summary', 'content', 'image_article'].includes(key)) && (
+                    <div className="bg-destructive/10 p-3 rounded-md flex items-start gap-2">
+                        <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
+                        <div>
+                            <p className="font-medium text-destructive">Harap perbaiki kesalahan di kedua tab sebelum mengirim</p>
+                            <p className="text-sm text-muted-foreground">Terdapat kesalahan validasi di tab SEO & Meta</p>
+                        </div>
+                    </div>
+                )}
+
                 <div>
                     <Tabs defaultValue="content" className="w-full">
                         <TabsList className="grid w-full grid-cols-2">
@@ -258,16 +268,6 @@ export default function AboutForm({ about, errors }: AboutFormProps) {
                                         'image_company',
                                         'Foto Perusahaan / Gambar Kantor',
                                         'Foto perusahaan'
-                                    )}
-
-                                    {errors && Object.keys(errors).some(key => !['title', 'summary', 'content', 'image_article'].includes(key)) && (
-                                        <div className="bg-destructive/10 p-3 rounded-md flex items-start gap-2">
-                                            <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
-                                            <div>
-                                                <p className="font-medium text-destructive">Harap perbaiki kesalahan di kedua tab sebelum mengirim</p>
-                                                <p className="text-sm text-muted-foreground">Terdapat kesalahan validasi di tab SEO & Meta</p>
-                                            </div>
-                                        </div>
                                     )}
                                 </div>
                             </TabsContent>

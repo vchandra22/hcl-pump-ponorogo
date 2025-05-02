@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AboutService;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -50,13 +51,14 @@ class AboutController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image_company' => 'nullable|string',
+            'image_company' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string',
-            'og_image' => 'nullable|string',
+            'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'image_alt' => 'nullable|string',
         ]);
+
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -64,7 +66,17 @@ class AboutController extends Controller
                 ->withInput();
         }
 
-        $this->aboutService->createAboutWithMeta($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image_company')) {
+            $data['image_company'] = $request->file('image_company')->store('about-us', 'public');
+        }
+
+        if ($request->hasFile('og_image')) {
+            $data['og_image'] = $request->file('og_image')->store('og-images', 'public');
+        }
+
+        $this->aboutService->createAboutWithMeta($data);
 
         return redirect()->route('about.index')->with('status', 'About berhasil dibuat!');
     }
@@ -108,11 +120,11 @@ class AboutController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image_company' => 'nullable|string',
+            'image_company' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string',
-            'og_image' => 'nullable|string',
+            'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'image_alt' => 'nullable|string',
         ]);
 
@@ -122,7 +134,38 @@ class AboutController extends Controller
                 ->withInput();
         }
 
-        $this->aboutService->updateAboutWithMeta($id, $request->all());
+        $about = $this->aboutService->getAboutWithMeta($id);
+
+        $data = $request->only([
+            'title', 'description',
+            'meta_title', 'meta_description', 'meta_keywords', 'image_company', 'image_alt'
+        ]);
+
+        // Handle image_company
+        if ($request->hasFile('image_company')) {
+            if ($about->image_company && Storage::disk('public')->exists($about->image_company)) {
+                Storage::disk('public')->delete($about->image_company);
+            }
+            $data['image_company'] = $request->file('image_company')->store('about-us', 'public');
+        } elseif ($request->input('keep_image') === 'true') {
+            $data['image_company'] = $about->image_company;
+        } else {
+            $data['image_company'] = null;
+        }
+
+        // Handle og_image
+        if ($request->hasFile('og_image')) {
+            if ($about->meta->og_image && Storage::disk('public')->exists($about->meta->og_image)) {
+                Storage::disk('public')->delete($about->meta->og_image);
+            }
+            $data['og_image'] = $request->file('og_image')->store('about-us/og', 'public');
+        } elseif ($request->input('keep_og_image') === 'true') {
+            $data['og_image'] = $about->meta->og_image;
+        } else {
+            $data['og_image'] = null;
+        }
+
+        $this->aboutService->updateAboutWithMeta($id, $data);
 
         return redirect()->route('about.index')
             ->with('status', 'About berhasil diperbarui!');

@@ -23,7 +23,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', [HomepageController::class, 'create'])->name('homepage.create');
         Route::post('/store', [HomepageController::class, 'store'])->name('homepage.store');
         Route::get('/{id}/edit', [HomepageController::class, 'edit'])->name('homepage.edit');
-        Route::put('/{id}/update', [HomepageController::class, 'update'])->name('homepage.update');
+        Route::post('/{id}/update', [HomepageController::class, 'update'])->name('homepage.update');
         Route::delete('/{id}/delete', [HomepageController::class, 'destroy'])->name('homepage.delete');
     });
     Route::prefix('/about-us')->group(function () {
@@ -31,7 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', [AboutController::class, 'create'])->name('about.create');
         Route::post('/store', [AboutController::class, 'store'])->name('about.store');
         Route::get('/{id}/edit', [AboutController::class, 'edit'])->name('about.edit');
-        Route::put('/{id}/update', [AboutController::class, 'update'])->name('about.update');
+        Route::post('/{id}/update', [AboutController::class, 'update'])->name('about.update');
         Route::delete('/{id}/delete', [AboutController::class, 'destroy'])->name('about.delete');
     });
 
