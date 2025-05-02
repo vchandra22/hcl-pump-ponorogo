@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\ContactService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -56,7 +57,7 @@ class ContactController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string',
-            'og_image' => 'nullable|string',
+            'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'image_alt' => 'nullable|string',
         ]);
 
@@ -66,7 +67,13 @@ class ContactController extends Controller
                 ->withInput();
         }
 
-        $contact = $this->contactService->createContactWithMeta($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('og_image')) {
+            $data['og_image'] = $request->file('og_image')->store('og-images', 'public');
+        }
+
+        $this->contactService->createContactWithMeta($data);
 
         return redirect()->route('contact.index')->with('status', 'Kontak berhasil dibuat!');
     }
@@ -123,7 +130,7 @@ class ContactController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string',
-            'og_image' => 'nullable|string',
+            'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'image_alt' => 'nullable|string',
         ]);
 
@@ -133,7 +140,26 @@ class ContactController extends Controller
                 ->withInput();
         }
 
-        $contact = $this->contactService->updateContactWithMeta($id, $request->all());
+        $contact = $this->contactService->getContactWithMeta($id);
+
+        $data = $request->only([
+            'title', 'description', 'email', 'phone', 'address',
+            'business_hours', 'gmaps_embed_code',
+            'meta_title', 'meta_description', 'meta_keywords', 'image_alt'
+        ]);
+
+        if ($request->hasFile('og_image')) {
+            if ($contact->meta->og_image && Storage::disk('public')->exists($contact->meta->og_image)) {
+                Storage::disk('public')->delete($contact->meta->og_image);
+            }
+            $data['og_image'] = $request->file('og_image')->store('contact/og', 'public');
+        } elseif ($request->input('keep_og_image') === 'true') {
+            $data['og_image'] = $contact->meta->og_image;
+        } else {
+            $data['og_image'] = null;
+        }
+
+        $this->contactService->updateContactWithMeta($id, $data);
 
         return redirect()->route('contact.index')
             ->with('status', 'Kontak berhasil diubah!');

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\Contact\ContactRepository;
 use App\Repositories\Meta\MetaRepository;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ContactService
 {
@@ -31,6 +32,10 @@ class ContactService
     {
         DB::beginTransaction();
         try {
+            if (isset($data['og_image']) && is_object($data['og_image']) && method_exists($data['og_image'], 'isValid') && $data['og_image']->isValid()) {
+                $data['og_image'] = $data['og_image']->store('contact/og', 'public');
+            }
+
             $metaData = [
                 'meta_title' => $data['meta_title'] ?? null,
                 'meta_description' => $data['meta_description'] ?? null,
@@ -67,6 +72,17 @@ class ContactService
         DB::beginTransaction();
         try {
             $contact = $this->contactRepository->find($id);
+
+            if (isset($data['og_image'])) {
+                if (is_object($data['og_image']) && method_exists($data['og_image'], 'isValid') && $data['og_image']->isValid()) {
+                    if ($contact->meta->og_image && Storage::disk('public')->exists($contact->meta->og_image)) {
+                        Storage::disk('public')->delete($contact->meta->og_image);
+                    }
+                    $data['og_image'] = $data['og_image']->store('contact/og', 'public');
+                }
+            } else {
+                $data['og_image'] = $contact->meta->og_image;
+            }
 
             $metaData = [
                 'meta_title' => $data['meta_title'] ?? null,

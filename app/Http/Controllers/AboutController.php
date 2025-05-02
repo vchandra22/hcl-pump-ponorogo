@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Services\AboutService;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -8,22 +9,22 @@ use Illuminate\Support\Facades\Validator;
 
 class AboutController extends Controller
 {
-    
+
     /**
      * Constructor
      */
-     protected $aboutService;
+    protected $aboutService;
 
-     /**
+    /**
      * Display a listing of the resource.
      */
-    
-     public function __construct(AboutService $aboutService)
-     {
-         $this->aboutService= $aboutService;
-     }
 
-     public function index()
+    public function __construct(AboutService $aboutService)
+    {
+        $this->aboutService = $aboutService;
+    }
+
+    public function index()
     {
         $about = $this->aboutService->getAllAbout();
 
@@ -81,14 +82,14 @@ class AboutController extends Controller
      */
     public function edit(string $id)
     {
-        
+
         $about = $this->aboutService->getAboutWithMeta($id);
 
         $data = [
-            'id' =>  $about->id,
+            'id' => $about->id,
             'title' => $about->title,
             'description' => $about->description,
-            'image_company' =>  $about->image_company,
+            'image_company' => $about->image_company,
             'meta_title' => $about->meta->meta_title,
             'meta_description' => $about->meta->meta_description,
             'meta_keywords' => $about->meta->meta_keywords,
@@ -133,6 +134,6 @@ class AboutController extends Controller
     public function destroy(string $id)
     {
         $this->aboutService->deleteAboutWithMeta($id);
-        return redirect()->route('about.index')->with('status','About Berhasil di delete');
+        return redirect()->route('about.index')->with('status', 'About Berhasil di delete');
     }
 }

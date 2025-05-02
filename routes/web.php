@@ -31,7 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', [ContactController::class, 'create'])->name('contact.create');
         Route::post('/store', [ContactController::class, 'store'])->name('contact.store');
         Route::get('/{id}/edit', [ContactController::class, 'edit'])->name('contact.edit');
-        Route::put('/{id}/update', [ContactController::class, 'update'])->name('contact.update');
+        Route::post('/{id}/update', [ContactController::class, 'update'])->name('contact.update');
         Route::delete('/{id}/delete', [ContactController::class, 'destroy'])->name('contact.delete');
     });
 

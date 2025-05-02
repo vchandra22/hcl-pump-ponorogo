@@ -6,8 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import InputError from '@/components/input-error';
-import { Image } from 'lucide-react';
+import { Image as ImageIcon, Image, Info } from 'lucide-react';
 import type { BreadcrumbItem } from '@/types';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 interface Contact {
     id?: number;
@@ -21,7 +23,8 @@ interface Contact {
     meta_title: string | null;
     meta_description: string | null;
     meta_keywords: string | null;
-    og_image: string | null;
+    og_image?: File | null;
+    og_image_url?: string | null;
     image_alt: string | null;
 }
 
@@ -48,7 +51,7 @@ export default function ContactForm({ contact, errors }: ContactFormProps) {
         },
     ];
 
-    const { data, setData, post, put, processing } = useForm<Contact>({
+    const { data, setData, post, processing } = useForm<Contact>({
         title: contact?.title || '',
         description: contact?.description || '',
         email: contact?.email || '',
@@ -59,7 +62,10 @@ export default function ContactForm({ contact, errors }: ContactFormProps) {
         meta_title: contact?.meta_title || '',
         meta_description: contact?.meta_description || '',
         meta_keywords: contact?.meta_keywords || '',
-        og_image: contact?.og_image || '',
+        og_image: contact?.og_image,
+        og_image_url: contact?.og_image
+            ? `/storage/${contact.og_image}`
+            : null,
         image_alt: contact?.image_alt || '',
     });
 
@@ -67,10 +73,146 @@ export default function ContactForm({ contact, errors }: ContactFormProps) {
         e.preventDefault();
 
         if (isEditMode) {
-            put(route('contact.update', contact.id));
+            post(route('contact.update', contact.id));
         } else {
             post(route('contact.store'));
         }
+    };
+
+    const handleImageChange = (field: 'og_image', e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0] || null;
+        if (file) {
+            setData(field, file);
+            setData(`keep_${field}` as any, 'false');
+
+            const previewUrl = URL.createObjectURL(file);
+            setData(`${field}_url` as any, previewUrl);
+        }
+    };
+
+    const handleRemoveImage = (field: 'og_image') => {
+        setData(field, null);
+        setData(`${field}_url` as any, undefined);
+        setData(`keep_${field}` as any, 'false');
+    };
+
+    const renderImagePreview = (field: 'og_image') => {
+        const url = data[`${field}_url`];
+        const hasFile = data[field] instanceof File;
+
+        if (!url && data[`keep_${field}`] === 'false') {
+            return (
+                <div className="mt-2 p-4 border rounded-md bg-gray-50 text-center">
+                    <p className="text-sm text-gray-500">Tidak ada gambar</p>
+                </div>
+            );
+        }
+
+        if (hasFile && url) {
+            return (
+                <div className="mt-2">
+                    <div className="relative rounded-md border overflow-hidden max-w-lg">
+                        <img
+                            src={url}
+                            alt={`${field} preview`}
+                            className="w-full h-auto max-h-72 object-cover"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 truncate">
+                            {data[field]?.name || 'Preview'}
+                        </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Preview gambar baru</p>
+                </div>
+            );
+        }
+
+        if (url && isEditMode) {
+            return (
+                <div className="mt-2">
+                    <div className="relative rounded-md border overflow-hidden max-w-lg">
+                        <img
+                            src={url}
+                            alt={`Current ${field}`}
+                            className="w-full h-auto max-h-72 object-cover"
+                            onError={(e) => {
+                                (e.target as HTMLImageElement).src = '/placeholder-image.jpg';
+                            }}
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 truncate">
+                            Gambar saat ini
+                        </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Gambar yang tersimpan</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
+    const renderImageUpload = (
+        field: 'og_image',
+        label: string,
+        description: string,
+        accept = 'image/*'
+    ) => {
+        const error = errors?.[field];
+
+        return (
+            <div className="space-y-2">
+                <Label htmlFor={field} className="flex items-center gap-2">
+                    {label}
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Info className="h-4 w-4 text-muted-foreground" />
+                            </TooltipTrigger>
+                            <TooltipContent className="max-w-sm">
+                                <p>{description}</p>
+                                <p className="text-xs mt-1">Format yang didukung: JPEG, PNG, JPG, WEBP. Maksimal 2MB.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </Label>
+
+                <div className="flex gap-2">
+                    <div className="flex-1">
+                        <Input
+                            type="file"
+                            id={field}
+                            onChange={(e) => handleImageChange(field, e)}
+                            accept={accept}
+                            className={cn(error && "border-destructive")}
+                        />
+                    </div>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => document.getElementById(field)?.click()}
+                    >
+                        <ImageIcon className="mr-2 h-4 w-4" />
+                        {data[`${field}_url`] ? 'Ganti' : 'Upload'}
+                    </Button>
+                    {isEditMode && data[`${field}_url`] && (
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => handleRemoveImage(field)}
+                        >
+                            Hapus
+                        </Button>
+                    )}
+                </div>
+
+                <InputError message={error} />
+
+                {renderImagePreview(field)}
+
+                <span className="text-xs text-gray-400">
+                    {isEditMode ? 'Biarkan kosong untuk mempertahankan gambar saat ini' : description}
+                </span>
+            </div>
+        );
     };
 
     return (
@@ -138,77 +280,71 @@ export default function ContactForm({ contact, errors }: ContactFormProps) {
 
                         <TabsContent value="seo">
                             <div className="grid grid-cols-1 gap-6">
-                                <div className="space-y-2">
-                                    <Label htmlFor="meta_title">Meta Title</Label>
-                                    <Input
-                                        id="meta_title"
-                                        value={data.meta_title || ''}
-                                        onChange={(e) => setData('meta_title', e.target.value)}
-                                        placeholder="Meta title untuk SEO"
-                                    />
-                                    <InputError message={errors?.meta_title} />
-                                    <span className="text-xs text-gray-400">
-                                            Judul yang akan muncul di hasil pencarian (50-60 karakter).
-                                        </span>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="meta_description">Meta Description</Label>
-                                    <Textarea
-                                        id="meta_description"
-                                        value={data.meta_description || ''}
-                                        onChange={(e) => setData('meta_description', e.target.value)}
-                                        placeholder="Deskripsi untuk SEO"
-                                        rows={3}
-                                    />
-                                    <InputError message={errors?.meta_description} />
-                                    <span className="text-xs text-gray-400">
-                                            Deskripsi yang akan muncul di hasil pencarian (120-160 karakter).
-                                        </span>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="meta_keywords">Meta Keywords</Label>
-                                    <Input
-                                        id="meta_keywords"
-                                        value={data.meta_keywords || ''}
-                                        onChange={(e) => setData('meta_keywords', e.target.value)}
-                                        placeholder="Kata kunci (dipisahkan dengan koma)"
-                                    />
-                                    <InputError message={errors?.meta_keywords} />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="og_image">Open Graph Image URL</Label>
-                                    <div className="flex gap-2">
+                                <div className="space-y-6">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="meta_title">Judul Meta</Label>
                                         <Input
-                                            id="og_image"
-                                            value={data.og_image || ''}
-                                            onChange={(e) => setData('og_image', e.target.value)}
-                                            placeholder="URL gambar untuk social sharing"
-                                            className="flex-1"
+                                            id="meta_title"
+                                            value={data.meta_title || ''}
+                                            onChange={(e) => setData('meta_title', e.target.value)}
+                                            className={cn(errors?.meta_title && "border-destructive")}
                                         />
-                                        <Button type="button" variant="outline">
-                                            <Image className="mr-2 h-4 w-4" />
-                                            Upload
-                                        </Button>
+                                        <InputError message={errors?.meta_title} />
+                                        <p className="text-sm text-muted-foreground">
+                                            Judul untuk mesin pencari (biarkan kosong untuk menggunakan judul artikel)
+                                        </p>
                                     </div>
-                                    <InputError message={errors?.og_image} />
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="meta_description">Deskripsi Meta</Label>
+                                        <Textarea
+                                            id="meta_description"
+                                            value={data.meta_description || ''}
+                                            onChange={(e) => setData('meta_description', e.target.value)}
+                                            className={cn(errors?.meta_description && "border-destructive")}
+                                            rows={3}
+                                        />
+                                        <InputError message={errors?.meta_description} />
+                                        <p className="text-sm text-muted-foreground">
+                                            Deskripsi untuk mesin pencari (panjang optimal: 150-160 karakter)
+                                        </p>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="meta_keywords">Kata Kunci Meta</Label>
+                                        <Input
+                                            id="meta_keywords"
+                                            value={data.meta_keywords || ''}
+                                            onChange={(e) => setData('meta_keywords', e.target.value)}
+                                            className={cn(errors?.meta_keywords && "border-destructive")}
+                                        />
+                                        <InputError message={errors?.meta_keywords} />
+                                        <p className="text-sm text-muted-foreground">
+                                            Kata kunci untuk SEO yang dipisahkan dengan koma
+                                        </p>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="image_alt">Teks Alt Gambar</Label>
+                                        <Input
+                                            id="image_alt"
+                                            value={data.image_alt || ''}
+                                            onChange={(e) => setData('image_alt', e.target.value)}
+                                            className={cn(errors?.image_alt && "border-destructive")}
+                                        />
+                                        <InputError message={errors?.image_alt} />
+                                        <p className="text-sm text-muted-foreground">
+                                            Teks deskriptif untuk aksesibilitas dan SEO
+                                        </p>
+                                    </div>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <Label htmlFor="image_alt">Image Alt Text</Label>
-                                    <Input
-                                        id="image_alt"
-                                        value={data.image_alt || ''}
-                                        onChange={(e) => setData('image_alt', e.target.value)}
-                                        placeholder="Teks alternatif untuk gambar"
-                                    />
-                                    <InputError message={errors?.image_alt} />
-                                    <span className="text-xs text-gray-400">
-                                            Teks alternatif untuk aksesibilitas dan SEO.
-                                        </span>
-                                </div>
+                                {renderImageUpload(
+                                    'og_image',
+                                    'Gambar Open Graph',
+                                    'Gambar yang ditampilkan saat dibagikan di media sosial'
+                                )}
+
                             </div>
                         </TabsContent>
 
