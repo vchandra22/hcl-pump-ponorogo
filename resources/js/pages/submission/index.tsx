@@ -131,7 +131,7 @@ export default function Index() {
                                             <TableCell className="font-medium">{item.name}</TableCell>
                                             <TableCell>{item.email}</TableCell>
                                             <TableCell>{item.phone}</TableCell>
-                                            <TableCell className="max-w-md truncate">{item.message}</TableCell>
+                                            <TableCell className="max-w-md truncate"> {item.message.length > 50 ? item.message.slice(0, 50) + '...' : item.message}</TableCell>
                                             <TableCell>
                                                 {new Date(item.created_at).toLocaleDateString('id-ID', {
                                                     day: '2-digit',
