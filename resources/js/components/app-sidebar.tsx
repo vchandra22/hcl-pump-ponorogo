@@ -3,7 +3,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, HomeIcon,Info } from 'lucide-react';
+import { LayoutGrid, HomeIcon,Info, Mail } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -21,6 +21,11 @@ const mainNavItems: NavItem[] = [
         title: 'Tentang Kami Manajemen',
         href: '/about_us',
         icon: Info,
+    },
+    {
+        title: 'Submission Manajemen',
+        href: '/submission',
+        icon: Mail,
     },
 ];
 

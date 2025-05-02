@@ -3,6 +3,7 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\SubmissionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -29,6 +30,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{id}/edit', [AboutController::class, 'edit'])->name('about.edit');
         Route::put('/{id}/update', [AboutController::class, 'update'])->name('about.update');
         Route::delete('/{id}/delete', [AboutController::class, 'destroy'])->name('about.delete');
+    });
+    Route::prefix('/submission')->group(function () {
+        Route::get('/', [SubmissionController::class, 'index'])->name('submission.index');
+        Route::get('/create', [SubmissionController::class, 'create'])->name('submission.create');
+        Route::post('/store', [SubmissionController::class, 'store'])->name('submission.store');
+        Route::get('/{id}', [SubmissionController::class, 'show'])->name('submission.show');
+        Route::delete('/{id}/delete', [SubmissionController::class, 'destroy'])->name('submission.delete');
     });
 });
 
