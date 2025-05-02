@@ -50,7 +50,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'About Us Management',
-        href: '/about_us',
+        href: '/about-us',
     },
 ];
 
@@ -89,7 +89,7 @@ export default function AboutUsIndex() {
                     </div>
                     {about.length < 1 && (
                         <Button asChild>
-                            <Link href="/about_us/create">
+                            <Link href="/about-us/create">
                                 <PlusIcon className="mr-2 h-4 w-4" />
                                 Tambah About Us
                             </Link>
@@ -115,7 +115,7 @@ export default function AboutUsIndex() {
                                 "Mulai dengan menambahkan About Us baru"}
                             action={
                                 <Button asChild>
-                                    <Link href="/about_us/create">
+                                    <Link href="/about-us/create">
                                         <PlusIcon className="mr-2 h-4 w-4" />
                                         Tambah About Us
                                     </Link>
@@ -166,7 +166,7 @@ export default function AboutUsIndex() {
                                                     asChild
                                                     className="hover:bg-neutral-100"
                                                 >
-                                                    <Link href={`/about_us/${item.id}/edit`}>
+                                                    <Link href={`/about-us/${item.id}/edit`}>
                                                         <PencilIcon className="h-4 w-4" />
                                                     </Link>
                                                 </Button>
@@ -192,7 +192,7 @@ export default function AboutUsIndex() {
                                                             <AlertDialogCancel>Batal</AlertDialogCancel>
                                                             <AlertDialogAction asChild>
                                                                 <Link
-                                                                    href={`/about_us/${item.id}/delete`}
+                                                                    href={`/about-us/${item.id}/delete`}
                                                                     method="delete"
                                                                     as="button"
                                                                     preserveScroll

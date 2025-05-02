@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\SocialMediaController;
@@ -24,7 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/{id}/update', [HomepageController::class, 'update'])->name('homepage.update');
         Route::delete('/{id}/delete', [HomepageController::class, 'destroy'])->name('homepage.delete');
     });
-    Route::prefix('/about_us')->group(function () {
+    Route::prefix('/about-us')->group(function () {
         Route::get('/', [AboutController::class, 'index'])->name('about.index');
         Route::get('/create', [AboutController::class, 'create'])->name('about.create');
         Route::post('/store', [AboutController::class, 'store'])->name('about.store');
@@ -57,6 +59,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
         Route::post('/{id}/update', [ArticleController::class, 'update'])->name('articles.update');
         Route::delete('/{id}/delete', [ArticleController::class, 'destroy'])->name('articles.delete');
+    });
+
+    Route::prefix('/contacts')->group(function () {
+        Route::get('/', [ContactController::class, 'index'])->name('contact.index');
+        Route::get('/create', [ContactController::class, 'create'])->name('contact.create');
+        Route::post('/store', [ContactController::class, 'store'])->name('contact.store');
+        Route::get('/{id}/edit', [ContactController::class, 'edit'])->name('contact.edit');
+        Route::post('/{id}/update', [ContactController::class, 'update'])->name('contact.update');
+        Route::delete('/{id}/delete', [ContactController::class, 'destroy'])->name('contact.destroy');
     });
 });
 
