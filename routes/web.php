@@ -5,6 +5,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\ReasonController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\SubmissionController;
 use Illuminate\Support\Facades\Route;
@@ -68,6 +69,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{id}/edit', [ContactController::class, 'edit'])->name('contact.edit');
         Route::post('/{id}/update', [ContactController::class, 'update'])->name('contact.update');
         Route::delete('/{id}/delete', [ContactController::class, 'destroy'])->name('contact.destroy');
+    });
+
+    Route::prefix('reasons')->name('reasons.')->group(function () {
+        Route::get('/', [ReasonController::class, 'index'])->name('index'); // List all reasons
+        Route::get('/create', [ReasonController::class, 'create'])->name('create'); // Show create form
+        Route::post('/', [ReasonController::class, 'store'])->name('store'); // Store a new reason
+        Route::get('/{id}/edit', [ReasonController::class, 'edit'])->name('edit'); // Show edit form
+        Route::put('/{id}', [ReasonController::class, 'update'])->name('update'); // Update a reason
+        Route::delete('/{id}', [ReasonController::class, 'destroy'])->name('destroy'); // Delete a reason
     });
 });
 

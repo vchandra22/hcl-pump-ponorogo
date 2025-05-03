@@ -12,6 +12,8 @@ use App\Repositories\Homepage\HomepageRepository;
 use App\Repositories\Homepage\HomepageRepositoryInterface;
 use App\Repositories\Meta\MetaRepository;
 use App\Repositories\Meta\MetaRepositoryInterface;
+use App\Repositories\Reason\ReasonRepository;
+use App\Repositories\Reason\ReasonRepositoryInterface;
 use App\Repositories\Submission\SubmissionRepository;
 use App\Repositories\Submission\SubmissionRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -30,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AboutRepositoryInterface::class, AboutRepository::class);
         $this->app->bind(SubmissionRepositoryInterface::class, SubmissionRepository::class);
         $this->app->bind(ArticleRepositoryInterface::class, ArticleRepository::class);
+        $this->app->bind(ReasonRepositoryInterface::class, ReasonRepository::class);
     }
 
     /**
