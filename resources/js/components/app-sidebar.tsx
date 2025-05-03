@@ -18,6 +18,11 @@ const mainNavItems: NavItem[] = [
         icon: HomeIcon,
     },
     {
+        title: 'Manajemen Produk',
+        href: '/products',
+        icon: Package,
+    },
+    {
         title: 'Tentang Kami Manajemen',
         href: '/about-us',
         icon: Info,
@@ -42,11 +47,7 @@ const mainNavItems: NavItem[] = [
         href: '/articles',
         icon: NewspaperIcon,
     },
-    {
-        title: 'Manajemen Produk',
-        href: '/products',
-        icon: Package,
-    },
+
 ];
 
 export function AppSidebar() {
