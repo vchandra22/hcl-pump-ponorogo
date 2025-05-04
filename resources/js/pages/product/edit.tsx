@@ -319,10 +319,13 @@ export default function EditPage({ product }: EditPageProps) {
                                         >
                                             <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-3 lg:grid-cols-7">
                                                 <div className="relative h-32 w-32 overflow-hidden rounded bg-gray-200 shadow">
-                                                    <span className="group absolute block h-full w-full cursor-pointer hover:bg-black/50">
+                                                    <Link method='delete' href={`/og-image/${product.meta_id}/delete`} className='h-full w-full'>
+<span className="group absolute block h-full w-full cursor-pointer hover:bg-black/50">
                                                         <Trash className="relative top-[40%] left-[40%] hidden group-hover:block" color="red" />
                                                     </span>
                                                     <img src={product.meta?.og_image} className="h-full w-full object-cover" />
+                                                    </Link>
+                                                    
                                                 </div>
                                             </div>
                                         </div>

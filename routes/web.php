@@ -8,8 +8,10 @@ use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\ProductController;
+use App\Services\MetaService;
 use App\Services\ProductImageService;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 Route::get('/', [FrontendController::class, 'home'])->name('home');
@@ -89,6 +91,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
         } catch(\Exception $err) {
             dd($err);
             return back()->with('failed', 'Delete image failed. Error: '.$err);
+        }
+    });
+
+    Route::delete('/og-image/{id}/delete', function (string $id, MetaService $meta_service) {
+        try {
+            $meta = $meta_service->getMetaById($id);
+            $array = explode('/', $meta->og_image);
+            $path = implode('/', array_splice($array, 2));
+            Storage::disk('public')->delete($path);
+            
+            $meta_service->updateMeta($id, [
+                'meta_title' => $meta->meta_title,
+                'meta_description' => $meta->meta_description,
+                'meta_keywords' => $meta->meta_keywords,
+                'og_image' => null,
+                'image_alt' => $meta->image_alt 
+            ]);
+
+            return back()->with('success', 'Delete OG image successfully.');
+        } catch(\Exception $err) {
+            dd($err);
+            return back()->with('failed', 'Delete OG image failed. Error: '.$err);
         }
     });
 });
