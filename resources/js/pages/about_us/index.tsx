@@ -97,15 +97,6 @@ export default function AboutUsIndex() {
                     )}
                 </div>
 
-                <div className="w-full md:w-1/3">
-                    <Input
-                        type="text"
-                        placeholder="Cari about us..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </div>
-
                 <div>
                     {filteredAbout.length === 0 ? (
                         <EmptyState
@@ -131,7 +122,6 @@ export default function AboutUsIndex() {
                                         <TableHead>Deskripsi</TableHead>
                                         <TableHead>Tanggal Dibuat</TableHead>
                                         <TableHead>Tanggal Diperbarui</TableHead>
-                                        <TableHead>Status</TableHead>
                                         <TableHead>Aksi</TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -153,11 +143,6 @@ export default function AboutUsIndex() {
                                                     month: 'long',
                                                     year: 'numeric'
                                                 })}
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge variant="default">
-                                                    Aktif
-                                                </Badge>
                                             </TableCell>
                                             <TableCell className="flex justify-start gap-2">
                                                 <Button

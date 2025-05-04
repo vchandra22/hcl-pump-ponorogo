@@ -221,7 +221,7 @@ export default function HomepageForm({ homepage, errors }: HomepageFormProps) {
                     </div>
                 </div>
 
-                {errors && Object.keys(errors).some(key => !['title', 'summary', 'content', 'image_article'].includes(key)) && (
+                {errors && Object.keys(errors).some(key => !['title', 'description', 'banner_image'].includes(key)) && (
                     <div className="bg-destructive/10 p-3 rounded-md flex items-start gap-2">
                         <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
                         <div>

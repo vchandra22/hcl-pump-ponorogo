@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import InputError from '@/components/input-error';
-import { Image as ImageIcon, Image, Info } from 'lucide-react';
+import { AlertCircle, Image as ImageIcon, Image, Info } from 'lucide-react';
 import type { BreadcrumbItem } from '@/types';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
@@ -223,6 +223,16 @@ export default function ContactForm({ contact, errors }: ContactFormProps) {
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold">{isEditMode ? 'Edit Contact' : 'Tambah Contact'}</h1>
                 </div>
+
+                {errors && Object.keys(errors).some(key => !['title', 'description', 'email', 'phone', 'address', 'business_hours', 'gmaps_embed_code'].includes(key)) && (
+                    <div className="bg-destructive/10 p-3 rounded-md flex items-start gap-2">
+                        <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
+                        <div>
+                            <p className="font-medium text-destructive">Harap perbaiki kesalahan di kedua tab sebelum mengirim</p>
+                            <p className="text-sm text-muted-foreground">Terdapat kesalahan validasi di tab SEO & Meta</p>
+                        </div>
+                    </div>
+                )}
 
                 <Tabs defaultValue="content" className="w-full">
                     <TabsList className="grid w-full grid-cols-2">

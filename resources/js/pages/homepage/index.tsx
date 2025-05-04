@@ -92,10 +92,6 @@ export default function HomepageIndex() {
                     )}
                 </div>
 
-                <div className="w-full md:w-1/3">
-                    <Input type="text" placeholder="Cari homepage..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                </div>
-
                 <div>
                     {filteredHomepages.length === 0 ? (
                         <EmptyState
@@ -122,7 +118,6 @@ export default function HomepageIndex() {
                                         <TableHead>Tanggal Dibuat</TableHead>
                                         <TableHead>Tanggal Diperbarui</TableHead>
                                         <TableHead>Status</TableHead>
-                                        <TableHead>Aksi</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -143,9 +138,6 @@ export default function HomepageIndex() {
                                                     month: 'long',
                                                     year: 'numeric',
                                                 })}
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge variant="default">Aktif</Badge>
                                             </TableCell>
                                             <TableCell className="flex justify-start gap-2">
                                                 <Button variant="ghost" size="icon" asChild className="hover:bg-neutral-100">

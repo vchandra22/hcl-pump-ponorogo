@@ -5,7 +5,7 @@ import { useForm, Head, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import InputError from '@/components/input-error';
-import { Image as ImageIcon, Info } from 'lucide-react';
+import { AlertCircle, Image as ImageIcon, Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
@@ -162,6 +162,16 @@ export default function SocialMediaForm({ social_media, errors }: SocialMediaFor
                         <h1 className="text-2xl font-bold">{isEditMode ? 'Edit Social Media' : 'Tambah Social Media'}</h1>
                     </div>
                 </div>
+
+                {errors && Object.keys(errors).some(key => !['platform', 'social_media_link', 'title'].includes(key)) && (
+                    <div className="bg-destructive/10 p-3 rounded-md flex items-start gap-2">
+                        <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
+                        <div>
+                            <p className="font-medium text-destructive">Harap perbaiki kesalahan di kedua tab sebelum mengirim</p>
+                            <p className="text-sm text-muted-foreground">Terdapat kesalahan validasi di tab SEO & Meta</p>
+                        </div>
+                    </div>
+                )}
 
                 <div>
                     <form id="social-media-form" onSubmit={handleSubmit} className="space-y-6 mt-6">
