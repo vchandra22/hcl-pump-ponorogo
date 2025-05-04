@@ -38,7 +38,7 @@ class UpdateProductRequest extends FormRequest
             'additional_info' => 'nullable',
             'product_images' => 'nullable|array',
             'product_images.*' => 'image|mimes:png,jpg,jpeg|max:2040',
-            'old_og_image' => 'string'
+            'old_og_image' => 'nullable|string'
         ];
     }
 }

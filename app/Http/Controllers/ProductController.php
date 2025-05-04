@@ -58,9 +58,9 @@ class ProductController extends Controller
             $meta = $this->meta_service->createMeta(
                 $data['meta_title'],
                 $data['meta_description'],
-                $data['meta_keywords'],
-                $uploaded_og_image['path'] ?? null,
-                $data['image_alt']
+                $data['meta_keywords'] ?? '',
+                $uploaded_og_image['path'] ?? '',
+                $data['image_alt'] ?? ''
             );
 
             $product = $this->product_service->createProduct(
@@ -182,6 +182,7 @@ class ProductController extends Controller
             
             return redirect('/products')->with('success', 'Update product successfully.');
         } catch (\Exception $err) {
+            dd($err);
             return back()->with('failed', 'Update product failed. Error: ' . $err);
         }
     }
