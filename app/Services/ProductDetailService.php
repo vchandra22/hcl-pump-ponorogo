@@ -44,6 +44,30 @@ class ProductDetailService {
     }
   }
   
+  public function updateProductDetail(
+    string $id, 
+    string $product_id, 
+    string $description, 
+    string $specification, 
+    string $additional_info
+  )
+  {
+    DB::beginTransaction();
+    try {
+      $data = $this->product_detail_repository->update($id, [
+        'product_id' => $product_id,
+        'description' => $description,
+        'specification' => $specification,
+        'additional_info' => $additional_info
+      ]);
+      DB::commit();
+      return $data;
+    } catch(\Exception $err) {
+      DB::rollBack();
+      throw $err;
+    }
+  }
+  
   public function deleteProductDetail(string $id)
   {
     DB::beginTransaction();

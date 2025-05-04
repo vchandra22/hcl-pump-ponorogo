@@ -65,7 +65,7 @@ export default function ProductIndex({ products }: PageProps) {
                             </TableHeader>
                             <TableBody>
                                 {products.map((item: Product) => (
-                                    <TableRow>
+                                    <TableRow key={item.id}>
                                         <TableCell className="font-medium">{item.title}</TableCell>
                                         <TableCell className="max-w-md truncate">{formatRupiah(item.price)}</TableCell>
                                         <TableCell>{formatDate(item.created_at)}</TableCell>

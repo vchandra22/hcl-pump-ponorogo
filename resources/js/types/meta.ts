@@ -4,7 +4,7 @@ export default interface Meta {
   meta_description: string;
   meta_keywords: string;
   og_image: string;
-  alt_image: string;
+  image_alt: string;
   created_at: string;
   updated_at: string;
   [key: string]: unknown;

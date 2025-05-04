@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\products\StoreProductRequest;
+use App\Http\Requests\products\UpdateProductRequest;
 use App\Services\MetaService;
 use App\Services\ProductDetailService;
 use App\Services\ProductImageService;
 use App\Services\ProductService;
 use App\Services\UploadImageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -39,7 +41,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return Inertia::render('product/form');
+        return Inertia::render('product/create');
     }
 
     /**
@@ -47,15 +49,18 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request, UploadImageService $upload_image_service)
     {
+        $data = $request->validated();
+        $uploaded_og_image = null;        
         try {
-            $data = $request->validated();
-
+            if($data['og_image']) {
+                $uploaded_og_image = $upload_image_service->single($data['og_image']);
+            }
             $meta = $this->meta_service->createMeta(
                 $data['meta_title'],
                 $data['meta_description'],
-                'oke, oke',
-                'oke',
-                'oke'
+                $data['meta_keywords'],
+                $uploaded_og_image['path'] ?? null,
+                $data['image_alt']
             );
 
             $product = $this->product_service->createProduct(
@@ -63,6 +68,8 @@ class ProductController extends Controller
                 $data['short_description'],
                 $data['price'],
                 $data['sale_price'],
+                $data['is_featured'],
+                $data['is_active'],
                 $meta->id
             );
 
@@ -86,6 +93,7 @@ class ProductController extends Controller
             
             return redirect('/products')->with('success', "Create product successfully.");
         } catch (\Exception $err) {
+            dd($err);
             return back()->with('failed', "Create product failed. Error: " . $err);
         }
     }
@@ -105,8 +113,7 @@ class ProductController extends Controller
     {
         try {
             $product = $this->product_service->getProductById($id);
-            dd($product);
-            return $product;
+            return Inertia::render('product/edit', ['product' => $product]);
         } catch(\Exception $err) {
             return back()->with('failed', 'Product not found. Error: '.$err);
         }
@@ -115,9 +122,68 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateProductRequest $request, string $id, UploadImageService $upload_image_service)
     {
-        //
+        $data = $request->validated();
+        $new_og_image = null;
+
+        $product = $this->product_service->getProductById($id);
+
+        try {
+            if($data['og_image']) {
+                $array = explode('/', $data['old_og_image']);
+                $path = implode('/', array_splice($array, 2)); 
+                Storage::disk('public')->delete($path);
+                
+                // upload new og image
+                $new_og_image = $upload_image_service->single($data['og_image']);
+            }
+
+            if ($data['product_images']) {
+                $images = $upload_image_service->multiple($data['product_images']);
+
+                foreach ($images as $image) {
+                    $this->product_image_service->createProductImages(
+                        $product->id,
+                        $image['name'],
+                        $image['path'],
+                        'Gambar Produk'
+                    );
+                }
+            }
+
+            $this->product_service->updateProduct(
+                $id,
+                $data['title'],
+                $data['short_description'],
+                $data['price'],
+                $data['sale_price'],
+                $data['is_featured'],
+                $data['is_active'],
+                $product->meta_id
+            );
+            
+            $this->meta_service->updateMeta($product->meta_id, [
+                'meta_title' => $data['meta_title'],
+                'meta_description' => $data['meta_description'],
+                'meta_keywords' => $data['meta_keywords'],
+                'og_image' => $new_og_image['path'] ?? $data['old_og_image'],
+                'image_alt' => $data['image_alt']
+            ]);
+
+            $product_detail = $this->product_detail_service->getProductDetailByProductId($id);
+            $this->product_detail_service->updateProductDetail(
+                $product_detail->id,
+                $id,
+                $data['description'],
+                $data['specification'],
+                $data['additional_info']
+            );
+            
+            return redirect('/products')->with('success', 'Update product successfully.');
+        } catch (\Exception $err) {
+            return back()->with('failed', 'Update product failed. Error: ' . $err);
+        }
     }
 
     /**
@@ -128,6 +194,10 @@ class ProductController extends Controller
         try {
             // delete meta
             $product = $this->product_service->getProductById($id);
+            $meta = $this->meta_service->getMetaById($product->meta_id);
+            $array = explode('/', $meta->og_image);
+            $path = implode('/', array_splice($array, 2));
+            Storage::disk('public')->delete($path);
             $this->meta_service->deleteMeta($product->meta_id);
 
             // delete product detail
