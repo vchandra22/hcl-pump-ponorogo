@@ -38,4 +38,8 @@ class MetaModel extends Model
         return $this->belongsTo(ContactModel::class, 'id', 'meta_id');
     }
 
+    public function product()
+    {
+        return $this->belongsTo(HomePageModel::class, 'id', 'meta_id');
+    }
 }

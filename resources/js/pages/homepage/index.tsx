@@ -45,10 +45,6 @@ interface PageProps {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-    {
         title: 'Homepage Management',
         href: '/homepage',
     },

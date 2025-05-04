@@ -3,7 +3,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, HomeIcon, Phone, Info, Mail, EarthIcon, NewspaperIcon } from 'lucide-react';
+import { LayoutGrid, HomeIcon, Package, Phone, Info, Mail, EarthIcon, NewspaperIcon } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -13,9 +13,14 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Beranda Manajemen',
+        title: 'Manajemen Beranda',
         href: '/homepage',
         icon: HomeIcon,
+    },
+    {
+        title: 'Manajemen Produk',
+        href: '/products',
+        icon: Package,
     },
     {
         title: 'Tentang Kami Manajemen',
@@ -42,6 +47,7 @@ const mainNavItems: NavItem[] = [
         href: '/articles',
         icon: NewspaperIcon,
     },
+
 ];
 
 export function AppSidebar() {

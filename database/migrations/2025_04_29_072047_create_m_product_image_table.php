@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('m_product_image', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('product_id');
-            $table->text('product_image');
-            $table->boolean('is_primary')->default(0);
+            $table->string('image_name');
+            $table->string('image_path');
+            $table->string('alt_text');
             $table->timestamps();
         });
     }

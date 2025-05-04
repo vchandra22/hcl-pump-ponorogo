@@ -7,6 +7,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\SubmissionController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,6 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/{id}/update', [HomepageController::class, 'update'])->name('homepage.update');
         Route::delete('/{id}/delete', [HomepageController::class, 'destroy'])->name('homepage.delete');
     });
+
     Route::prefix('/about-us')->group(function () {
         Route::get('/', [AboutController::class, 'index'])->name('about.index');
         Route::get('/create', [AboutController::class, 'create'])->name('about.create');
@@ -68,6 +70,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{id}/edit', [ContactController::class, 'edit'])->name('contact.edit');
         Route::post('/{id}/update', [ContactController::class, 'update'])->name('contact.update');
         Route::delete('/{id}/delete', [ContactController::class, 'destroy'])->name('contact.destroy');
+    });
+    
+    Route::prefix('/products')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('product.index');
+        Route::get('/create', [ProductController::class, 'create'])->name('product.create');
+        Route::post('/store', [ProductController::class, 'store'])->name('product.store');
+        Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+        Route::put('/{id}/update', [ProductController::class, 'update'])->name('product.update');
+        Route::delete('/{id}/delete', [ProductController::class, 'destroy'])->name('product.delete');
     });
 });
 
