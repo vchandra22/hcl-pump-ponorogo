@@ -21,4 +21,9 @@ class FrontendController extends Controller
             'homepages' => $homepages
         ]);
     }
+    
+    public function product()
+    {
+        return Inertia::render('frontends/product/index');
+    }
 }
