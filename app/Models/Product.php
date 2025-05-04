@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasSlug;
 use App\Traits\InteractsWithUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
-    use HasFactory, InteractsWithUuid;
+    use HasFactory, InteractsWithUuid, HasSlug;
 
     protected $table = 'm_product';
     public $incrementing = false;
@@ -18,7 +19,6 @@ class Product extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'slug',
         'title',
         'short_description',
         'price',

@@ -8,8 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
+import { ProductFormData } from '@/types/product';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { Image } from 'lucide-react';
+import { Image, Trash } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -22,29 +24,9 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-type ProductFormData = {
-  title: string;
-  slug: string;
-  short_description: string;
-  price: string;
-  sale_price: string;
-  is_featured: boolean;
-  is_active: boolean;
-  product_images: File[] | null;
-  description: string;
-  specification: string;
-  additional_info: string;
-  meta_title: string | null;
-  meta_description: string | null;
-  meta_keywords: string | null;
-  og_image: File | null;
-  image_alt: string | null;
-}
-
 export default function CreateProduct() {
-    const { data, setData, submit, processing,  errors } = useForm<ProductFormData>({
+    const { data, setData, submit, processing, errors } = useForm<ProductFormData>({
         title: '',
-        slug: '',
         short_description: '',
         price: '0',
         sale_price: '0',
@@ -54,24 +36,30 @@ export default function CreateProduct() {
         description: '',
         specification: '',
         additional_info: '',
-        meta_title: null, 
+        meta_title: null,
         meta_description: '',
         meta_keywords: '',
         og_image: null,
         image_alt: '',
     });
+    const og_image = useRef<HTMLInputElement>(null);
 
     const handleFiles = (data: File[]) => {
         setData('product_images', data);
     };
-    
+
     const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      
-      submit('post', route('product.store'), {
-        forceFormData: true,
-      });
-    }
+        e.preventDefault();
+
+        submit('post', route('product.store'), {
+            forceFormData: true,
+        });
+    };
+
+    useEffect(() => {
+        console.log(data.og_image);
+        console.log(og_image.current?.value);
+    }, [data.og_image]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -87,7 +75,7 @@ export default function CreateProduct() {
                         </TabsTrigger>
                     </TabsList>
 
-                    <form onSubmit={handleSubmit} encType='multipart/form-data'>
+                    <form onSubmit={handleSubmit} encType="multipart/form-data">
                         <TabsContent value="product">
                             <div className="grid grid-cols-1 gap-6">
                                 <div className="space-y-2">
@@ -96,24 +84,12 @@ export default function CreateProduct() {
                                         id="title"
                                         value={data.title}
                                         onChange={(e) => {
-                                            setData('title', e.target.value)
-                                            setData('meta_title', e.target.value)
-                                          }
-                                        }
+                                            setData('title', e.target.value);
+                                            setData('meta_title', e.target.value);
+                                        }}
                                         placeholder="Masukkan nama produk"
                                     />
                                     <InputError message={errors?.title} />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="slug">Slug *</Label>
-                                    <Input
-                                        id="slug"
-                                        value={data.slug}
-                                        onChange={(e) => setData('slug', e.target.value)}
-                                        placeholder="Masukkan slug produk"
-                                    />
-                                    <InputError message={errors?.slug} />
                                 </div>
 
                                 <div className="space-y-2">
@@ -122,10 +98,9 @@ export default function CreateProduct() {
                                         id="short_description"
                                         value={data.short_description}
                                         onChange={(e) => {
-                                            setData('short_description', e.target.value)
-                                            setData('meta_description', e.target.value)
-                                          }
-                                        }
+                                            setData('short_description', e.target.value);
+                                            setData('meta_description', e.target.value);
+                                        }}
                                         placeholder="Masukkan deskripsi singkat produk"
                                         rows={3}
                                     />
@@ -198,11 +173,11 @@ export default function CreateProduct() {
                                     </div>
                                 </div>
 
-                                <div className='space-y-10'>
-                                  <CustomInputFile onChange={handleFiles} />
-                                  <InputError message={errors?.product_images}/>
+                                <div className="space-y-10">
+                                    <CustomInputFile onChange={handleFiles} />
+                                    <InputError message={errors?.product_images} />
                                 </div>
-                                
+
                                 <p className="-mb-4 text-lg font-bold">Detail Produk</p>
 
                                 <div className="space-y-2">
@@ -247,39 +222,89 @@ export default function CreateProduct() {
                             <div className="grid grid-cols-1 gap-6">
                                 <div className="space-y-2">
                                     <Label htmlFor="meta_title">Meta Title</Label>
-                                    <Input id="meta_title" value={data.meta_title ?? ''} onChange={(e) => setData('meta_title', e.target.value)} placeholder="Meta title untuk SEO" />
+                                    <Input
+                                        id="meta_title"
+                                        value={data.meta_title ?? ''}
+                                        onChange={(e) => setData('meta_title', e.target.value)}
+                                        placeholder="Meta title untuk SEO"
+                                    />
                                     <InputError message={errors?.meta_title} />
                                     <span className="text-xs text-gray-400">Judul yang akan muncul di hasil pencarian (50-60 karakter).</span>
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="meta_description">Meta Description</Label>
-                                    <Textarea id="meta_description" value={data.meta_description ?? ''} onChange={(e) => setData('meta_description', e.target.value)} placeholder="Deskripsi untuk SEO" rows={3} />
+                                    <Textarea
+                                        id="meta_description"
+                                        value={data.meta_description ?? ''}
+                                        onChange={(e) => setData('meta_description', e.target.value)}
+                                        placeholder="Deskripsi untuk SEO"
+                                        rows={3}
+                                    />
                                     <InputError message={errors?.meta_description} />
                                     <span className="text-xs text-gray-400">Deskripsi yang akan muncul di hasil pencarian (120-160 karakter).</span>
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="meta_keywords">Meta Keywords</Label>
-                                    <Input id="meta_keywords" value={data.meta_keywords ?? ''} onChange={(e) => e.target.value} placeholder="Kata kunci (dipisahkan dengan koma)" />
+                                    <Input
+                                        id="meta_keywords"
+                                        value={data.meta_keywords ?? ''}
+                                        onChange={(e) => setData('meta_keywords', e.target.value)}
+                                        placeholder="Kata kunci (dipisahkan dengan koma)"
+                                    />
                                     <InputError />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="og_image">Open Graph Image URL</Label>
                                     <div className="flex gap-2">
-                                        <Input id="og_image" placeholder="URL gambar untuk social sharing" className="flex-1" />
-                                        <Button type="button" variant="outline">
+                                        <Input
+                                            id="og_image"
+                                            ref={og_image}
+                                            type="file"
+                                            accept="image/*"
+                                            className="flex-1"
+                                            onChange={(e) => {
+                                               if(e.target.files) setData('og_image', e.target.files[0]);
+                                            }}
+                                        />
+                                        <Button type="button" variant="outline" onClick={() => og_image.current?.click()}>
                                             <Image className="mr-2 h-4 w-4" />
                                             Upload
                                         </Button>
                                     </div>
+                                    {data.og_image && (
+                                        <div
+                                            className="flex justify-center"
+                                            onClick={() => {
+                                                setData('og_image', null);
+
+                                                if (og_image.current) og_image.current.value = ''; 
+                                            }}
+                                        >
+                                            <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-3 lg:grid-cols-7">
+                                                <div className="relative h-32 w-32 overflow-hidden rounded bg-gray-200 shadow">
+                                                    <span className="group absolute block h-full w-full cursor-pointer hover:bg-black/50">
+                                                        <Trash className="relative top-[40%] left-[40%] hidden group-hover:block" color="red" />
+                                                    </span>
+                                                    <img src={URL.createObjectURL(data.og_image)} className="h-full w-full object-cover" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <InputError />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="image_alt">Image Alt Text</Label>
-                                    <Input id="image_alt" value={data.image_alt ?? ''} onChange={(e) => setData('image_alt', e.target.value)} placeholder="Teks alternatif untuk gambar" />
+                                    <Input
+                                        id="image_alt"
+                                        value={data.image_alt ?? ''}
+                                        onChange={(e) => setData('image_alt', e.target.value)}
+                                        placeholder="Teks alternatif untuk gambar"
+                                    />
                                     <InputError />
                                     <span className="text-xs text-gray-400">Teks alternatif untuk aksesibilitas dan SEO.</span>
                                 </div>

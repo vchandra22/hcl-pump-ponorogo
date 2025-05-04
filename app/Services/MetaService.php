@@ -16,6 +16,11 @@ class MetaService {
   {
     return $this->meta_repository->all();
   }
+
+  public function getMetaById(string $id)
+  {
+    return $this->meta_repository->find($id);
+  }
   
   public function createMeta(
     string $meta_title,

@@ -32,16 +32,19 @@ class ProductService
     string $short_description,
     int $price,
     int $sale_price,
+    bool $is_featured,
+    bool $is_active,
     string $meta_id,
   ) {
     DB::beginTransaction();
     try {
       $product = $this->product_repository->create([
-        'slug' => Str::slug($title),
         'title' => $title,
         'short_description' => $short_description,
         'price' => $price,
         'sale_price' => $sale_price,
+        'is_featured' => $is_featured,
+        'is_active' => $is_active,
         'meta_id' => $meta_id
       ]);
       DB::commit();
@@ -49,6 +52,35 @@ class ProductService
     } catch (\Exception $err) {
       DB::rollBack();
       throw $err;
+    }
+  }
+  
+  public function updateProduct(
+    string $id,
+    string $title,
+    string $short_description,
+    int $price,
+    int $sale_price,
+    bool $is_featured,
+    bool $is_active,
+    string $meta_id
+)
+  {
+    DB::beginTransaction();
+    try {
+      $product = $this->product_repository->update($id, [
+        'title' => $title,
+        'short_description' => $short_description,
+        'price' => $price,
+        'sale_price' => $sale_price,
+        'is_featured' => $is_featured,
+        'is_active' => $is_active,
+        'meta_id' => $meta_id
+      ]);
+      DB::commit();
+      return $product;
+    } catch(\Exception $err) {
+      DB::rollBack();
     }
   }
   

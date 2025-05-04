@@ -26,7 +26,7 @@ class ProductDetailRepository implements ProductDetailRepositoryInterface {
   
   public function update(string $id, array $data)
   {
-    $product = ProductDetail::findOrFail($data);
+    $product = ProductDetail::findOrFail($id);
     $product->update($data);
     return $product;
   }

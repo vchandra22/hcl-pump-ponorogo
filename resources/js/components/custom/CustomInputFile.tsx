@@ -1,12 +1,16 @@
 import { cn } from '@/lib/utils';
+import { ProductImage } from '@/types/product';
+import { Link } from '@inertiajs/react';
 import { Image, Trash } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface PropsType {
     onChange: (data: File[]) => void;
+    isEdit?: boolean;
+    value?: ProductImage[];
 }
 
-export default function CustomInputFile({ onChange }: PropsType) {
+export default function CustomInputFile({ onChange, isEdit = false, value }: PropsType) {
     const [files, setFile] = useState<File[]>([]);
     const [previews, setPreview] = useState<{ originalName: string, src: string }[]>([]);
 
@@ -28,7 +32,7 @@ export default function CustomInputFile({ onChange }: PropsType) {
       setFile(filteredFiles);
       onChange(filteredFiles);
     }
-
+    
     useEffect(() => {
         const urls = files.map((file) => ({originalName: file.name, src: URL.createObjectURL(file)}));
         setPreview(urls);
@@ -36,7 +40,7 @@ export default function CustomInputFile({ onChange }: PropsType) {
 
     return (
         <div>
-            <label htmlFor="input" className="text-sm font-medium mb-1">
+            <label htmlFor="input" className="mb-1 text-sm font-medium">
                 Gambar Produk *
             </label>
             <div
@@ -51,17 +55,26 @@ export default function CustomInputFile({ onChange }: PropsType) {
                 Pilih gambar
             </div>
             <input ref={inputRef} type="file" multiple style={{ display: 'none' }} id="input" onChange={handleChange} />
-            <div className='flex justify-center'>
-            <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-3 lg:grid-cols-7">
-                {previews.map((file, i) => (
-                    <div key={i} className="h-32 w-32 overflow-hidden rounded bg-gray-200 shadow relative" onClick={() => handleDelete(file)}>
-                        <span className='group block absolute w-full h-full hover:bg-black/50 cursor-pointer'>
-                          <Trash className='hidden group-hover:block relative left-[40%] top-[40%]' color='red'/>
-                        </span>
-                        <img src={file.src} alt={`preview-${i}`} className="h-full w-full object-cover" />
-                    </div>
-                ))}
-            </div>
+            <div className="flex justify-center">
+                <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-3 lg:grid-cols-7">
+                    {previews.map((file, i) => (
+                        <div key={i} className="relative h-32 w-32 overflow-hidden rounded bg-gray-200 shadow" onClick={() => handleDelete(file)}>
+                            <span className="group absolute block h-full w-full cursor-pointer hover:bg-black/50">
+                                <Trash className="relative top-[40%] left-[40%] hidden group-hover:block" color="red" />
+                            </span>
+                            <img src={file.src} alt={`preview-${i}`} className="h-full w-full object-cover" />
+                        </div>
+                    ))}
+                    {isEdit &&
+                        value?.map((item, i) => (
+                            <Link method='delete' href={`/image/${item.id}/delete`} key={i} className="relative h-32 w-32 overflow-hidden rounded bg-gray-200 shadow" >
+                                <span className="group absolute block h-full w-full cursor-pointer hover:bg-black/50">
+                                    <Trash className="relative top-[40%] left-[40%] hidden group-hover:block" color="red" />
+                                </span>
+                                <img src={item.image_path} alt={`preview-${i}`} className="h-full w-full object-cover" />
+                            </Link>
+                        ))}
+                </div>
             </div>
         </div>
     );

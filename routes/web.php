@@ -8,6 +8,7 @@ use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\ProductController;
+use App\Services\ProductImageService;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -77,8 +78,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', [ProductController::class, 'create'])->name('product.create');
         Route::post('/store', [ProductController::class, 'store'])->name('product.store');
         Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
-        Route::put('/{id}/update', [ProductController::class, 'update'])->name('product.update');
+        Route::post('/{id}/update', [ProductController::class, 'update'])->name('product.update');
         Route::delete('/{id}/delete', [ProductController::class, 'destroy'])->name('product.delete');
+    });
+    
+    Route::delete('/image/{id}/delete', function (string $id, ProductImageService $product_image_service) {
+        try {
+            $product_image_service->deleteProductImage($id);
+            return back()->with('success', 'Delete image successfully.');
+        } catch(\Exception $err) {
+            dd($err);
+            return back()->with('failed', 'Delete image failed. Error: '.$err);
+        }
     });
 });
 
