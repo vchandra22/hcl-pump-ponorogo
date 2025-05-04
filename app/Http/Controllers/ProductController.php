@@ -33,7 +33,12 @@ class ProductController extends Controller
     public function index()
     {
         $products = $this->product_service->getAllProducts();
-        return Inertia::render('product/index', ['products' => $products]);
+        return Inertia::render('product/index', [
+            'products' => $products, 
+            'status' => [
+                'success' => session('success'),
+                'failed' => session('failed')
+            ]]);
     }
 
     /**

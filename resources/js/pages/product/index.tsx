@@ -20,6 +20,8 @@ import formatDate from '@/utils/formatDate';
 import formatRupiah from '@/utils/formatRupiah';
 import { Head, Link } from '@inertiajs/react';
 import { PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
+import { useEffect } from 'react';
+import { toast, Toaster } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,15 +30,27 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface PageProps {
-    products: Product[];
+interface Status {
+    success: string;
+    failed: string;
 }
 
-export default function ProductIndex({ products }: PageProps) {
-    console.log(products)
+interface PageProps {
+    products: Product[];
+    status: Status;
+}
+
+export default function ProductIndex({ products, status }: PageProps) {
+    
+    useEffect(() => {
+        if(status.success) toast.success(status.success);
+        if(status.failed) toast.success(status.failed);
+    }, [status])
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Manajemen Produk" />
+            <Toaster/>
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <div>
