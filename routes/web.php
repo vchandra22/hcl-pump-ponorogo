@@ -28,6 +28,7 @@ Route::prefix('/about')->group(function () {
     Route::get('/', [FrontendController::class, 'about'])->name('about.index');
 });
 
+Route::get('/contact', [FrontendController::class, 'contact'])->name('contact.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
