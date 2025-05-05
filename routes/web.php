@@ -17,6 +17,7 @@ use Inertia\Inertia;
 Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::prefix('/product')->group(function () {
     Route::get('/', [FrontendController::class, 'product'])->name('product');
+    Route::get('/{slug}', [FrontendController::class, 'productDetail'])->name('product.detail');
 });
 
 

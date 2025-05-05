@@ -24,7 +24,7 @@ export default function ProductIndex() {
               </div>
           </section>
 
-          <section className="container mx-auto w-full">
+          <section className="container mx-auto w-full mb-15">
               <div className="grid w-full gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-6">
                   <div>
                       <ProductCard />

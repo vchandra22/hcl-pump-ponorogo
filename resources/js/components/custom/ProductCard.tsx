@@ -4,10 +4,10 @@ import { CircleChevronRight } from "lucide-react";
 interface ProductCardProps {
   title?: string;
   img?: string;
-  slug?: string;
+  href?: string;
 }
 
-export default function ProductCard({ title, img, slug }: ProductCardProps) {
+export default function ProductCard({ title, img, href}: ProductCardProps) {
     return (
         <div className="w-full rounded-3xl border border-slate-200 lg:col-span-4">
             <img src={img ?? `/asset/contoh-gambar-pompa.png`} width="100" height="100" className="mx-auto w-full overflow-hidden object-cover" />
@@ -16,7 +16,7 @@ export default function ProductCard({ title, img, slug }: ProductCardProps) {
                     {title ?? 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'}
                 </p>
                 <div className="text-primary-color flex items-center justify-between pt-2 xl:pt-4 group">
-                    <Link href={slug ?? `#`} as="button" preserveScroll className="text-xl md:text-2xl cursor-pointer group-hover:underline">
+                    <Link href={href ?? `#`} as="button" preserveScroll className="text-xl md:text-2xl cursor-pointer group-hover:underline">
                         Lihat Produk
                     </Link>
                     <CircleChevronRight className="text-primary-color cursor-pointer" size="28" />
