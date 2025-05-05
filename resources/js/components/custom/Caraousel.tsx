@@ -33,7 +33,7 @@ export default function Caraousel({ images, alt }: CaraouselProps) {
     };
 
     return (
-        <div className="relative h-120 w-150">
+        <div className="relative sm:h-110 lg:h-120 sm:w-full sm:max-w-120 lg:w-200">
             <div className="absolute flex h-full w-full items-center justify-between px-3">
                 <button className="cursor-pointer" onClick={() => paginate(1)}>
                     <CircleChevronLeft size={40} />
