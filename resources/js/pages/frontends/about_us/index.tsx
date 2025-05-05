@@ -129,7 +129,7 @@ export default function AboutUsIndex() {
                     </section>
                 </div>
                 <div className="mt-9 md:mb-4 lg:mb-3 lg:mt-0">
-                    <p className="text-primary-color text-center">Lihat produk lainya</p>
+                    <p className="text-primary-color text-center h3">Lihat produk lainya</p>
                 </div>
             </section>
             <CtaComponent />
