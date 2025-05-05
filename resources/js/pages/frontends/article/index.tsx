@@ -33,7 +33,7 @@ export default function Article() {
                     alt="" />
             </section>
 
-            <section className="mx-auto my-15 w-full px-4 md:px-12">
+            <section className="mx-auto w-full px-4 md:px-12">
                 <div className="grid lg:grid-cols-12">
                     <p className="text-primary-color h2 lg:col-span-4">Kumpulan Inspirasi</p>
                     <div className="flex flex-col gap-y-9 lg:col-span-8">
@@ -42,8 +42,7 @@ export default function Article() {
                 </div>
             </section>
 
-            <section className="w-full py-12 md:px-12 mx-auto">
-
+            <section className="w-full px-4 md:px-12 mx-auto">
                 <ArticleCard/>
                 <ArticleCard/>
                 <ArticleCard/>
