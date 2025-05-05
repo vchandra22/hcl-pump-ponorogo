@@ -8,8 +8,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-    --font-sans:
-        'Reddit Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Reddit Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -58,7 +57,7 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
-/*    custom color*/
+    /*    custom color*/
     --color-primary-color: oklch(0.6657 0.1386 164.48);
     --color-secondary-color: oklch(0.3123 0.0517 249.32);
     --color-accent-color: oklch(0.8732 0.1296 139.83);
@@ -87,39 +86,51 @@
 }
 
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --destructive-foreground: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.87 0 0);
-    --chart-1: oklch(0.646 0.222 41.116);
-    --chart-2: oklch(0.6 0.118 184.704);
-    --chart-3: oklch(0.398 0.07 227.392);
-    --chart-4: oklch(0.828 0.189 84.429);
-    --chart-5: oklch(0.769 0.188 70.08);
+    /* Base Colors */
+    --background: #FFFFFF;
+    --foreground: #1C333B;
+    --card: #FFFFFF;
+    --card-foreground: #1C333B;
+    --popover: #FFFFFF;
+    --popover-foreground: #1C333B;
+
+    /* Primary & Secondary */
+    --primary: #19A478;
+    --primary-foreground: #FFFFFF;
+    --secondary: #E8F5F1; /* Soft green tint */
+    --secondary-foreground: #1C333B;
+
+    /* Muted & Accent */
+    --muted: #F5F5F5;
+    --muted-foreground: #6B7280; /* Neutral gray for readability */
+    --accent: #ABF099;
+    --accent-foreground: #091B1E;
+
+    /* Destructive & UI Elements */
+    --destructive: #EF4444; /* Brighter red for better visibility */
+    --destructive-foreground: #FFFFFF;
+    --border: #E5E7EB; /* Light gray border */
+    --input: #FFFFFF;
+    --ring: #19A478; /* Focus ring matches primary */
+
+    /* Chart Colors */
+    --chart-1: #19A478;
+    --chart-2: #1C333B;
+    --chart-3: #ABF099;
+    --chart-4: #091B1E;
+    --chart-5: #D1FAE5; /* Light green variant */
+
     --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.87 0 0);
+
+    /* Sidebar (Light & Fresh) */
+    --sidebar: #FFFFFF; /* White background */
+    --sidebar-foreground: #1C333B;
+    --sidebar-primary: #19A478;
+    --sidebar-primary-foreground: #FFFFFF;
+    --sidebar-accent: #ABF099;
+    --sidebar-accent-foreground: #091B1E;
+    --sidebar-border: #E5E7EB; /* Light border */
+    --sidebar-ring: #ABF099; /* Accent color for focus */
 }
 
 .dark {
@@ -196,18 +207,17 @@
     body {
         @apply bg-background text-foreground;
     }
-    
+
     /* global.css */
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+        -webkit-appearance: none;
+        margin: 0;
     }
 
     input[type="number"] {
-      -moz-appearance: textfield;
+        -moz-appearance: textfield;
     }
 
-    
-        
+
 }
