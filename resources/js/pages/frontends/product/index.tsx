@@ -24,23 +24,23 @@ export default function ProductIndex() {
                 </div>
             </section>
 
-            <section className="px-4 md:px-12 mx-auto w-full">
-                <div className="grid w-full gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-6">
-                    <div>
-                        <ProductCard />
-                    </div>
-                    <div>
-                        <ProductCard />
-                    </div>
-                    <div>
-                        <ProductCard />
-                    </div>
-                    <div>
-                        <ProductCard />
-                    </div>
-                </div>
-            </section>
-
+          <section className="container mx-auto w-full mb-15">
+              <div className="grid w-full gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-6">
+                  <div>
+                      <ProductCard />
+                  </div>
+                  <div>
+                      <ProductCard />
+                  </div>
+                  <div>
+                      <ProductCard />
+                  </div>
+                  <div>
+                      <ProductCard />
+                  </div>
+              </div>
+          </section>
+          
             <CtaComponent />
 
             <Footer />

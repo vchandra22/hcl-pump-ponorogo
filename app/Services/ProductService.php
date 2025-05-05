@@ -4,17 +4,14 @@ namespace App\Services;
 
 use App\Repositories\Product\ProductRepository;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class ProductService
 {
   private $product_repository;
-  private $meta_service;
 
-  function __construct(ProductRepository $product_repository, MetaService $meta_service)
+  function __construct(ProductRepository $product_repository)
   {
     $this->product_repository = $product_repository;
-    $this->meta_service = $meta_service;
   }
 
   public function getAllProducts()
@@ -25,6 +22,11 @@ class ProductService
   public function getProductById(string $id)
   {
     return $this->product_repository->findOne($id);
+  }
+  
+  public function getProductBySlug(string $slug)
+  {
+    return $this->product_repository->findBySlug($slug);
   }
 
   public function createProduct(
@@ -81,6 +83,7 @@ class ProductService
       return $product;
     } catch(\Exception $err) {
       DB::rollBack();
+      throw $err;
     }
   }
   

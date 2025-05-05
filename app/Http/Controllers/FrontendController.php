@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Services\HomepageService;
+use App\Services\ProductService;
 use Inertia\Inertia;
 
 class FrontendController extends Controller
 {
     protected $homepageService;
+    private $product_service;
 
-    public function __construct(HomepageService $homepageService)
+    public function __construct(HomepageService $homepageService, ProductService $product_service)
     {
         $this->homepageService = $homepageService;
+        $this->product_service = $product_service;
     }
 
     public function home() {
@@ -45,5 +48,11 @@ class FrontendController extends Controller
     public function contact()
     {
         return Inertia::render('frontends/contact/index');
+    }
+
+    public function productDetail(string $slug)
+    {
+        $product = $this->product_service->getProductBySlug($slug);
+        return Inertia::render('frontends/product/detail', ['product' => $product]);
     }
 }

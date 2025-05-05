@@ -15,6 +15,11 @@ class ProductRepository implements ProductRepositoryInterface
   {
     return Product::with(['meta', 'productDetail', 'productImages'])->findOrFail($id);
   }
+  
+  public function findBySlug(string $slug)
+  {
+    return Product::where('slug', $slug)->with(['meta', 'productDetail', 'productImages'])->first();
+  }
     
   public function create(array $product)
   {
