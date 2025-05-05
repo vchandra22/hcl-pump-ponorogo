@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Pompa HCL Ponorogo';
 
@@ -38,6 +38,7 @@ const navLinks: { name: string; href: string; className: string }[] = [
 ];
 
 export default function Navigasi() {
+    const { url } = usePage();
     return (
         <header className="flex h-20 w-full shrink-0 items-center justify-end border border-b-slate-200 px-4 md:px-6">
             <Sheet>
@@ -67,7 +68,7 @@ export default function Navigasi() {
             </Link>
             <nav className="ml-auto hidden gap-6 lg:flex">
                 {navLinks.map((link, i) => (
-                    <Link key={i} href={link.href} className={link.className} prefetch={false}>
+                    <Link key={i} href={link.href} className={`${link.className} ${(link.href == url && url !== '/contact') ? 'underline' : ''}`} prefetch={false}>
                         {link.name}
                     </Link>
                 ))}
