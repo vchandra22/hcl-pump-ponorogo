@@ -31,4 +31,9 @@ class FrontendController extends Controller
     {
         return Inertia::render('frontends/article/index');
     }
+
+    public function about()
+    {
+        return Inertia::render('frontends/about_us/index');
+    }
 }

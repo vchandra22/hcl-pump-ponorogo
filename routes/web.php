@@ -23,6 +23,10 @@ Route::prefix('/article')->group(function () {
     Route::get('/', [FrontendController::class, 'article'])->name('article.index');
 });
 
+Route::prefix('/about')->group(function () {
+    Route::get('/', [FrontendController::class, 'about'])->name('about.index');
+});
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {

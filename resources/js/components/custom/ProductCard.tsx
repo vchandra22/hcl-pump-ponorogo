@@ -7,7 +7,7 @@ interface ProductCardProps {
   slug?: string;
 }
 
-export default function ProductCard({ title, img, slug }: ProductCardProps) {
+export default function     ProductCard({ title, img, slug }: ProductCardProps) {
     return (
         <div className="w-full rounded-3xl border border-slate-200 lg:col-span-4">
             <img src={img ?? `/asset/contoh-gambar-pompa.png`} width="100" height="100" className="mx-auto w-full overflow-hidden object-cover" />
