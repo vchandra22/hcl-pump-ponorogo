@@ -1,10 +1,10 @@
 import { Link } from "@inertiajs/react";
 
 interface CtaComponentProps {
-  title?: string;
-  description?: string;
-  buttonText?: string;
-  href?: string;
+    title?: string;
+    description?: string;
+    buttonText?: string;
+    href?: string;
 }
 
 export default function CtaComponent({ title, description, buttonText, href }: CtaComponentProps) {

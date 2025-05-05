@@ -19,6 +19,10 @@ Route::prefix('/product')->group(function () {
     Route::get('/', [FrontendController::class, 'product'])->name('product');
 });
 
+Route::prefix('/article')->group(function () {
+    Route::get('/', [FrontendController::class, 'article'])->name('article.index');
+});
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
@@ -77,7 +81,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/{id}/update', [ContactController::class, 'update'])->name('contact.update');
         Route::delete('/{id}/delete', [ContactController::class, 'destroy'])->name('contact.destroy');
     });
-    
+
     Route::prefix('/products')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('product.index');
         Route::get('/create', [ProductController::class, 'create'])->name('product.create');
@@ -86,7 +90,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/{id}/update', [ProductController::class, 'update'])->name('product.update');
         Route::delete('/{id}/delete', [ProductController::class, 'destroy'])->name('product.delete');
     });
-    
+
     Route::delete('/image/{id}/delete', function (string $id, ProductImageService $product_image_service) {
         try {
             $product_image_service->deleteProductImage($id);
@@ -103,13 +107,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $array = explode('/', $meta->og_image);
             $path = implode('/', array_splice($array, 2));
             Storage::disk('public')->delete($path);
-            
+
             $meta_service->updateMeta($id, [
                 'meta_title' => $meta->meta_title,
                 'meta_description' => $meta->meta_description,
                 'meta_keywords' => $meta->meta_keywords,
                 'og_image' => null,
-                'image_alt' => $meta->image_alt 
+                'image_alt' => $meta->image_alt
             ]);
 
             return back()->with('success', 'Delete OG image successfully.');
