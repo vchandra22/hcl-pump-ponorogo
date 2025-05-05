@@ -34,7 +34,7 @@ export default function Article() {
             </section>
 
             <section className="mx-auto w-full px-4 md:px-12">
-                <div className="grid lg:grid-cols-12">
+                <div className="grid lg:grid-cols-12 py-4 md:py-8">
                     <p className="text-primary-color h2 lg:col-span-4">Kumpulan Inspirasi</p>
                     <div className="flex flex-col gap-y-9 lg:col-span-8">
                         <h1 className="h1 text-secondary-color">Temukan Lebih Banyak Inspirasi Di Sini</h1>
