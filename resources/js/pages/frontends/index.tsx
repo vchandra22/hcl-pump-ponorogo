@@ -18,7 +18,7 @@ export default function Beranda() {
                     <div className="lg:max-w-2/3">
                         <div className="flex flex-col justify-center space-y-4">
                             <div className="space-y-2">
-                                <h1 className="text-bg-color text-center text-3xl h1 font-bold tracking-tighter sm:text-5xl lg:text-start xl:text-6xl/none">
+                                <h1 className="text-bg-color text-center text-xl h1 font-bold tracking-tighter sm:text-5xl lg:text-start xl:text-6xl/none">
                                     HCL – Pilihan Cerdas untuk Pompa Air yang Mengalir Tanpa Henti
                                 </h1>
                                 <p className="text-bg-color pt-2 text-center md:text-xl lg:pt-8 lg:text-start">
@@ -34,7 +34,7 @@ export default function Beranda() {
 
             <section className="w-full py-12 md:px-6 md:py-24 lg:py-32">
                 <div className="mx-auto px-4 md:px-6">
-                    <div className="grid w-full grid-cols-1 lg:grid-cols-12">
+                    <div className="grid w-full grid-cols-1 mb-9 md:mb-0 lg:grid-cols-12">
                         <div className="lg:col-span-4">
                             <div className="w-full">
                                 <h2 className="text-primary-color font-regular pb-2 h2">Mengapa memilih kami?</h2>
@@ -112,7 +112,7 @@ export default function Beranda() {
                 <div className="mx-auto px-4 md:px-6">
                     <div className="grid w-full grid-cols-1 pb-8 md:pb-12 lg:grid-cols-12">
                         <div className="lg:col-span-4">
-                            <div className="w-full">
+                            <div className="w-fulsl">
                                 <h2 className="text-primary-color font-regular pb-2 h2">Update Artikel</h2>
                             </div>
                         </div>
