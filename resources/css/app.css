@@ -157,6 +157,36 @@
     --sidebar-ring: oklch(0.439 0 0);
 }
 
+.h1 {
+    font-size: 2.5rem;
+    line-height: 2.875rem;
+}
+
+.h2 {
+    font-size: 1.75rem;
+    line-height: 2.125rem;
+}
+
+.h3 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+
+.p-subheading {
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+}
+
+.p-body-text-lg {
+    font-size: 1rem;
+    line-height: 1.375rem;
+}
+
+.p-body-text-sm {
+    font-size: 0.75rem;
+    line-height: 1.125rem;
+}
+
 @layer base {
     * {
         @apply border-border;
@@ -176,5 +206,7 @@
     input[type="number"] {
       -moz-appearance: textfield;
     }
+
+    
         
 }
