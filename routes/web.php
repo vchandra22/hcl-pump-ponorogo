@@ -8,6 +8,7 @@ use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TermsConditionController;
 use App\Services\MetaService;
 use App\Services\ProductImageService;
 use Illuminate\Support\Facades\Route;
@@ -87,6 +88,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{id}/edit', [ContactController::class, 'edit'])->name('contact.edit');
         Route::post('/{id}/update', [ContactController::class, 'update'])->name('contact.update');
         Route::delete('/{id}/delete', [ContactController::class, 'destroy'])->name('contact.destroy');
+    });
+
+    Route::prefix('/terms-conditions')->group(function () {
+        Route::get('/', [TermsConditionController::class, 'index'])->name('terms.index');
+        Route::get('/create', [TermsConditionController::class, 'create'])->name('terms.create');
+        Route::post('/store', [TermsConditionController::class, 'store'])->name('terms.store');
+        Route::get('/{id}/edit', [TermsConditionController::class, 'edit'])->name('terms.edit');
+        Route::post('/{id}/update', [TermsConditionController::class, 'update'])->name('terms.update');
+        Route::delete('/{id}/delete', [TermsConditionController::class, 'destroy'])->name('terms.delete');
     });
 
     Route::prefix('/products')->group(function () {

@@ -58,9 +58,7 @@ export default function SocialMediaIndex() {
 
     useEffect(() => {
         const results = social_media.filter((item) =>
-            Object.values(item).some(
-                (value) => typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
-            )
+            Object.values(item).some((value) => typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())),
         );
         setFilteredSocialMedia(results);
     }, [searchTerm, social_media]);
@@ -90,8 +88,8 @@ export default function SocialMediaIndex() {
                     />
                 </div>
 
-                <div className="min-h-5/6 flex  items-center justify-center pb-20">
-                    {filteredSocialMedia.length === 0 ? (
+                {filteredSocialMedia.length === 0 ? (
+                    <div className="flex min-h-5/6 items-center justify-center pb-20">
                         <EmptyState
                             title={searchTerm ? 'Social Media tidak ditemukan' : 'Belum ada social media'}
                             description={
@@ -108,74 +106,70 @@ export default function SocialMediaIndex() {
                                 </Button>
                             }
                         />
-                    ) : (
-                        <div className="rounded-md border">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Platform</TableHead>
-                                        <TableHead>Judul</TableHead>
-                                        <TableHead>Link</TableHead>
-                                        <TableHead>Aksi</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {filteredSocialMedia.map((item) => (
-                                        <TableRow key={item.id}>
-                                            <TableCell className="font-medium">{item.platform}</TableCell>
-                                            <TableCell>{item.title}</TableCell>
-                                            <TableCell>
-                                                <a href={item.social_media_link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                                                    {item.social_media_link}
-                                                </a>
-                                            </TableCell>
-                                            <TableCell className="flex gap-2">
-                                                <Button variant="ghost" size="icon" asChild>
-                                                    <Link href={`/social-media/${item.id}/edit`}>
-                                                        <PencilIcon className="h-4 w-4" />
-                                                    </Link>
-                                                </Button>
+                    </div>
+                ) : (
+                    <div className="rounded-md border">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Platform</TableHead>
+                                    <TableHead>Judul</TableHead>
+                                    <TableHead>Link</TableHead>
+                                    <TableHead>Aksi</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {filteredSocialMedia.map((item) => (
+                                    <TableRow key={item.id}>
+                                        <TableCell className="font-medium">{item.platform}</TableCell>
+                                        <TableCell>{item.title}</TableCell>
+                                        <TableCell>
+                                            <a
+                                                href={item.social_media_link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-blue-600 hover:underline"
+                                            >
+                                                {item.social_media_link}
+                                            </a>
+                                        </TableCell>
+                                        <TableCell className="flex gap-2">
+                                            <Button variant="ghost" size="icon" asChild>
+                                                <Link href={`/social-media/${item.id}/edit`}>
+                                                    <PencilIcon className="h-4 w-4" />
+                                                </Link>
+                                            </Button>
 
-                                                <AlertDialog>
-                                                    <AlertDialogTrigger asChild>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            className="text-red-600 hover:bg-red-50 hover:text-red-700"
-                                                        >
-                                                            <Trash2Icon className="h-4 w-4" />
-                                                        </Button>
-                                                    </AlertDialogTrigger>
-                                                    <AlertDialogContent>
-                                                        <AlertDialogHeader>
-                                                            <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
-                                                            <AlertDialogDescription>
-                                                                Data social media ini akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.
-                                                            </AlertDialogDescription>
-                                                        </AlertDialogHeader>
-                                                        <AlertDialogFooter>
-                                                            <AlertDialogCancel>Batal</AlertDialogCancel>
-                                                            <AlertDialogAction asChild>
-                                                                <Link
-                                                                    href={`/social-media/${item.id}/delete`}
-                                                                    method="delete"
-                                                                    as="button"
-                                                                    preserveScroll
-                                                                >
-                                                                    Hapus
-                                                                </Link>
-                                                            </AlertDialogAction>
-                                                        </AlertDialogFooter>
-                                                    </AlertDialogContent>
-                                                </AlertDialog>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    )}
-                </div>
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button variant="ghost" size="icon" className="text-red-600 hover:bg-red-50 hover:text-red-700">
+                                                        <Trash2Icon className="h-4 w-4" />
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Data social media ini akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                        <AlertDialogAction asChild>
+                                                            <Link href={`/social-media/${item.id}/delete`} method="delete" as="button" preserveScroll>
+                                                                Hapus
+                                                            </Link>
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                )}
             </div>
         </AppLayout>
     );
