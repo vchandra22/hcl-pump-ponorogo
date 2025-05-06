@@ -12,6 +12,7 @@ import { ProductFormData } from '@/types/product';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { Image, Trash } from 'lucide-react';
 import { useEffect, useRef } from 'react';
+import { toast, Toaster } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,7 +25,16 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function CreateProduct() {
+type Status = {
+    success: string;
+    failed: string;
+}
+
+interface CreateProductProps {
+    status: Status;
+}
+
+export default function CreateProduct({ status }: CreateProductProps) {
     const { data, setData, submit, processing, errors } = useForm<ProductFormData>({
         title: '',
         short_description: '',
@@ -57,13 +67,13 @@ export default function CreateProduct() {
     };
 
     useEffect(() => {
-        console.log(data.og_image);
-        console.log(og_image.current?.value);
-    }, [data.og_image]);
+        if(status.failed) toast.error(status.failed);
+    }, [status.failed]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Tambah Produk" />
+            <Toaster/>
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <Tabs defaultValue="product" className="w-full">
                     <TabsList className="grid w-full grid-cols-2">
