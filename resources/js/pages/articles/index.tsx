@@ -123,7 +123,7 @@ export default function ArticlesIndex() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {filteredArticles.map((article) => (
                             <Card key={article.id} className="overflow-hidden p-0">
-                                <div className="h-full bg-gray-100 relative">
+                                <div className="h-72 bg-gray-100 relative">
                                     {article.image_article ? (
                                         <img
                                             src={`/storage/${article.image_article}`}
