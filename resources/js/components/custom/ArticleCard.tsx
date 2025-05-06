@@ -52,7 +52,7 @@ export default function ArticleCard({
                                 <Link href={href ?? '#'} as="button" preserveScroll className="cursor-pointer h3 hover:underline">
                                     Baca Selengkapnya
                                 </Link>
-                                <CircleChevronRight className="text-primary-color me-8" size="28" />
+                                <CircleChevronRight color="#0fae7d" className="text-primary-color me-8" size="28" />
                             </div>
                         </div>
                     </div>

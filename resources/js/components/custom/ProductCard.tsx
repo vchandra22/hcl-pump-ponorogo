@@ -19,7 +19,7 @@ export default function ProductCard({ title, img, href}: ProductCardProps) {
                     <Link href={href ?? `#`} as="button" preserveScroll className="text-xl md:text-2xl cursor-pointer group-hover:underline">
                         Lihat Produk
                     </Link>
-                    <CircleChevronRight className="text-primary-color cursor-pointer" size="28" />
+                    <CircleChevronRight color="#0fae7d" className="text-primary-color cursor-pointer" size="28" />
                 </div>
             </div>
         </div>

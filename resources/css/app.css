@@ -201,6 +201,7 @@
 @layer base {
     * {
         @apply border-border;
+        @apply text-secondary-color;
     }
 
     body {
