@@ -10,6 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import QuillEditor from '@/components/custom/quill-editor';
+import { useEffect, useState } from 'react';
 
 interface About {
     id?: number;
@@ -32,6 +34,12 @@ interface AboutFormProps {
 
 export default function AboutForm({ about, errors }: AboutFormProps) {
     const isEditMode = !!about?.id;
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
@@ -252,16 +260,18 @@ export default function AboutForm({ about, errors }: AboutFormProps) {
                                         <InputError message={errors?.title} />
                                     </div>
 
-                                    <div className="space-y-2">
-                                        <Label htmlFor="description">Deskripsi *</Label>
-                                        <Textarea
-                                            id="description"
-                                            value={data.description}
-                                            onChange={(e) => setData('description', e.target.value)}
-                                            placeholder="Masukkan deskripsi About Us"
-                                            rows={5}
-                                        />
-                                        <InputError message={errors?.description} />
+                                    <div className="mb-12">
+                                        {mounted && (
+                                            <QuillEditor
+                                                id="description"
+                                                label="Deskripsi *"
+                                                value={data.description}
+                                                onChange={(value) => setData('description', value)}
+                                                placeholder="Masukkan deskripsi tentang perusahaan"
+                                                error={errors?.description}
+                                                height="250px"
+                                            />
+                                        )}
                                     </div>
 
                                     {renderImageUpload(

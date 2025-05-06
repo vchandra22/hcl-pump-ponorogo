@@ -10,6 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AlertCircle, Image as ImageIcon, Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
+import QuillEditor from '@/components/custom/quill-editor';
 
 interface Article {
     id?: number;
@@ -35,6 +37,12 @@ interface ArticleFormProps {
 
 export default function ArticleForm({ article, errors }: ArticleFormProps) {
     const isEditMode = !!article?.id;
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
@@ -310,41 +318,39 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
                                                 </p>
                                             </div>
 
-                                            <div className="space-y-2">
-                                                <Label htmlFor="summary">
-                                                    Ringkasan <span className="text-destructive">*</span>
-                                                </Label>
-                                                <Textarea
-                                                    id="summary"
-                                                    value={data.summary}
-                                                    onChange={(e) => setData('summary', e.target.value)}
-                                                    className={cn(errors?.summary && "border-destructive")}
-                                                    rows={3}
-                                                    required
-                                                />
-                                                <InputError message={errors?.summary} />
-                                                <p className="text-sm text-muted-foreground">
-                                                    Ringkasan singkat yang muncul di daftar artikel
-                                                </p>
+                                            <div className="mb-12">
+                                                {mounted && (
+                                                    <QuillEditor
+                                                        id="summary"
+                                                        label="Ringkasan *"
+                                                        value={data.summary}
+                                                        onChange={(value) => setData('summary', value)}
+                                                        placeholder="Masukkan ringkasan dari konten artikel"
+                                                        error={errors?.summary}
+                                                        height="250px"
+                                                    />
+                                                )}
                                             </div>
+                                            <p className="text-sm text-muted-foreground">
+                                                Ringkasan singkat yang muncul di daftar artikel
+                                            </p>
 
-                                            <div className="space-y-2">
-                                                <Label htmlFor="content">
-                                                    Konten <span className="text-destructive">*</span>
-                                                </Label>
-                                                <Textarea
-                                                    id="content"
-                                                    value={data.content}
-                                                    onChange={(e) => setData('content', e.target.value)}
-                                                    className={cn(errors?.content && "border-destructive")}
-                                                    rows={8}
-                                                    required
-                                                />
-                                                <InputError message={errors?.content} />
-                                                <p className="text-sm text-muted-foreground">
-                                                    Konten lengkap artikel Anda
-                                                </p>
+                                            <div className="mb-12">
+                                                {mounted && (
+                                                    <QuillEditor
+                                                        id="content"
+                                                        label="Konten *"
+                                                        value={data.content}
+                                                        onChange={(value) => setData('content', value)}
+                                                        placeholder="Masukkan ringkasan dari konten artikel"
+                                                        error={errors?.content}
+                                                        height="250px"
+                                                    />
+                                                )}
                                             </div>
+                                            <p className="text-sm text-muted-foreground">
+                                                Konten lengkap artikel Anda
+                                            </p>
                                         </div>
 
                                         {renderImageUpload(

@@ -58,13 +58,8 @@ export default function Index() {
     }, [status]);
 
     useEffect(() => {
-        const results = submissions.filter(item =>
-            Object.values(item).some(
-                value =>
-                    value &&
-                    typeof value === 'string' &&
-                    value.toLowerCase().includes(searchTerm.toLowerCase())
-            )
+        const results = submissions.filter((item) =>
+            Object.values(item).some((value) => value && typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())),
         );
         setFilteredSubmissions(results);
     }, [searchTerm, submissions]);
@@ -88,21 +83,16 @@ export default function Index() {
                 </div>
 
                 <div className="w-full md:w-1/3">
-                    <Input
-                        type="text"
-                        placeholder="Cari submission..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                    <Input type="text" placeholder="Cari submission..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                 </div>
 
-                <div className="min-h-5/6 flex  items-center justify-center pb-20">
-                    {filteredSubmissions.length === 0 ? (
+                {filteredSubmissions.length === 0 ? (
+                    <div className="flex min-h-5/6 items-center justify-center pb-20">
                         <EmptyState
-                            title={searchTerm ? "Submission tidak ditemukan" : "Belum ada Submission"}
-                            description={searchTerm ?
-                                "Tidak ada submission yang sesuai dengan pencarian Anda" :
-                                "Mulai dengan menambahkan submission baru"}
+                            title={searchTerm ? 'Submission tidak ditemukan' : 'Belum ada Submission'}
+                            description={
+                                searchTerm ? 'Tidak ada submission yang sesuai dengan pencarian Anda' : 'Mulai dengan menambahkan submission baru'
+                            }
                             action={
                                 <Button asChild>
                                     <Link href={route('submission.create')}>
@@ -112,86 +102,89 @@ export default function Index() {
                                 </Button>
                             }
                         />
-                    ) : (
-                        <div className="rounded-md border">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Nama</TableHead>
-                                        <TableHead>Email</TableHead>
-                                        <TableHead>Telepon</TableHead>
-                                        <TableHead>Pesan</TableHead>
-                                        <TableHead>Tanggal Dibuat</TableHead>
-                                        <TableHead>Aksi</TableHead>
+                    </div>
+                ) : (
+                    <div className="rounded-md border">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Nama</TableHead>
+                                    <TableHead>Email</TableHead>
+                                    <TableHead>Telepon</TableHead>
+                                    <TableHead>Pesan</TableHead>
+                                    <TableHead>Tanggal Dibuat</TableHead>
+                                    <TableHead>Aksi</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {filteredSubmissions.map((item) => (
+                                    <TableRow key={item.id}>
+                                        <TableCell className="font-medium">{item.name}</TableCell>
+                                        <TableCell>{item.email}</TableCell>
+                                        <TableCell>{item.phone}</TableCell>
+                                        <TableCell className="max-w-md truncate">
+                                            {' '}
+                                            {item.message.length > 50 ? item.message.slice(0, 50) + '...' : item.message}
+                                        </TableCell>
+                                        <TableCell>
+                                            {new Date(item.created_at).toLocaleDateString('id-ID', {
+                                                day: '2-digit',
+                                                month: 'long',
+                                                year: 'numeric',
+                                            })}
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex space-x-2">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    asChild
+                                                    className="text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                                                >
+                                                    <Link href={route('submission.show', item.id)}>
+                                                        <EyeIcon className="h-4 w-4" />
+                                                    </Link>
+                                                </Button>
+                                                <AlertDialog>
+                                                    <AlertDialogTrigger asChild>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                                                        >
+                                                            <Trash2Icon className="h-4 w-4" />
+                                                        </Button>
+                                                    </AlertDialogTrigger>
+                                                    <AlertDialogContent>
+                                                        <AlertDialogHeader>
+                                                            <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
+                                                            <AlertDialogDescription>
+                                                                Data Submission akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.
+                                                            </AlertDialogDescription>
+                                                        </AlertDialogHeader>
+                                                        <AlertDialogFooter>
+                                                            <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                            <AlertDialogAction asChild>
+                                                                <Link
+                                                                    href={route('submission.delete', item.id)}
+                                                                    method="delete"
+                                                                    as="button"
+                                                                    preserveScroll
+                                                                >
+                                                                    Hapus
+                                                                </Link>
+                                                            </AlertDialogAction>
+                                                        </AlertDialogFooter>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
+                                            </div>
+                                        </TableCell>
                                     </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {filteredSubmissions.map((item) => (
-                                        <TableRow key={item.id}>
-                                            <TableCell className="font-medium">{item.name}</TableCell>
-                                            <TableCell>{item.email}</TableCell>
-                                            <TableCell>{item.phone}</TableCell>
-                                            <TableCell className="max-w-md truncate"> {item.message.length > 50 ? item.message.slice(0, 50) + '...' : item.message}</TableCell>
-                                            <TableCell>
-                                                {new Date(item.created_at).toLocaleDateString('id-ID', {
-                                                    day: '2-digit',
-                                                    month: 'long',
-                                                    year: 'numeric'
-                                                })}
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="flex space-x-2">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        asChild
-                                                        className="text-blue-600 hover:bg-blue-50 hover:text-blue-700"
-                                                    >
-                                                        <Link href={route('submission.show', item.id)}>
-                                                            <EyeIcon className="h-4 w-4" />
-                                                        </Link>
-                                                    </Button>
-                                                    <AlertDialog>
-                                                        <AlertDialogTrigger asChild>
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="icon"
-                                                                className="text-red-600 hover:bg-red-50 hover:text-red-700"
-                                                            >
-                                                                <Trash2Icon className="h-4 w-4" />
-                                                            </Button>
-                                                        </AlertDialogTrigger>
-                                                        <AlertDialogContent>
-                                                            <AlertDialogHeader>
-                                                                <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
-                                                                <AlertDialogDescription>
-                                                                    Data Submission akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.
-                                                                </AlertDialogDescription>
-                                                            </AlertDialogHeader>
-                                                            <AlertDialogFooter>
-                                                                <AlertDialogCancel>Batal</AlertDialogCancel>
-                                                                <AlertDialogAction asChild>
-                                                                    <Link
-                                                                        href={route('submission.delete', item.id)}
-                                                                        method="delete"
-                                                                        as="button"
-                                                                        preserveScroll
-                                                                    >
-                                                                        Hapus
-                                                                    </Link>
-                                                                </AlertDialogAction>
-                                                            </AlertDialogFooter>
-                                                        </AlertDialogContent>
-                                                    </AlertDialog>
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    )}
-                </div>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                )}
             </div>
         </AppLayout>
     );

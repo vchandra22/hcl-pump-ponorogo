@@ -40,7 +40,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/dashboard',
     },
     {
-        title: 'Social Media Management',
+        title: 'Manajemen Sosial Media',
         href: '/social-media',
     },
 ];
@@ -67,12 +67,12 @@ export default function SocialMediaIndex() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Social Media Management" />
+            <Head title="Manajemen Sosial Media" />
             <Toaster />
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold">Social Media Management</h1>
+                    <h1 className="text-2xl font-bold">Manajemen Sosial Media</h1>
                     <Button asChild>
                         <Link href="/social-media/create">
                             <PlusIcon className="mr-2 h-4 w-4" />

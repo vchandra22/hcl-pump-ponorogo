@@ -6,10 +6,12 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import InputError from '@/components/input-error';
-import { AlertCircle, Image as ImageIcon, Image, Info } from 'lucide-react';
+import { AlertCircle, Image as ImageIcon, Info } from 'lucide-react';
 import type { BreadcrumbItem } from '@/types';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
+import QuillEditor from '@/components/custom/quill-editor';
 
 interface Contact {
     id?: number;
@@ -35,6 +37,11 @@ interface ContactFormProps {
 
 export default function ContactForm({ contact, errors }: ContactFormProps) {
     const isEditMode = !!contact?.id;
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -262,16 +269,18 @@ export default function ContactForm({ contact, errors }: ContactFormProps) {
                                     </div>
                                 ))}
 
-                                <div className="space-y-2">
-                                    <Label htmlFor="description">Deskripsi</Label>
-                                    <Textarea
-                                        id="description"
-                                        value={data.description}
-                                        onChange={(e) => setData('description', e.target.value)}
-                                        placeholder="Deskripsi singkat"
-                                        rows={4}
-                                    />
-                                    <InputError message={errors?.description} />
+                                <div className="mb-12">
+                                    {mounted && (
+                                        <QuillEditor
+                                            id="description"
+                                            label="Deskripsi *"
+                                            value={data.description}
+                                            onChange={(value) => setData('description', value)}
+                                            placeholder="Masukkan deskripsi singkat"
+                                            error={errors?.description}
+                                            height="250px"
+                                        />
+                                    )}
                                 </div>
 
                                 <div className="space-y-2">

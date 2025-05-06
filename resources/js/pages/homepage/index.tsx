@@ -9,10 +9,8 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
-import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
@@ -88,22 +86,26 @@ export default function HomepageIndex() {
                     )}
                 </div>
 
-                <div className="min-h-5/6 flex  items-center justify-center pb-20">
+                <div>
                     {filteredHomepages.length === 0 ? (
-                        <EmptyState
-                            title={searchTerm ? 'Tidak dapat menemukan konten beranda' : 'Belum ada konten homepage'}
-                            description={
-                                searchTerm ? 'Tidak ada konten beranda yang sesuai dengan pencarian Anda' : 'Mulai dengan menambahkan konten beranda baru'
-                            }
-                            action={
-                                <Button asChild>
-                                    <Link href="/homepage/create">
-                                        <PlusIcon className="mr-2 h-4 w-4" />
-                                        Buat Konten
-                                    </Link>
-                                </Button>
-                            }
-                        />
+                        <div className="flex min-h-5/6 items-center justify-center pb-20">
+                            <EmptyState
+                                title={searchTerm ? 'Tidak dapat menemukan konten beranda' : 'Belum ada konten homepage'}
+                                description={
+                                    searchTerm
+                                        ? 'Tidak ada konten beranda yang sesuai dengan pencarian Anda'
+                                        : 'Mulai dengan menambahkan konten beranda baru'
+                                }
+                                action={
+                                    <Button asChild>
+                                        <Link href="/homepage/create">
+                                            <PlusIcon className="mr-2 h-4 w-4" />
+                                            Buat Konten
+                                        </Link>
+                                    </Button>
+                                }
+                            />
+                        </div>
                     ) : (
                         <div className="rounded-md border">
                             <Table>

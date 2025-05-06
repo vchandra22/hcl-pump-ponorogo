@@ -5,11 +5,13 @@ import { useForm, Head, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import InputError from '@/components/input-error';
-import { AlertCircle, Image as ImageIcon, Image, Info } from 'lucide-react';
+import { AlertCircle, Image as ImageIcon, Info } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import QuillEditor from '@/components/custom/quill-editor';
+import { useEffect, useState } from 'react';
 
 interface Homepage {
     id?: number;
@@ -32,6 +34,12 @@ interface HomepageFormProps {
 
 export default function HomepageForm({ homepage, errors }: HomepageFormProps) {
     const isEditMode = !!homepage?.id;
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
@@ -252,16 +260,18 @@ export default function HomepageForm({ homepage, errors }: HomepageFormProps) {
                                         <InputError message={errors?.title} />
                                     </div>
 
-                                    <div className="space-y-2">
-                                        <Label htmlFor="description">Deskripsi *</Label>
-                                        <Textarea
-                                            id="description"
-                                            value={data.description}
-                                            onChange={(e) => setData('description', e.target.value)}
-                                            placeholder="Masukkan deskripsi homepage"
-                                            rows={5}
-                                        />
-                                        <InputError message={errors?.description} />
+                                    <div className="mb-12">
+                                        {mounted && (
+                                            <QuillEditor
+                                                id="description"
+                                                label="Deskripsi *"
+                                                value={data.description}
+                                                onChange={(value) => setData('description', value)}
+                                                placeholder="Masukkan deskripsi homepage"
+                                                error={errors?.description}
+                                                height="250px"
+                                            />
+                                        )}
                                     </div>
 
                                     {renderImageUpload(
