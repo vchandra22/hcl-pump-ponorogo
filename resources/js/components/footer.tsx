@@ -81,13 +81,13 @@ export default function Footer() {
                             ))}
                         </div>
                         <div className="font-regular text-text-color flex flex-col items-center lg:items-start space-y-8">
-                            <Link href="#" className="cursor-pointer text-lg hover:underline md:text-xl">
+                            <Link href="/syarat-ketentuan" className="cursor-pointer text-lg hover:underline md:text-xl">
                                 Syarat & Ketentuan
                             </Link>
-                            <Link href="#" className="cursor-pointer text-lg hover:underline md:text-xl">
+                            <Link href="/kebijakan-privasi" className="cursor-pointer text-lg hover:underline md:text-xl">
                                 Kebijakan & Privasi
                             </Link>
-                            <Link href="#" className="cursor-pointer text-lg hover:underline md:text-xl">
+                            <Link href="/disclaimer" className="cursor-pointer text-lg hover:underline md:text-xl">
                                 Desclaimer
                             </Link>
                         </div>

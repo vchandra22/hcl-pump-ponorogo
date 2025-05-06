@@ -37,6 +37,11 @@ class MetaModel extends Model
         return $this->belongsTo(TermsCondition::class,'id', 'meta_id');
     }
 
+    public function disclaimer()
+    {
+        return $this->belongsTo(DisclaimerModel::class, 'id', 'meta_id');
+    }
+
     public function article()
     {
         return $this->belongsTo(ArticleModel::class);

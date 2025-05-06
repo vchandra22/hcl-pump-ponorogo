@@ -133,7 +133,7 @@ class PrivacyPolicyController extends Controller
             if ($privacyPolicy->meta->og_image && Storage::disk('public')->exists($privacyPolicy->meta->og_image)) {
                 Storage::disk('public')->delete($privacyPolicy->meta->og_image);
             }
-            $data['og_image'] = $request->file('og_image')->store('homepage/og', 'public');
+            $data['og_image'] = $request->file('og_image')->store('privacy-policy/og', 'public');
         } elseif ($request->input('keep_og_image') === 'true') {
             $data['og_image'] = $privacyPolicy->meta->og_image;
         } else {

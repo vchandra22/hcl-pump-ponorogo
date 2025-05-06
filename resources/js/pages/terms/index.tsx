@@ -118,7 +118,6 @@ export default function TermsIndex() {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>No</TableHead>
                                         <TableHead>Terms & Condition</TableHead>
                                         <TableHead>Meta Title</TableHead>
                                         <TableHead>Tanggal Dibuat</TableHead>
@@ -129,7 +128,6 @@ export default function TermsIndex() {
                                 <TableBody>
                                     {filteredTerms.map((term, index) => (
                                         <TableRow key={term.id}>
-                                            <TableCell className="w-12">{index + 1}</TableCell>
                                             <TableCell className="max-w-md truncate">{truncateText(term.terms_and_condition)}</TableCell>
                                             <TableCell>{term.meta?.meta_title || '-'}</TableCell>
                                             <TableCell>

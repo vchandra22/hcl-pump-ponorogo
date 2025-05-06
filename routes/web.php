@@ -3,6 +3,7 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DisclaimerController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\PrivacyPolicyController;
@@ -32,6 +33,12 @@ Route::prefix('/about')->group(function () {
 });
 
 Route::get('/contact', [FrontendController::class, 'contact'])->name('contact.index');
+
+Route::get('/syarat-ketentuan', [FrontendController::class, 'termsCondition'])->name('terms-condition.index');
+
+Route::get('/kebijakan-privasi', [FrontendController::class, 'privacyPolicy'])->name('privacy-policy.index');
+
+Route::get('/disclaimer', [FrontendController::class, 'disclaimer'])->name('disclaimer.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
@@ -107,6 +114,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{id}/edit', [PrivacyPolicyController::class, 'edit'])->name('privacy-policy.edit');
         Route::post('/{id}/update', [PrivacyPolicyController::class, 'update'])->name('privacy-policy.update');
         Route::delete('/{id}/delete', [PrivacyPolicyController::class, 'destroy'])->name('privacy-policy.delete');
+    });
+
+    Route::prefix('/disclaimer')->group(function () {
+        Route::get('/', [DisclaimerController::class, 'index'])->name('disclaimer.index');
+        Route::get('/create', [DisclaimerController::class, 'create'])->name('disclaimer.create');
+        Route::post('/store', [DisclaimerController::class, 'store'])->name('disclaimer.store');
+        Route::get('/{id}/edit', [DisclaimerController::class, 'edit'])->name('disclaimer.edit');
+        Route::post('/{id}/update', [DisclaimerController::class, 'update'])->name('disclaimer.update');
+        Route::delete('/{id}/delete', [DisclaimerController::class, 'destroy'])->name('disclaimer.delete');
     });
 
     Route::prefix('/products')->group(function () {

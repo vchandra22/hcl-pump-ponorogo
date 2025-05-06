@@ -62,6 +62,20 @@ class FrontendController extends Controller
         } catch (\Exception $err) {
             return back()->with('failed', 'Produk tidak ditemukan.');
         }
-        
+    }
+
+    public function termsCondition()
+    {
+        return Inertia::render('frontends/terms/index');
+    }
+
+    public function privacyPolicy()
+    {
+        return Inertia::render('frontends/privacy_policy/index');
+    }
+
+    public function disclaimer()
+    {
+        return Inertia::render('frontends/disclaimer/index');
     }
 }
