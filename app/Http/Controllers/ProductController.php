@@ -46,7 +46,12 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return Inertia::render('product/create');
+        return Inertia::render('product/create', [
+            'status' => [
+                'success' => session('success'),
+                'failed' => session('failed')
+            ]
+        ]);
     }
 
     /**
@@ -187,7 +192,6 @@ class ProductController extends Controller
             
             return redirect('/products')->with('success', 'Update product successfully.');
         } catch (\Exception $err) {
-            dd($err);
             return back()->with('failed', 'Update product failed. Error: ' . $err);
         }
     }

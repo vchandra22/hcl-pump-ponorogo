@@ -52,7 +52,16 @@ class FrontendController extends Controller
 
     public function productDetail(string $slug)
     {
-        $product = $this->product_service->getProductBySlug($slug);
-        return Inertia::render('frontends/product/detail', ['product' => $product]);
+        try {
+            $product = $this->product_service->getProductBySlug($slug);
+            if(!$product) {
+                abort(404, 'Produk tidak ditemukan.');
+            }
+
+            return Inertia::render('frontends/product/detail', ['product' => $product]);
+        } catch (\Exception $err) {
+            return back()->with('failed', 'Produk tidak ditemukan.');
+        }
+        
     }
 }
