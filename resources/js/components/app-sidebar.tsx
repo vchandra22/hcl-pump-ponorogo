@@ -13,22 +13,22 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Manajemen Beranda',
+        title: 'Beranda',
         href: '/homepage',
         icon: HomeIcon,
     },
     {
-        title: 'Manajemen Produk',
+        title: 'Produk',
         href: '/products',
         icon: Package,
     },
     {
-        title: 'Tentang Kami Manajemen',
+        title: 'Tentang Kami',
         href: '/about-us',
         icon: Info,
     },
     {
-        title: 'Submission Manajemen',
+        title: 'Submission',
         href: '/submission',
         icon: Mail,
     },

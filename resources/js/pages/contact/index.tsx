@@ -9,10 +9,8 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
-import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
@@ -101,7 +99,7 @@ export default function ContactIndex() {
                     )}
                 </div>
 
-                <div>
+                <div className="min-h-5/6 flex  items-center justify-center pb-20">
                     {filteredContacts.length === 0 ? (
                         <EmptyState
                             title={searchTerm ? "Contact tidak ditemukan" : "Belum ada contact"}

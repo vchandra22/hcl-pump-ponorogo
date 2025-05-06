@@ -9,10 +9,8 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
-import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
@@ -49,7 +47,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/dashboard',
     },
     {
-        title: 'About Us Management',
+        title: 'Informasi Tentang Kami',
         href: '/about-us',
     },
 ];
@@ -79,13 +77,13 @@ export default function AboutUsIndex() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="About Us Management" />
+            <Head title="Informasi Tentang Kami" />
             <Toaster />
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold">About Us Management</h1>
+                        <h1 className="text-2xl font-bold">Informasi Tentang Kami</h1>
                     </div>
                     {about.length < 1 && (
                         <Button asChild>
@@ -97,10 +95,10 @@ export default function AboutUsIndex() {
                     )}
                 </div>
 
-                <div>
+                <div className="min-h-5/6 flex  items-center justify-center pb-20">
                     {filteredAbout.length === 0 ? (
                         <EmptyState
-                            title={searchTerm ? "About Us tidak ditemukan" : "Belum ada About Us"}
+                            title={searchTerm ? "Tidak dapat menemukan data" : "Belum ada Konten Tentang Kami"}
                             description={searchTerm ?
                                 "Tidak ada About Us yang sesuai dengan pencarian Anda" :
                                 "Mulai dengan menambahkan About Us baru"}

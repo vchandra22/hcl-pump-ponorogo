@@ -41,7 +41,7 @@ interface PageProps {
 }
 
 export default function ProductIndex({ products, status }: PageProps) {
-    
+
     useEffect(() => {
         if(status.success) toast.success(status.success);
         if(status.failed) toast.success(status.failed);
@@ -124,18 +124,20 @@ export default function ProductIndex({ products, status }: PageProps) {
                         </Table>
                     </div>
                 ) : (
-                    <EmptyState
-                        title={'Belum ada produk'}
-                        description={'Mulai dengan menambahkan produk baru'}
-                        action={
-                            <Button asChild>
-                                <Link href="/products/create">
-                                    <PlusIcon className="mr-2 h-4 w-4" />
-                                    Tambah Produk 
-                                </Link>
-                            </Button>
-                        }
-                    />
+                    <div  className="min-h-5/6 flex  items-center justify-center pb-20">
+                        <EmptyState
+                            title={'Belum ada produk'}
+                            description={'Mulai dengan menambahkan produk baru'}
+                            action={
+                                <Button asChild>
+                                    <Link href="/products/create">
+                                        <PlusIcon className="mr-2 h-4 w-4" />
+                                        Tambah Produk
+                                    </Link>
+                                </Button>
+                            }
+                        />
+                    </div>
                 )}
             </div>
         </AppLayout>

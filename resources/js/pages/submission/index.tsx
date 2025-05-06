@@ -96,7 +96,7 @@ export default function Index() {
                     />
                 </div>
 
-                <div>
+                <div className="min-h-5/6 flex  items-center justify-center pb-20">
                     {filteredSubmissions.length === 0 ? (
                         <EmptyState
                             title={searchTerm ? "Submission tidak ditemukan" : "Belum ada Submission"}

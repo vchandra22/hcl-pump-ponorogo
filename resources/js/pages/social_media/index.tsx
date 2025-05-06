@@ -90,7 +90,7 @@ export default function SocialMediaIndex() {
                     />
                 </div>
 
-                <div>
+                <div className="min-h-5/6 flex  items-center justify-center pb-20">
                     {filteredSocialMedia.length === 0 ? (
                         <EmptyState
                             title={searchTerm ? 'Social Media tidak ditemukan' : 'Belum ada social media'}

@@ -45,7 +45,7 @@ interface PageProps {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Homepage Management',
+        title: 'Manajemen Beranda',
         href: '/homepage',
     },
 ];
@@ -70,36 +70,36 @@ export default function HomepageIndex() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Homepage Management" />
+            <Head title="Manajemen Beranda" />
             <Toaster />
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold">Homepage Management</h1>
+                        <h1 className="text-2xl font-bold">Manajemen Beranda</h1>
                     </div>
                     {homepages.length < 1 && (
                         <Button asChild>
                             <Link href="/homepage/create">
                                 <PlusIcon className="mr-2 h-4 w-4" />
-                                Tambah Homepage
+                                Buat Konten
                             </Link>
                         </Button>
                     )}
                 </div>
 
-                <div>
+                <div className="min-h-5/6 flex  items-center justify-center pb-20">
                     {filteredHomepages.length === 0 ? (
                         <EmptyState
-                            title={searchTerm ? 'Homepage tidak ditemukan' : 'Belum ada homepage'}
+                            title={searchTerm ? 'Tidak dapat menemukan konten beranda' : 'Belum ada konten homepage'}
                             description={
-                                searchTerm ? 'Tidak ada homepage yang sesuai dengan pencarian Anda' : 'Mulai dengan menambahkan homepage baru'
+                                searchTerm ? 'Tidak ada konten beranda yang sesuai dengan pencarian Anda' : 'Mulai dengan menambahkan konten beranda baru'
                             }
                             action={
                                 <Button asChild>
                                     <Link href="/homepage/create">
                                         <PlusIcon className="mr-2 h-4 w-4" />
-                                        Tambah Homepage
+                                        Buat Konten
                                     </Link>
                                 </Button>
                             }

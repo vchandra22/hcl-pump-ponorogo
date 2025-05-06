@@ -93,7 +93,7 @@ export default function ArticlesIndex() {
                     />
                 </div>
 
-                <div>
+                <div className="min-h-5/6 flex  items-center justify-center pb-20">
                     {filteredArticles.length === 0 ? (
                         <EmptyState
                             title={searchTerm ? 'Artikel tidak ditemukan' : 'Belum ada artikel'}
