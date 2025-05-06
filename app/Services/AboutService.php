@@ -132,6 +132,16 @@ class AboutService{
             $about = $this->aboutRepository->find($id);
             $metaId = $about->meta_id;
 
+            // Hapus file og_image dari meta jika ada
+            if ($about->meta && $about->meta->og_image && Storage::disk('public')->exists($about->meta->og_image)) {
+                Storage::disk('public')->delete($about->meta->og_image);
+            }
+
+            // Hapus file image_company jika ada
+            if ($about->image_company && Storage::disk('public')->exists($about->image_company)) {
+                Storage::disk('public')->delete($about->image_company);
+            }
+
             // Hapus about terlebih dahulu
             $this->aboutRepository->delete($id);
 

@@ -121,6 +121,11 @@ class ContactService
             $contact = $this->contactRepository->find($id);
             $metaId = $contact->meta_id;
 
+            // Hapus file og_image dari meta jika ada
+            if ($contact->meta && $contact->meta->og_image && Storage::disk('public')->exists($contact->meta->og_image)) {
+                Storage::disk('public')->delete($contact->meta->og_image);
+            }
+
             $this->contactRepository->delete($id);
 
             $this->metaRepository->delete($metaId);

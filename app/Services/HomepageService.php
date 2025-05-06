@@ -132,6 +132,16 @@ class HomepageService
             $homepage = $this->homepageRepository->find($id);
             $metaId = $homepage->meta_id;
 
+            // Hapus file og_image dari meta jika ada
+            if ($homepage->meta && $homepage->meta->og_image && Storage::disk('public')->exists($homepage->meta->og_image)) {
+                Storage::disk('public')->delete($homepage->meta->og_image);
+            }
+
+            // Hapus file banner_image jika ada
+            if ($homepage->banner_image && Storage::disk('public')->exists($homepage->banner_image)) {
+                Storage::disk('public')->delete($homepage->banner_image);
+            }
+
             // Hapus homepage terlebih dahulu
             $this->homepageRepository->delete($id);
 

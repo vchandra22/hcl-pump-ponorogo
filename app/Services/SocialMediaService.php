@@ -90,6 +90,12 @@ class SocialMediaService
         DB::beginTransaction();
         try {
             $socialMedia = $this->SocialMediaRepository->find($id);
+
+            // Hapus file icon_social_media dari meta jika ada
+            if ($socialMedia->icon_social_media && Storage::disk('public')->exists($socialMedia->icon_social_media)) {
+                Storage::disk('public')->delete($socialMedia->icon_social_media);
+            }
+
             $this->SocialMediaRepository->delete($id);
 
             DB::commit();
