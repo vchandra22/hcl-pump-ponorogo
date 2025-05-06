@@ -40,7 +40,7 @@ const navLinks: { name: string; href: string; className: string }[] = [
 export default function Navigasi() {
     const { url } = usePage();
     return (
-        <header className="flex h-20 w-full shrink-0 items-center justify-end border border-b-slate-200 px-4 md:px-6">
+        <header className="bg-bg-color/80 flex h-20 w-full shrink-0 items-center justify-end border-b border-slate-200 px-4 backdrop-blur-md md:sticky md:top-0 md:z-50 md:px-6">
             <Sheet>
                 <SheetTrigger>
                     <Button variant="outline" size="icon" className="lg:hidden">
@@ -68,7 +68,12 @@ export default function Navigasi() {
             </Link>
             <nav className="ml-auto hidden gap-6 lg:flex">
                 {navLinks.map((link, i) => (
-                    <Link key={i} href={link.href} className={`${link.className} ${(link.href == url && url !== '/contact') ? 'underline' : ''}`} prefetch={false}>
+                    <Link
+                        key={i}
+                        href={link.href}
+                        className={`${link.className} ${link.href == url && url !== '/contact' ? 'underline' : ''}`}
+                        prefetch={false}
+                    >
                         {link.name}
                     </Link>
                 ))}

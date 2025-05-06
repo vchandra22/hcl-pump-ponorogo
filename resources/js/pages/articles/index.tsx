@@ -48,6 +48,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+const stripHtmlTags = (html: string) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || '';
+};
+
 export default function ArticlesIndex() {
     const { articles, status } = usePage<PageProps>().props;
     const [searchTerm, setSearchTerm] = useState('');
@@ -83,7 +89,7 @@ export default function ArticlesIndex() {
             <Toaster />
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <h1 className="text-2xl font-bold">Manajemen Artikel</h1>
                     <Button asChild>
                         <Link href={route('articles.create')}>
@@ -120,17 +126,17 @@ export default function ArticlesIndex() {
                         />
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                         {filteredArticles.map((article) => (
                             <Card key={article.id} className="overflow-hidden p-0">
-                                <div className="h-72 bg-gray-100 relative">
+                                <div className="relative h-72 bg-gray-100">
                                     {article.image_article ? (
                                         <img
                                             src={`/storage/${article.image_article}`}
                                             alt={article.image_alt || article.title}
                                             width="100"
                                             height="100"
-                                            className="h-full w-full object-cover overflow-hidden"
+                                            className="h-full w-full overflow-hidden object-cover"
                                         />
                                     ) : (
                                         <div className="flex h-full w-full items-center justify-center">
@@ -139,58 +145,58 @@ export default function ArticlesIndex() {
                                     )}
                                 </div>
                                 <CardContent className="p-4">
-                                    <h3 className="font-medium line-clamp-1 text-lg mb-1">{article.title}</h3>
-                                    <p className="text-muted-foreground line-clamp-2 text-sm mb-3">{article.summary}</p>
+                                    <h3 className="mb-1 line-clamp-1 text-lg font-medium">{article.title}</h3>
+                                    <article className="prose line-clamp-2 min-h-14 overflow-hidden">
+                                        {stripHtmlTags(article.summary)}
+                                    </article>
 
-                                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                                        <div className="flex items-center gap-1">
-                                            <UserIcon className="h-3 w-3" />
-                                            <span>{article.author}</span>
+                                        <div className="text-muted-foreground mb-3 flex items-center gap-4 text-sm">
+                                            <div className="flex items-center gap-1">
+                                                <UserIcon className="h-3 w-3" />
+                                                <span>{article.author}</span>
+                                            </div>
+                                            <div className="flex items-center gap-1">
+                                                <CalendarIcon className="h-3 w-3" />
+                                                <span>{formatDate(article.created_at)}</span>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-1">
-                                            <CalendarIcon className="h-3 w-3" />
-                                            <span>{formatDate(article.created_at)}</span>
+
+                                        <div className="flex justify-end gap-2">
+                                            <Button variant="ghost" size="sm" asChild>
+                                                <Link href={route('articles.edit', article.id)}>
+                                                    <PencilIcon className="mr-1 h-4 w-4" />
+                                                    Edit
+                                                </Link>
+                                            </Button>
+
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button variant="ghost" size="sm"
+                                                            className="text-red-600 hover:bg-red-50 hover:text-red-700">
+                                                        <Trash2Icon className="mr-1 h-4 w-4" />
+                                                        Hapus
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Artikel ini akan dihapus secara permanen. Tindakan ini tidak
+                                                            dapat dibatalkan.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                        <AlertDialogAction asChild>
+                                                            <Link href={route('articles.delete', article.id)}
+                                                                  method="delete" as="button" preserveScroll>
+                                                                Hapus
+                                                            </Link>
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
                                         </div>
-                                    </div>
-
-                                    <div className="flex justify-end gap-2">
-                                        <Button variant="ghost" size="sm" asChild>
-                                            <Link href={route('articles.edit', article.id)}>
-                                                <PencilIcon className="h-4 w-4 mr-1" />
-                                                Edit
-                                            </Link>
-                                        </Button>
-
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button variant="ghost" size="sm" className="text-red-600 hover:bg-red-50 hover:text-red-700">
-                                                    <Trash2Icon className="h-4 w-4 mr-1" />
-                                                    Hapus
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        Artikel ini akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>Batal</AlertDialogCancel>
-                                                    <AlertDialogAction asChild>
-                                                        <Link
-                                                            href={route('articles.delete', article.id)}
-                                                            method="delete"
-                                                            as="button"
-                                                            preserveScroll
-                                                        >
-                                                            Hapus
-                                                        </Link>
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                    </div>
                                 </CardContent>
                             </Card>
                         ))}

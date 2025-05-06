@@ -1,10 +1,34 @@
 import { Link } from '@inertiajs/react';
 import { MapPin } from 'lucide-react';
 
+// Import the same navigation links as used in Navigasi component
+const navLinks = [
+    {
+        name: 'Beranda',
+        href: '/',
+    },
+    {
+        name: 'Tentang Kami',
+        href: '/about',
+    },
+    {
+        name: 'Produk',
+        href: '/product',
+    },
+    {
+        name: 'Artikel',
+        href: '/article',
+    },
+    {
+        name: 'Kontak',
+        href: '/contact',
+    },
+];
+
 export default function Footer() {
     return (
         <footer className="w-full">
-            <div className="bg-bg-color mx-auto px-4 md:px-6">
+            <div className="bg-bg-color border border-t-slate-200 mx-auto px-4 md:px-6">
                 <div className="grid w-full grid-cols-1 gap-12 py-4 md:py-12 lg:grid-cols-3">
                     <div className="space-y-12">
                         <div className="item-center mb-8 flex w-full justify-center">
@@ -49,15 +73,12 @@ export default function Footer() {
                     {/* Footer Links */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div className="font-regular text-text-color flex flex-col items-center lg:items-start space-y-8">
-                            <Link href="#" className="cursor-pointer text-lg hover:underline md:text-xl">
-                                Tentang Kami
-                            </Link>
-                            <Link href="#" className="cursor-pointer text-lg hover:underline md:text-xl">
-                                Kontak
-                            </Link>
-                            <Link href="#" className="cursor-pointer text-lg hover:underline md:text-xl">
-                                Artikel
-                            </Link>
+                            {/* Use the same navLinks from Navigasi component */}
+                            {navLinks.map((link, i) => (
+                                <Link key={i} href={link.href} className="cursor-pointer text-lg hover:underline md:text-xl" prefetch={false}>
+                                    {link.name}
+                                </Link>
+                            ))}
                         </div>
                         <div className="font-regular text-text-color flex flex-col items-center lg:items-start space-y-8">
                             <Link href="#" className="cursor-pointer text-lg hover:underline md:text-xl">
