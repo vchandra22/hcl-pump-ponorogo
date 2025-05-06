@@ -47,7 +47,7 @@ class TermsConditionService
 
             $meta = $this->metaRepository->create($metaData);
 
-            // Buat homepage dengan meta_id
+            // Buat terms dengan meta_id
             $termsConditionData = [
                 'terms_and_condition' => $data['terms_and_condition'],
                 'meta_id' => $meta->id,
@@ -67,7 +67,7 @@ class TermsConditionService
     {
         DB::beginTransaction();
         try {
-            $termsCondition = $this->homepageRepository->find($id);
+            $termsCondition = $this->termsConditionRepository->find($id);
 
             if (isset($data['og_image'])) {
                 if (is_object($data['og_image']) && method_exists($data['og_image'], 'isValid') && $data['og_image']->isValid()) {
@@ -91,7 +91,7 @@ class TermsConditionService
 
             $this->metaRepository->update($termsCondition->meta_id, $metaData);
 
-            // Update homepage data
+            // Update terms data
             $termsConditionData = [
                 'terms_and_condition' => $data['terms_and_condition'],
             ];

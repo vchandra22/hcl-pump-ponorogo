@@ -3,7 +3,18 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, HomeIcon, Package, Phone, Info, Mail, EarthIcon, NewspaperIcon, SettingsIcon } from 'lucide-react';
+import {
+    LayoutGrid,
+    HomeIcon,
+    Package,
+    Phone,
+    Info,
+    Mail,
+    EarthIcon,
+    NewspaperIcon,
+    SettingsIcon,
+    Shield
+} from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -51,7 +62,12 @@ const mainNavItems: NavItem[] = [
         title: 'Terms & Condition',
         href: '/terms-conditions',
         icon: SettingsIcon,
-    }
+    },
+    {
+        title: 'Privacy & Policy',
+        href: '/privacy-policy',
+        icon: Shield,
+    },
 ];
 
 export function AppSidebar() {

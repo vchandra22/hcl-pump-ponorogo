@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\TermsConditionService;
+use App\Models\PrivacyPolicy;
+use App\Services\PrivacyPolicyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
-class TermsConditionController extends Controller
+class PrivacyPolicyController extends Controller
 {
-    protected $termsConditionService;
+    protected $privacyPolicyService;
 
-    public function __construct(TermsConditionService $termsConditionService)
+    public function __construct(PrivacyPolicyService $privacyPolicyService)
     {
-        $this->termsConditionService = $termsConditionService;
+        $this->privacyPolicyService = $privacyPolicyService;
     }
 
     /**
@@ -22,10 +23,11 @@ class TermsConditionController extends Controller
      */
     public function index()
     {
-        $termsConditions = $this->termsConditionService->getAllTermsCondition();
+        $privacyPolicy = $this->privacyPolicyService->getAllPrivacyPolicy();
 
-        return Inertia::render('terms/index', [
-            'termsConditions' => $termsConditions,
+        return Inertia::render('privacy_policy/index',
+        [
+            'privacyPolicy' => $privacyPolicy,
             'status' => session('status')
         ]);
     }
@@ -35,7 +37,7 @@ class TermsConditionController extends Controller
      */
     public function create()
     {
-        return Inertia::render('terms/form');
+        return Inertia::render('privacy_policy/form');
     }
 
     /**
@@ -44,7 +46,7 @@ class TermsConditionController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'terms_and_condition' => 'required|string',
+            'privacy_policy' => 'required|string',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string',
@@ -64,15 +66,15 @@ class TermsConditionController extends Controller
             $data['og_image'] = $request->file('og_image')->store('og-images', 'public');
         }
 
-        $this->termsConditionService->createTermsConditionWithMeta($data);
+        $this->privacyPolicyService->createPrivacyPolicyWithMeta($data);
 
-        return redirect()->route('terms.index')->with('status', 'Terms & Condition berhasil dibuat!');
+        return redirect()->route('privacy-policy.index')->with('status', 'Privacy Policy berhasil dibuat!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(PrivacyPolicy $privacyPolicy)
     {
         //
     }
@@ -82,20 +84,20 @@ class TermsConditionController extends Controller
      */
     public function edit($id)
     {
-        $termsCondition = $this->termsConditionService->getTermsConditionWithMeta($id);
+        $privacyPolicy = $this->privacyPolicyService->getPrivacyPolicyWithMeta($id);
 
         $data = [
-            'id' => $termsCondition->id,
-            'terms_and_condition' => $termsCondition->terms_and_condition,
-            'meta_title' => $termsCondition->meta->meta_title,
-            'meta_description' => $termsCondition->meta->meta_description,
-            'meta_keywords' => $termsCondition->meta->meta_keywords,
-            'og_image' => $termsCondition->meta->og_image,
-            'image_alt' => $termsCondition->meta->image_alt,
+            'id' => $privacyPolicy->id,
+            'privacy_policy' => $privacyPolicy->privacy_policy,
+            'meta_title' => $privacyPolicy->meta->meta_title,
+            'meta_description' => $privacyPolicy->meta->meta_description,
+            'meta_keywords' => $privacyPolicy->meta->meta_keywords,
+            'og_image' => $privacyPolicy->meta->og_image,
+            'image_alt' => $privacyPolicy->meta->image_alt,
         ];
 
-        return Inertia::render('terms/form', [
-            'termsCondition' => $data
+        return Inertia::render('privacy_policy/form', [
+            'privacyPolicy' => $data,
         ]);
     }
 
@@ -105,7 +107,7 @@ class TermsConditionController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'terms_and_condition' => 'required|string',
+            'privacy_policy' => 'required|string',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string',
@@ -119,39 +121,39 @@ class TermsConditionController extends Controller
                 ->withInput();
         }
 
-        $termsCondition = $this->termsConditionService->getTermsConditionWithMeta($id);
+        $privacyPolicy = $this->privacyPolicyService->getPrivacyPolicyWithMeta($id);
 
         $data = $request->only([
-            'terms_and_condition',
+            'privacy_policy',
             'meta_title', 'meta_description', 'meta_keywords', 'image_alt'
         ]);
 
         // Handle og_image
         if ($request->hasFile('og_image')) {
-            if ($termsCondition->meta->og_image && Storage::disk('public')->exists($termsCondition->meta->og_image)) {
-                Storage::disk('public')->delete($termsCondition->meta->og_image);
+            if ($privacyPolicy->meta->og_image && Storage::disk('public')->exists($privacyPolicy->meta->og_image)) {
+                Storage::disk('public')->delete($privacyPolicy->meta->og_image);
             }
             $data['og_image'] = $request->file('og_image')->store('homepage/og', 'public');
         } elseif ($request->input('keep_og_image') === 'true') {
-            $data['og_image'] = $termsCondition->meta->og_image;
+            $data['og_image'] = $privacyPolicy->meta->og_image;
         } else {
             $data['og_image'] = null;
         }
 
-        $this->termsConditionService->updateTermsConditionWithMeta($id, $data);
+        $this->privacyPolicyService->updatePrivacyPolicyWithMeta($id, $data);
 
-        return redirect()->route('terms.index')
-            ->with('status', 'Terms & Condition berhasil diubah!');
+        return redirect()->route('privacy-policy.index')
+            ->with('status', 'Privacy Policy berhasil diubah!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $this->termsConditionService->deleteTermsConditionWithMeta($id);
+        $this->privacyPolicyService->deletePrivacyPolicyWithMeta($id);
 
-        return redirect()->route('terms.index')
-            ->with('status', 'Terms & Condition berhasil dihapus!');
+        return redirect()->route('privacy-policy.index')
+            ->with('status', 'Privacy Policy berhasil dihapus!');
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\ProductController;
@@ -97,6 +98,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{id}/edit', [TermsConditionController::class, 'edit'])->name('terms.edit');
         Route::post('/{id}/update', [TermsConditionController::class, 'update'])->name('terms.update');
         Route::delete('/{id}/delete', [TermsConditionController::class, 'destroy'])->name('terms.delete');
+    });
+
+    Route::prefix('/privacy-policy')->group(function () {
+        Route::get('/', [PrivacyPolicyController::class, 'index'])->name('privacy-policy.index');
+        Route::get('/create', [PrivacyPolicyController::class, 'create'])->name('privacy-policy.create');
+        Route::post('/store', [PrivacyPolicyController::class, 'store'])->name('privacy-policy.store');
+        Route::get('/{id}/edit', [PrivacyPolicyController::class, 'edit'])->name('privacy-policy.edit');
+        Route::post('/{id}/update', [PrivacyPolicyController::class, 'update'])->name('privacy-policy.update');
+        Route::delete('/{id}/delete', [PrivacyPolicyController::class, 'destroy'])->name('privacy-policy.delete');
     });
 
     Route::prefix('/products')->group(function () {

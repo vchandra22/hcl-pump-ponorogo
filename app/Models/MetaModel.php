@@ -28,6 +28,10 @@ class MetaModel extends Model
         return $this->belongsTo(HomePageModel::class, 'id', 'meta_id');
     }
 
+    public function privacyPolicy()
+    {
+        return $this->belongsTo(PrivacyPolicy::class, 'id', 'meta_id');
+    }
     public function termsCondition()
     {
         return $this->belongsTo(TermsCondition::class,'id', 'meta_id');
