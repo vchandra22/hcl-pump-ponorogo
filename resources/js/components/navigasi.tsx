@@ -71,7 +71,7 @@ export default function Navigasi() {
                     <Link
                         key={i}
                         href={link.href}
-                        className={`${link.className} ${link.href == url && url !== '/contact' ? 'underline' : ''}`}
+                        className={`${link.className} relative ${(link.href == url && link.href != '/contact') ? 'navbar-active' : ''}`}
                         prefetch={false}
                     >
                         {link.name}

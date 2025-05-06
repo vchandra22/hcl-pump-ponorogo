@@ -199,6 +199,16 @@
     line-height: 1.125rem;
 }
 
+.navbar-active::before {
+    content: '';
+    opacity: 80%;
+    width: 100%;
+    height: 2.2px;
+    background-color: #19A478;
+    position: absolute;
+    bottom: -22px;
+}
+
 @layer base {
     * {
         @apply border-border;
