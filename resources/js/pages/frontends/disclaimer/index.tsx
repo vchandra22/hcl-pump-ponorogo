@@ -3,7 +3,7 @@ import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
 
-export default function DisclaimerIndex({ disclaimer = {} }) {
+export default function DisclaimerIndex({ disclaimer = {}, base_url = '' }) {
 
     const disclaimerData = Array.isArray(disclaimer) ? disclaimer[0] : disclaimer;
 
@@ -30,6 +30,8 @@ export default function DisclaimerIndex({ disclaimer = {} }) {
                     property="og:description"
                     content={disclaimerData?.meta?.meta_description || "Disclaimer resmi HCL Pump Ponorogo mengenai batasan tanggung jawab dan informasi yang disediakan pada situs web kami."}
                 />
+                <meta property="og:image" content={`${base_url}/asset/logo-hcl-pump-ponorogo.png`} />
+                <meta property="og:url" content={`${base_url}${location.pathname}`} />
                 <meta property="og:type" content="website" />
                 <meta name="robots" content="index, follow" />
                 <meta name="language" content="Indonesian" />

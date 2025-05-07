@@ -2,7 +2,6 @@ import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
 import { Head, Link } from '@inertiajs/react';
 import ArticleCard from '@/components/custom/ArticleCard';
-import { CircleChevronRight } from 'lucide-react';
 import DOMPurify from 'dompurify';
 
 interface ArticleDetailProps {
@@ -39,7 +38,7 @@ const formatDate = (dateString: string) => {
     });
 };
 
-export default function ArticleDetail({ article, listArticle }: ArticleDetailProps) {
+export default function ArticleDetail({ article, listArticle, base_url = '' }: ArticleDetailProps) {
     const coverImage = article.image_article
         ? `/storage/${article.image_article}`
         : '/asset/gambar-ilustrasi-artikel.png';
@@ -61,7 +60,15 @@ export default function ArticleDetail({ article, listArticle }: ArticleDetailPro
                 {/* Open Graph Tags */}
                 <meta property="og:title" content={`${article.meta.meta_title} | HCL Pump Ponorogo`} />
                 <meta property="og:description" content={article.meta.meta_description} />
-                <meta property="og:image" content={article.meta.og_image ? `/storage/${article.meta.og_image}` : '/asset/logo-hcl-pump-ponorogo.png'} />
+                <meta
+                    property="og:image"
+                    content={
+                        article.meta.og_image
+                            ? `${base_url}/storage/${article.meta.og_image}`
+                            : `${base_url}/asset/logo-hcl-pump-ponorogo.png`
+                    }
+                />
+                <meta property="og:url" content={`${base_url}${location.pathname}`} />
                 <meta property="og:type" content="article" />
 
                 {/* SEO Related */}

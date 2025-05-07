@@ -48,12 +48,17 @@ class FrontendController extends Controller
         return Inertia::render('frontends/article/index', [
             'about' => $about,
             'articles' => $articles,
+            'base_url' => url('/'),
         ]);
     }
 
-    public function about()
+    public function about(AboutService $aboutService)
     {
-        return Inertia::render('frontends/about_us/index');
+        $about = $aboutService->getAllAbout();
+
+        return Inertia::render('frontends/about_us/index', [
+            'about' => $about,
+        ]);
     }
 
     public function articleDetail($slug, ArticleService $articleService)
@@ -64,6 +69,7 @@ class FrontendController extends Controller
         return Inertia::render('frontends/article/detail', [
             'article' => $article,
             'listArticle' => $listArticle,
+            'base_url' => url('/'),
         ]);
     }
 
@@ -73,6 +79,7 @@ class FrontendController extends Controller
 
         return Inertia::render('frontends/contact/index', [
             'contacts' => $contacts,
+            'base_url' => url('/'),
             'status' => session('status'),
         ]);
     }
@@ -124,6 +131,7 @@ class FrontendController extends Controller
 
         return Inertia::render('frontends/terms/index', [
             'terms_condition' => $termsCondition,
+            'base_url' => url('/'),
         ]);
     }
 
@@ -133,6 +141,7 @@ class FrontendController extends Controller
 
         return Inertia::render('frontends/privacy_policy/index', [
             'privacy_policy' => $privacyPolicy,
+            'base_url' => url('/'),
         ]);
     }
 
@@ -142,6 +151,7 @@ class FrontendController extends Controller
 
         return Inertia::render('frontends/disclaimer/index', [
             'disclaimer' => $disclaimer,
+            'base_url' => url('/'),
         ]);
     }
 }

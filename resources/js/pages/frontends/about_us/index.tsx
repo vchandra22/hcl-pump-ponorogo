@@ -5,10 +5,23 @@ import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
 
-export default function AboutUsIndex() {
+interface About {
+    id: string;
+    title: string;
+    description: string;
+    image_company: string;
+}
+
+interface AboutProps {
+    about: About;
+}
+
+export default function AboutUsIndex({ about }: AboutProps) {
     return (
         <>
-            <Head title="Article">{/*some head meta*/}</Head>
+            <Head title="Tentang Kami">
+                {/*some head meta*/}
+            </Head>
             <Navigasi />
             <section className="mx-auto my-15 w-full px-4 md:px-12">
                 <div className="grid lg:grid-cols-12">

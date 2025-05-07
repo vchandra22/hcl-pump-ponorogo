@@ -1,10 +1,10 @@
 import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { ClockIcon, LocateIcon, LucideMail, PhoneIcon } from 'lucide-react';
 import { Toaster, toast } from 'sonner';
 
-export default function Contact({ contacts = {} }) { // Removed flash prop
+export default function Contact({ contacts = {}, base_url = '' }) { // Removed flash prop
     const contactData = Array.isArray(contacts) ? contacts[0] : contacts;
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -57,6 +57,8 @@ export default function Contact({ contacts = {} }) { // Removed flash prop
                     property="og:description"
                     content={contactData?.meta?.meta_description ?? "Hubungi HCL Pump Ponorogo untuk informasi produk, layanan, dan konsultasi pompa industri terpercaya."}
                 />
+                <meta property="og:image" content={`${base_url}/asset/logo-hcl-pump-ponorogo.png`} />
+                <meta property="og:url" content={`${base_url}${location.pathname}`} />
                 <meta property="og:type" content="website" />
                 <meta name="robots" content="index, follow" />
                 <meta name="language" content="Indonesian" />

@@ -21,7 +21,7 @@ import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
 interface Article {
-    id: number;
+    id: string;
     title: string;
     summary: string;
     content: string;

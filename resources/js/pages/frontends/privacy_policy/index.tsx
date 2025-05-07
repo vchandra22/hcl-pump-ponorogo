@@ -3,7 +3,7 @@ import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
 
-export default function PrivacyPolicy({ privacy_policy = {} }) {
+export default function PrivacyPolicy({ privacy_policy = {}, base_url = '' }) {
 
     const privacyPolicyData = Array.isArray(privacy_policy) ? privacy_policy[0] : privacy_policy;
 
@@ -30,6 +30,8 @@ export default function PrivacyPolicy({ privacy_policy = {} }) {
                     property="og:description"
                     content={privacyPolicyData?.meta?.meta_description || "Kebijakan privasi resmi HCL Pump Ponorogo tentang pengumpulan, penggunaan, dan perlindungan data pengguna."}
                 />
+                <meta property="og:image" content={`${base_url}/asset/logo-hcl-pump-ponorogo.png`} />
+                <meta property="og:url" content={`${base_url}${location.pathname}`} />
                 <meta property="og:type" content="website" />
                 <meta name="robots" content="index, follow" />
                 <meta name="language" content="Indonesian" />

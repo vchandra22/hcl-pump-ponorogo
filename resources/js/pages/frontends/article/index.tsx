@@ -21,9 +21,10 @@ interface ArticleItem {
 interface ArticleProps {
     about?: AboutData[];
     articles?: ArticleItem[];
+    base_url?: string;
 }
 
-export default function Article({ about = [], articles = [] }: ArticleProps) {
+export default function Article({ about = [], articles = [], base_url = '' }: ArticleProps) {
     const aboutData = about[0] || {};
     const companyImage = aboutData.image_company
         ? `/storage/${aboutData.image_company}`
@@ -54,6 +55,8 @@ export default function Article({ about = [], articles = [] }: ArticleProps) {
                     property="og:description"
                     content={"Jelajahi berbagai artikel inspiratif seputar inovasi dan teknologi pompa dari HCL Pump Ponorogo."}
                 />
+                <meta property="og:image" content={`${base_url}/asset/logo-hcl-pump-ponorogo.png`} />
+                <meta property="og:url" content={`${base_url}${location.pathname}`} />
                 <meta property="og:type" content="website" />
                 <meta name="robots" content="index, follow" />
                 <meta name="language" content="Indonesian" />

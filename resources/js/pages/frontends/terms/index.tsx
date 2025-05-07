@@ -3,7 +3,7 @@ import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
 
-export default function FrontendTermsIndex({ terms_condition = {} }) {
+export default function FrontendTermsIndex({ terms_condition = {}, base_url = '' }) {
 
     const termsConditionData = Array.isArray(terms_condition) ? terms_condition[0] : terms_condition;
 
@@ -32,6 +32,8 @@ export default function FrontendTermsIndex({ terms_condition = {} }) {
                     property="og:description"
                     content={termsConditionData?.meta?.meta_description || "Syarat dan ketentuan resmi HCL Pump Ponorogo yang mengatur penggunaan layanan dan produk kami."}
                 />
+                <meta property="og:image" content={`${base_url}/asset/logo-hcl-pump-ponorogo.png`} />
+                <meta property="og:url" content={`${base_url}${location.pathname}`} />
                 <meta property="og:type" content="website" />
                 <meta name="robots" content="index, follow" />
                 <meta name="language" content="Indonesian" />
