@@ -1,89 +1,197 @@
-import Footer from '@/components/footer';
-import Navigasi from '@/components/navigasi';
-import { Head } from '@inertiajs/react';
-import DOMPurify from 'dompurify';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { EmptyState } from '@/components/ui/empty-state';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Toaster, toast } from 'sonner';
 
-// Define a type for the terms and conditions props to fix implicit any error
 interface TermsCondition {
-    id?: number;
-    terms_and_condition?: string;
-    created_at?: string;
-    updated_at?: string;
-    meta_title?: string;
-    meta_description?: string;
-    meta_keywords?: string;
+    id: number;
+    terms_and_condition: string;
+    created_at: string;
+    updated_at: string;
+    meta: {
+        meta_title: string | null;
+        meta_description: string | null;
+        meta_keywords: string | null;
+        og_image: string | null;
+        image_alt: string | null;
+    };
 }
 
-export default function TermsIndex({ terms_condition = {} }) {
+interface PageProps {
+    termsConditions: TermsCondition[];
+    status?: string;
+}
 
-    const termsConditionData = Array.isArray(terms_condition) ? terms_condition[0] : terms_condition;
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Terms & Conditions',
+        href: '/terms-conditions',
+    },
+];
 
-    // Sanitasi konten
-    const sanitizedContent = termsConditionData?.terms_and_condition
-        ? DOMPurify.sanitize(termsConditionData.terms_and_condition)
-        : '';
+export default function TermsIndex() {
+    const { termsConditions, status } = usePage<PageProps>().props;
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredTerms, setFilteredTerms] = useState<TermsCondition[]>(termsConditions);
+
+    useEffect(() => {
+        if (status) {
+            toast.success(status);
+        }
+    }, [status]);
+
+    useEffect(() => {
+        const results = termsConditions.filter((term) =>
+            Object.values(term).some((value) => {
+                if (value && typeof value === 'string') {
+                    return value.toLowerCase().includes(searchTerm.toLowerCase());
+                }
+                return false;
+            })
+        );
+        setFilteredTerms(results);
+    }, [searchTerm, termsConditions]);
+
+    const truncateText = (text: string, maxLength: number = 100) => {
+        if (text.length <= maxLength) return text;
+        return text.substring(0, maxLength) + '...';
+    };
 
     return (
-        <>
-            <Head title="Syarat & Ketentuan | HCL Pump Ponorogo">
-                {/* Improved meta tags with default values if data is missing */}
-                <meta name="title" content={termsConditionData?.meta_title || "Syarat & Ketentuan | HCL Pump Ponorogo"} />
-                <meta
-                    name="description"
-                    content={termsConditionData?.meta_description || "Syarat dan ketentuan resmi HCL Pump Ponorogo yang mengatur penggunaan layanan dan produk kami."}
-                />
-                <meta
-                    name="keywords"
-                    content={termsConditionData?.meta_keywords || "syarat dan ketentuan, HCL Pump, Ponorogo, persyaratan layanan, peraturan penggunaan"}
-                />
-                {/* Added additional meta tags for SEO and sharing */}
-                <meta property="og:title" content={termsConditionData?.meta_title || "Syarat & Ketentuan | HCL Pump Ponorogo"} />
-                <meta
-                    property="og:description"
-                    content={termsConditionData?.meta_description || "Syarat dan ketentuan resmi HCL Pump Ponorogo yang mengatur penggunaan layanan dan produk kami."}
-                />
-                <meta property="og:type" content="website" />
-                <meta name="robots" content="index, follow" />
-                <meta name="language" content="Indonesian" />
-            </Head>
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Terms & Conditions" />
+            <Toaster />
 
-            <Navigasi />
-
-            <section className="relative w-full overflow-hidden py-12 text-white md:px-6 md:py-12 lg:py-44">
-                <div className={'bg-primary-color/10 absolute top-0 left-0 z-10 h-full w-full'}></div>
-                <div className="relative z-20 mx-auto w-full px-4">
-                    <div className="mx-auto mb-9 grid w-full grid-cols-1 px-8 md:mb-0 lg:grid-cols-12">
-                        <div className="lg:col-span-4">
-                            <p className="p-subheading font-regular text-text-color text-start">
-                                Syarat & Ketentuan
-                            </p>
-                        </div>
-                        <div className="lg:col-span-8">
-                            <div className="w-full">
-                                <h1 className="text-text-color font-regular h1">
-                                    Syarat & Ketentuan HCL Pump Ponorogo
-                                </h1>
-                            </div>
-                        </div>
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold">Terms & Conditions</h1>
                     </div>
+                    {termsConditions.length < 1 && (
+                        <Button asChild>
+                            <Link href="/terms-conditions/create">
+                                <PlusIcon className="mr-2 h-4 w-4" />
+                                Tambah Baru
+                            </Link>
+                        </Button>
+                    )}
                 </div>
-            </section>
 
-            <section className="w-full px-4 py-12 md:px-12 md:py-24 lg:py-32">
-                {sanitizedContent ? (
-                    <article
-                        className="prose max-w-none"
-                        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-                    />
-                ) : (
-                    <article className="prose max-w-none">
-                        <p>Syarat dan ketentuan sedang dalam proses pembaruan. Silakan kunjungi kembali halaman ini nanti.</p>
-                    </article>
-                )}
-                <div className="text-text-color"></div>
-            </section>
+                <div>
+                    {filteredTerms.length === 0 ? (
+                        <div className="flex min-h-svh items-center justify-center pb-20">
+                            <EmptyState
+                                title={searchTerm ? 'Tidak dapat menemukan terms & conditions' : 'Belum ada terms & conditions'}
+                                description={
+                                    searchTerm
+                                        ? 'Tidak ada terms & conditions yang sesuai dengan pencarian Anda'
+                                        : 'Mulai dengan menambahkan terms & conditions baru'
+                                }
+                                action={
+                                    <Button asChild>
+                                        <Link href="terms-conditions/create">
+                                            <PlusIcon className="mr-2 h-4 w-4" />
+                                            Tambah Baru
+                                        </Link>
+                                    </Button>
+                                }
+                            />
+                        </div>
+                    ) : (
+                        <div className="rounded-md border">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Terms & Condition</TableHead>
+                                        <TableHead>Meta Title</TableHead>
+                                        <TableHead>Tanggal Dibuat</TableHead>
+                                        <TableHead>Tanggal Diperbarui</TableHead>
+                                        <TableHead>Aksi</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {filteredTerms.map((term, index) => (
+                                        <TableRow key={term.id}>
+                                            <TableCell className="max-w-md truncate">{truncateText(term.terms_and_condition)}</TableCell>
+                                            <TableCell>{term.meta?.meta_title || '-'}</TableCell>
+                                            <TableCell>
+                                                {new Date(term.created_at).toLocaleDateString('id-ID', {
+                                                    day: '2-digit',
+                                                    month: 'long',
+                                                    year: 'numeric',
+                                                })}
+                                            </TableCell>
+                                            <TableCell>
+                                                {new Date(term.updated_at).toLocaleDateString('id-ID', {
+                                                    day: '2-digit',
+                                                    month: 'long',
+                                                    year: 'numeric',
+                                                })}
+                                            </TableCell>
+                                            <TableCell className="flex justify-start gap-2">
+                                                <Button variant="ghost" size="icon" asChild className="hover:bg-neutral-100">
+                                                    <Link href={`/terms-conditions/${term.id}/edit`}>
+                                                        <PencilIcon className="h-4 w-4" />
+                                                    </Link>
+                                                </Button>
 
-            <Footer />
-        </>
+                                                <AlertDialog>
+                                                    <AlertDialogTrigger asChild>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                                                        >
+                                                            <Trash2Icon className="h-4 w-4" />
+                                                        </Button>
+                                                    </AlertDialogTrigger>
+                                                    <AlertDialogContent>
+                                                        <AlertDialogHeader>
+                                                            <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
+                                                            <AlertDialogDescription>
+                                                                Data terms & conditions akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.
+                                                            </AlertDialogDescription>
+                                                        </AlertDialogHeader>
+                                                        <AlertDialogFooter>
+                                                            <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                            <AlertDialogAction asChild>
+                                                                <Link
+                                                                    href={`/terms-conditions/${term.id}/delete`}
+                                                                    method="delete"
+                                                                    as="button"
+                                                                    preserveScroll
+                                                                >
+                                                                    Hapus
+                                                                </Link>
+                                                            </AlertDialogAction>
+                                                        </AlertDialogFooter>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </AppLayout>
     );
 }

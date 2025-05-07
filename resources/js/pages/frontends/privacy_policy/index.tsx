@@ -14,7 +14,7 @@ export default function PrivacyPolicy({ privacy_policy = {} }) {
 
     return (
         <>
-            <Head title="Kebijakan Privasi | HCL Pump Ponorogo">
+            <Head title="Kebijakan Privasi">
                 <meta name="title" content={privacyPolicyData?.meta?.meta_title || "Kebijakan Privasi | HCL Pump Ponorogo"} />
                 <meta
                     name="description"

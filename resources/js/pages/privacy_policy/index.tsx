@@ -68,11 +68,6 @@ export default function PrivacyPolicyIndex() {
         setFilteredPolicies(results);
     }, [searchTerm, privacyPolicy]);
 
-    const truncateText = (text: string, maxLength: number = 100) => {
-        if (text.length <= maxLength) return text;
-        return text.substring(0, maxLength) + '...';
-    };
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Kebijakan Privasi" />

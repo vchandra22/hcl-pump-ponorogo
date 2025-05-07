@@ -3,7 +3,7 @@ import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
 
-export default function TermsIndex({ terms_condition = {} }) {
+export default function FrontendTermsIndex({ terms_condition = {} }) {
 
     const termsConditionData = Array.isArray(terms_condition) ? terms_condition[0] : terms_condition;
 
@@ -14,7 +14,7 @@ export default function TermsIndex({ terms_condition = {} }) {
 
     return (
         <>
-            <Head title="Syarat & Ketentuan | HCL Pump Ponorogo">
+            <Head title="Syarat & Ketentuan">
                 {/* Improved meta tags with default values if data is missing */}
                 <meta name="title" content={termsConditionData?.meta?.meta_title || "Syarat & Ketentuan | HCL Pump Ponorogo"} />
                 <meta

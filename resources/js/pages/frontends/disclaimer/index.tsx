@@ -14,7 +14,7 @@ export default function DisclaimerIndex({ disclaimer = {} }) {
 
     return (
         <>
-            <Head title="Disclaimer | HCL Pump Ponorogo">
+            <Head title="Disclaimer">
                 <meta name="title" content={disclaimerData?.meta?.meta_title || "Disclaimer | HCL Pump Ponorogo"} />
                 <meta
                     name="description"

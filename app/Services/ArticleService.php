@@ -29,6 +29,11 @@ class ArticleService
         return $this->articleRepository->find($id);
     }
 
+    public function getArticleBySlug($slug)
+    {
+        return $this->articleRepository->findBySlug($slug);
+    }
+
     public function createArticleWithMeta(array $data)
     {
         DB::beginTransaction();

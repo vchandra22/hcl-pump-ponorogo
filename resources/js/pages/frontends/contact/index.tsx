@@ -34,7 +34,7 @@ export default function Contact({ contacts = {} }) { // Removed flash prop
 
     return (
         <>
-            <Head title={contactData?.meta?.meta_title || "Kontak Kami | HCL Pump Ponorogo"}>
+            <Head title={"Kontak Kami"}>
                 <meta
                     name="title"
                     content={contactData?.meta?.meta_title ?? "Kontak Kami | HCL Pump Ponorogo"}

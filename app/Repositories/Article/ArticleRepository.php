@@ -41,4 +41,9 @@ class ArticleRepository implements ArticleRepositoryInterface
     {
         return $this->model->findOrFail($id)->delete();
     }
+
+    public function findBySlug($slug)
+    {
+        return $this->model->with('meta')->where('slug', $slug)->first();
+    }
 }

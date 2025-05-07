@@ -25,7 +25,7 @@ Route::prefix('/product')->group(function () {
 
 Route::prefix('/article')->group(function () {
     Route::get('/', [FrontendController::class, 'article'])->name('article.index');
-    Route::get('/detail', [FrontendController::class, 'articleDetail'])->name('article.detail');
+    Route::get('/{slug}', [FrontendController::class, 'articleDetail'])->name('article.detail');
 });
 
 Route::prefix('/about')->group(function () {

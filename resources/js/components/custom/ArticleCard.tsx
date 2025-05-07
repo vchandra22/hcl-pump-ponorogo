@@ -2,14 +2,13 @@ import { Link } from '@inertiajs/react';
 import { CircleChevronRight } from 'lucide-react';
 
 interface ArticleCardProps {
-    img?: string;
+    img: string;
+    title: string;
     alt?: string;
-    title?: string;
-    date?: string;
-    author?: string;
-    shortDescription?: string;
-    href?: string;
-    showMoreArticlesUrl?: string;
+    date: string;
+    author: string;
+    shortDescription: string;
+    href: string;
 }
 
 export default function ArticleCard({

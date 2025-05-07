@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\AboutService;
+use App\Services\ArticleService;
 use App\Services\ContactService;
 use App\Services\DisclaimerService;
 use App\Services\HomepageService;
@@ -38,9 +40,15 @@ class FrontendController extends Controller
         return Inertia::render('frontends/product/index');
     }
 
-    public function article()
+    public function article(AboutService $aboutService, ArticleService $articleService)
     {
-        return Inertia::render('frontends/article/index');
+        $about = $aboutService->getAllAbout();
+        $articles = $articleService->getAllArticles();
+
+        return Inertia::render('frontends/article/index', [
+            'about' => $about,
+            'articles' => $articles,
+        ]);
     }
 
     public function about()
@@ -48,9 +56,15 @@ class FrontendController extends Controller
         return Inertia::render('frontends/about_us/index');
     }
 
-    public function articleDetail()
+    public function articleDetail($slug, ArticleService $articleService)
     {
-        return Inertia::render('frontends/article/detail');
+        $article = $articleService->getArticleBySlug($slug);
+        $listArticle = $articleService->getAllArticles();
+
+        return Inertia::render('frontends/article/detail', [
+            'article' => $article,
+            'listArticle' => $listArticle,
+        ]);
     }
 
     public function contact(ContactService $contactService)
