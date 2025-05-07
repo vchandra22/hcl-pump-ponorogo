@@ -39,7 +39,7 @@ interface AboutProps {
 export default function AboutUsIndex({ about, product, base_url = '' }: AboutProps) {
     const aboutData = about[0] || {};
     const companyImage = aboutData.image_company ? `/storage/${aboutData.image_company}` : '/asset/gambar-perusahaan.png';
-console.log(product);
+
     const sanitizedContent = aboutData.description ? DOMPurify.sanitize(aboutData.description) : '';
 
     return (
@@ -203,7 +203,7 @@ console.log(product);
                                     <ProductCard
                                         title={item.title}
                                         img={item.product_images[0].image_path ? `${item.product_images[0].image_path}` : '/asset/logo-hcl-pump-ponorogo.png'}
-                                        href={`/products/${item.slug}`}
+                                        href={`/produk/${item.slug}`}
                                         image_alt={item.meta.image_alt ?? 'HCL Pump Ponorogo'}
                                     />
                                 </div>
