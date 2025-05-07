@@ -19,7 +19,7 @@ export default function ProductCard({ title, img, href, image_alt }: ProductCard
                     {title ?? 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'}
                 </p>
                 <div className="text-primary-color group flex items-center justify-between pt-2 xl:pt-4">
-                    <Link href={href ?? `#`} as="button" preserveScroll className="cursor-pointer text-xl group-hover:underline md:text-2xl">
+                    <Link onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} href={href ?? `#`} as="button" preserveScroll className="cursor-pointer text-xl group-hover:underline md:text-2xl">
                         Lihat Produk
                     </Link>
                     <CircleChevronRight color="#0fae7d" className="text-primary-color cursor-pointer" size="28" />
