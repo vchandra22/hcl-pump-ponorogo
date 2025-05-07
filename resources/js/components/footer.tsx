@@ -87,7 +87,7 @@ export default function Footer() {
                             <Link href="/kebijakan-privasi" className="cursor-pointer text-lg hover:underline md:text-xl">
                                 Kebijakan & Privasi
                             </Link>
-                            <Link href="/disclaimer" className="cursor-pointer text-lg hover:underline md:text-xl">
+                            <Link href="/penafian" className="cursor-pointer text-lg hover:underline md:text-xl">
                                 Desclaimer
                             </Link>
                         </div>

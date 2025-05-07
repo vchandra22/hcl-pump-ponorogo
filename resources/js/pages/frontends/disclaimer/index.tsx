@@ -1,11 +1,39 @@
 import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
+import DOMPurify from 'dompurify';
 
-export default function Disclaimer() {
+export default function DisclaimerIndex({ disclaimer = {} }) {
+
+    const disclaimerData = Array.isArray(disclaimer) ? disclaimer[0] : disclaimer;
+
+    // Sanitasi konten
+    const sanitizedContent = disclaimerData?.disclaimer
+        ? DOMPurify.sanitize(disclaimerData.disclaimer)
+        : '';
+
     return (
         <>
-            <Head title="Disclaimer">{/*some head meta*/}</Head>
+            <Head title="Disclaimer | HCL Pump Ponorogo">
+                <meta name="title" content={disclaimerData?.meta?.meta_title || "Disclaimer | HCL Pump Ponorogo"} />
+                <meta
+                    name="description"
+                    content={disclaimerData?.meta?.meta_description || "Disclaimer resmi HCL Pump Ponorogo mengenai batasan tanggung jawab dan informasi yang disediakan pada situs web kami."}
+                />
+                <meta
+                    name="keywords"
+                    content={disclaimerData?.meta?.meta_keywords || "disclaimer, HCL Pump, Ponorogo, batasan tanggung jawab, informasi situs"}
+                />
+
+                <meta property="og:title" content={disclaimerData?.meta?.meta_title || "Disclaimer | HCL Pump Ponorogo"} />
+                <meta
+                    property="og:description"
+                    content={disclaimerData?.meta?.meta_description || "Disclaimer resmi HCL Pump Ponorogo mengenai batasan tanggung jawab dan informasi yang disediakan pada situs web kami."}
+                />
+                <meta property="og:type" content="website" />
+                <meta name="robots" content="index, follow" />
+                <meta name="language" content="Indonesian" />
+            </Head>
 
             <Navigasi />
 
@@ -21,7 +49,7 @@ export default function Disclaimer() {
                         <div className="lg:col-span-8">
                             <div className="w-full">
                                 <h1 className="text-text-color font-regular h1">
-                                    Disclaimer Website HCL Pump Ponorogo
+                                    Disclaimer HCL Pump Ponorogo
                                 </h1>
                             </div>
                         </div>
@@ -30,14 +58,21 @@ export default function Disclaimer() {
             </section>
 
             <section className="w-full px-4 py-12 md:px-12 md:py-24 lg:py-32">
-                <p className="p-subheading font-regular text-text-color text-start">
-                    Aliquam erat volutpat. Morbi molestie arcu sit amet libero porttitor, a mollis odio suscipit. Integer id augue vitae urna
-                    tristique tempus. Quisque sed dolor nec dui scelerisque dapibus. Curabitur tincidunt, felis a elementum tincidunt, ex felis
-                    fermentum dui, eget pulvinar arcu eros eu eros. Duis efficitur, sapien quis bibendum auctor, lectus risus feugiat sapien, ac
-                    pulvinar orci est a arcu. Integer vel turpis sed purus scelerisque euismod. Maecenas euismod tristique leo, vel malesuada ligula
-                    malesuada sed. Suspendisse potenti. Integer sit amet metus non tortor tincidunt interdum. Curabitur auctor, tellus in congue
-                    vestibulum, lacus lacus convallis justo, at fermentum libero felis nec ligula.
-                </p>
+                {sanitizedContent ? (
+                    <article
+                        className="prose max-w-none"
+                        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                    />
+                ) : (
+                    <article className="prose max-w-none">
+                        <p className="p-subheading font-regular text-text-color text-start">
+                            Semua informasi di situs web ini diterbitkan dengan itikad baik dan hanya untuk tujuan informasi umum. HCL Pump Ponorogo tidak memberikan jaminan
+                            apa pun tentang kelengkapan, keandalan, dan keakuratan informasi ini. Segala tindakan yang Anda ambil atas informasi yang Anda temukan
+                            di situs web ini sepenuhnya merupakan risiko Anda sendiri. HCL Pump Ponorogo tidak bertanggung jawab atas kerugian atau kerusakan sehubungan
+                            dengan penggunaan situs ini.
+                        </p>
+                    </article>
+                )}
                 <div className="text-text-color"></div>
             </section>
 

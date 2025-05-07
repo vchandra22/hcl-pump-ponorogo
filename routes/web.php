@@ -38,7 +38,7 @@ Route::get('/syarat-ketentuan', [FrontendController::class, 'termsCondition'])->
 
 Route::get('/kebijakan-privasi', [FrontendController::class, 'privacyPolicy'])->name('privacy-policy.index');
 
-Route::get('/disclaimer', [FrontendController::class, 'disclaimer'])->name('disclaimer.index');
+Route::get('/penafian', [FrontendController::class, 'disclaimer'])->name('penafian.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {

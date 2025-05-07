@@ -1,11 +1,41 @@
 import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
+import DOMPurify from 'dompurify';
 
-export default function TermsCondition() {
+export default function TermsIndex({ terms_condition = {} }) {
+
+    const termsConditionData = Array.isArray(terms_condition) ? terms_condition[0] : terms_condition;
+
+    // Sanitasi konten
+    const sanitizedContent = termsConditionData?.terms_and_condition
+        ? DOMPurify.sanitize(termsConditionData.terms_and_condition)
+        : '';
+
     return (
         <>
-            <Head title="Syarat & Ketentuan">{/*some head meta*/}</Head>
+            <Head title="Syarat & Ketentuan | HCL Pump Ponorogo">
+                {/* Improved meta tags with default values if data is missing */}
+                <meta name="title" content={termsConditionData?.meta?.meta_title || "Syarat & Ketentuan | HCL Pump Ponorogo"} />
+                <meta
+                    name="description"
+                    content={termsConditionData?.meta?.meta_description || "Syarat dan ketentuan resmi HCL Pump Ponorogo yang mengatur penggunaan layanan dan produk kami."}
+                />
+                <meta
+                    name="keywords"
+                    content={termsConditionData?.meta?.meta_keywords || "syarat dan ketentuan, HCL Pump, Ponorogo, persyaratan layanan, peraturan penggunaan"}
+                />
+
+                {/* Added additional meta tags for SEO and sharing */}
+                <meta property="og:title" content={termsConditionData?.meta?.meta_title || "Syarat & Ketentuan | HCL Pump Ponorogo"} />
+                <meta
+                    property="og:description"
+                    content={termsConditionData?.meta?.meta_description || "Syarat dan ketentuan resmi HCL Pump Ponorogo yang mengatur penggunaan layanan dan produk kami."}
+                />
+                <meta property="og:type" content="website" />
+                <meta name="robots" content="index, follow" />
+                <meta name="language" content="Indonesian" />
+            </Head>
 
             <Navigasi />
 
@@ -30,14 +60,18 @@ export default function TermsCondition() {
             </section>
 
             <section className="w-full px-4 py-12 md:px-12 md:py-24 lg:py-32">
-                <p className="p-subheading font-regular text-text-color text-start">
-                    Aliquam erat volutpat. Morbi molestie arcu sit amet libero porttitor, a mollis odio suscipit. Integer id augue vitae urna
-                    tristique tempus. Quisque sed dolor nec dui scelerisque dapibus. Curabitur tincidunt, felis a elementum tincidunt, ex felis
-                    fermentum dui, eget pulvinar arcu eros eu eros. Duis efficitur, sapien quis bibendum auctor, lectus risus feugiat sapien, ac
-                    pulvinar orci est a arcu. Integer vel turpis sed purus scelerisque euismod. Maecenas euismod tristique leo, vel malesuada ligula
-                    malesuada sed. Suspendisse potenti. Integer sit amet metus non tortor tincidunt interdum. Curabitur auctor, tellus in congue
-                    vestibulum, lacus lacus convallis justo, at fermentum libero felis nec ligula.
-                </p>
+                {sanitizedContent ? (
+                    <article
+                        className="prose max-w-none"
+                        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                    />
+                ) : (
+                    <article className="prose max-w-none">
+                        <p className="text-text-color text-start">
+                            Konten Syarat & Ketentuan belum tersedia. Silakan kembali lagi nanti.
+                        </p>
+                    </article>
+                )}
                 <div className="text-text-color"></div>
             </section>
 

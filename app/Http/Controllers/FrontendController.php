@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\DisclaimerService;
 use App\Services\HomepageService;
+use App\Services\PrivacyPolicyService;
 use App\Services\ProductService;
+use App\Services\TermsConditionService;
 use Inertia\Inertia;
+use Termwind\Components\Dd;
 
 class FrontendController extends Controller
 {
@@ -64,18 +68,30 @@ class FrontendController extends Controller
         }
     }
 
-    public function termsCondition()
+    public function termsCondition(TermsConditionService $termsConditionService)
     {
-        return Inertia::render('frontends/terms/index');
+        $termsCondition = $termsConditionService->getAllTermsCondition();
+
+        return Inertia::render('frontends/terms/index', [
+            'terms_condition' => $termsCondition,
+        ]);
     }
 
-    public function privacyPolicy()
+    public function privacyPolicy(PrivacyPolicyService $privacyPolicyService)
     {
-        return Inertia::render('frontends/privacy_policy/index');
+        $privacyPolicy = $privacyPolicyService->getAllPrivacyPolicy();
+
+        return Inertia::render('frontends/privacy_policy/index', [
+            'privacy_policy' => $privacyPolicy,
+        ]);
     }
 
-    public function disclaimer()
+    public function disclaimer(DisclaimerService $disclaimerService)
     {
-        return Inertia::render('frontends/disclaimer/index');
+        $disclaimer = $disclaimerService->getAllDisclaimer();
+
+        return Inertia::render('frontends/disclaimer/index', [
+            'disclaimer' => $disclaimer,
+        ]);
     }
 }

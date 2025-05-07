@@ -1,11 +1,39 @@
 import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
+import DOMPurify from 'dompurify';
 
-export default function PrivacyPolicy() {
+export default function PrivacyPolicy({ privacy_policy = {} }) {
+
+    const privacyPolicyData = Array.isArray(privacy_policy) ? privacy_policy[0] : privacy_policy;
+
+    // Sanitasi konten
+    const sanitizedContent = privacyPolicyData?.privacy_policy
+        ? DOMPurify.sanitize(privacyPolicyData.privacy_policy)
+        : '';
+
     return (
         <>
-            <Head title="Kebijakan Privasi">{/*some head meta*/}</Head>
+            <Head title="Kebijakan Privasi | HCL Pump Ponorogo">
+                <meta name="title" content={privacyPolicyData?.meta?.meta_title || "Kebijakan Privasi | HCL Pump Ponorogo"} />
+                <meta
+                    name="description"
+                    content={privacyPolicyData?.meta?.meta_description || "Kebijakan privasi resmi HCL Pump Ponorogo tentang pengumpulan, penggunaan, dan perlindungan data pengguna."}
+                />
+                <meta
+                    name="keywords"
+                    content={privacyPolicyData?.meta?.meta_keywords || "kebijakan privasi, HCL Pump, Ponorogo, keamanan data, perlindungan privasi"}
+                />
+
+                <meta property="og:title" content={privacyPolicyData?.meta?.meta_title || "Kebijakan Privasi | HCL Pump Ponorogo"} />
+                <meta
+                    property="og:description"
+                    content={privacyPolicyData?.meta?.meta_description || "Kebijakan privasi resmi HCL Pump Ponorogo tentang pengumpulan, penggunaan, dan perlindungan data pengguna."}
+                />
+                <meta property="og:type" content="website" />
+                <meta name="robots" content="index, follow" />
+                <meta name="language" content="Indonesian" />
+            </Head>
 
             <Navigasi />
 
@@ -30,14 +58,16 @@ export default function PrivacyPolicy() {
             </section>
 
             <section className="w-full px-4 py-12 md:px-12 md:py-24 lg:py-32">
-                <p className="p-subheading font-regular text-text-color text-start">
-                    Aliquam erat volutpat. Morbi molestie arcu sit amet libero porttitor, a mollis odio suscipit. Integer id augue vitae urna
-                    tristique tempus. Quisque sed dolor nec dui scelerisque dapibus. Curabitur tincidunt, felis a elementum tincidunt, ex felis
-                    fermentum dui, eget pulvinar arcu eros eu eros. Duis efficitur, sapien quis bibendum auctor, lectus risus feugiat sapien, ac
-                    pulvinar orci est a arcu. Integer vel turpis sed purus scelerisque euismod. Maecenas euismod tristique leo, vel malesuada ligula
-                    malesuada sed. Suspendisse potenti. Integer sit amet metus non tortor tincidunt interdum. Curabitur auctor, tellus in congue
-                    vestibulum, lacus lacus convallis justo, at fermentum libero felis nec ligula.
-                </p>
+                {sanitizedContent ? (
+                    <article
+                        className="prose max-w-none"
+                        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                    />
+                ) : (
+                    <article className="prose max-w-none">
+                        <p>Kebijakan privasi sedang dalam proses pembaruan. Silakan kunjungi kembali halaman ini nanti.</p>
+                    </article>
+                )}
                 <div className="text-text-color"></div>
             </section>
 
