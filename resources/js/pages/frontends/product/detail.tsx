@@ -3,12 +3,48 @@ import CtaComponent from '@/components/custom/CtaComponent';
 import ProductCard from '@/components/custom/ProductCard';
 import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
-import { Head, Link } from '@inertiajs/react';
+import { Product } from '@/types/product';
+import formatRupiah from '@/utils/formatRupiah';
+import { Head, Link, usePage } from '@inertiajs/react';
+import DOMPurify from 'dompurify';
 
-export default function ProductDetail() {
+interface ProductDetailProps {
+    product: Product;
+    products: Product[];
+}
+
+export default function ProductDetail({ product, products }: ProductDetailProps) {
+    const {
+        props: {
+            ziggy: { url },
+        },
+    } = usePage();
+
+    const sanitizedDescriptionContent = product.product_detail?.description ? DOMPurify.sanitize(product.product_detail.description) : '';
+
+    const sanitizedSpecificationContent = product.product_detail?.specification ? DOMPurify.sanitize(product.product_detail.specification) : '';
+
+    const sanitizedInfoContent = product.product_detail?.additional_info ? DOMPurify.sanitize(product.product_detail.additional_info) : '';
+
     return (
         <>
-            <Head title="Detail Produk" />
+            <Head title={`${product.meta?.meta_title} | HCL Pump Ponorogo`}>
+                <meta name="description" content={product.meta?.meta_description ?? ''} />
+                <meta name="keywords" content={product.meta?.meta_keywords ?? ''} />
+
+                {/* Open Graph Tags */}
+                <meta property="og:title" content={`${product.meta?.meta_title} | HCL Pump Ponorogo`} />
+                <meta property="og:description" content={product.meta?.meta_description} />
+                <meta
+                    property="og:image"
+                    content={product.meta?.og_image ? `${url}${product.meta?.og_image}` : '/asset/logo-hcl-pump-ponorogo.png'}
+                />
+                <meta property="og:type" content="article" />
+
+                {/* SEO Related */}
+                <meta name="robots" content="index, follow" />
+                <meta name="language" content="Indonesian" />
+            </Head>
             <Navigasi />
 
             <section className="text-secondary-color mx-auto px-4 md:px-6">
@@ -17,71 +53,76 @@ export default function ProductDetail() {
                         <p className="h2 text-primary-color">Produk Kami</p>
                     </div>
                     <div className="lg:col-span-8">
-                        <h1 className="h1 font-medium">HCL PUMP 4SPM5-17</h1>
-                        <p className="p-body-text-lg my-15">
-                            Mauris vitae quam in justo dictum sodales. In eget tortor a nunc vehicula tempor. Nam ac tincidunt ipsum, eget accumsan
-                            nisi. Praesent porta, magna vitae dapibus pharetra, erat eros efficitur nunc, in mattis lectus libero a velit. Nulla
-                            facilisi. Nullam nec turpis et arcu egestas commodo. Integer sit amet metus non tortor tincidunt interdum. Donec et metus
-                            mollis, ultricies est at, ultricies nulla. Morbi non libero magna. Praesent imperdiet magna ac ipsum cursus, ut fermentum
-                            turpis tincidunt.
-                        </p>
+                        <h1 className="h1 font-medium">{product.title}</h1>
+                        <p className="p-body-text-lg my-15">{product.short_description}</p>
                         <div className="my-10 flex justify-center">
-                            <Caraousel images={['/asset/contoh-gambar-pompa.png', '/asset/gambar-ilustrasi-artikel.png']} />
+                            <Caraousel images={product.product_images!} />
                         </div>
 
-                        <p className="h2">Integer ullamcorper felis sit amet.</p>
+                        <p className="h2">{product.title}</p>
 
-                        <div className="my-5">
-                            <p className="text-xl text-red-500 line-through">Rp 7.500.00</p>
-                            <p className="h1">Rp 7.250.00</p>
-                        </div>
+                        {product.price != 0 ? (
+                            <div className="my-5">
+                                <p className="text-xl text-red-500 line-through">{formatRupiah(product.price)}</p>
+                                <p className="h1">{formatRupiah(product.sale_price ?? 0)}</p>
+                            </div>
+                        ) : (
+                            <div className="my-5">
+                                <Link href="https://www.youtube.com" className="cursor-pointer text-blue-600 hover:underline">
+                                    Hubungi kami untuk info lebih lanjut!!
+                                </Link>
+                            </div>
+                        )}
 
                         <div>
-                            <p className='h3'>Secification: </p>
-                            <p className='p-body-text-lg mb-10'>
-                                Marketing automation streamlines repetitive tasks and workflows, allowing marketers to focus on strategic activities.
-                                Automation tools can manage email campaigns, social media posts, lead nurturing, and customer segmentation. By
-                                automating routine processes, businesses can improve efficiency, maintain consistency, and scale their marketing
-                                efforts. Video marketing has gained immense popularity as a powerful tool for engaging audiences. Videos can convey
-                                complex information in an easily digestible format, making them ideal for product demonstrations, tutorials, and
-                                storytelling. Platforms like YouTube and TikTok offer vast reach, while live streaming provides real-time interaction
-                                with viewers. Personalization in marketing tailors messages and offers to individual consumers based on their
-                                preferences, behavior, and demographics. Advanced data analytics and machine learning algorithms enable businesses to
-                                deliver highly relevant content, improving engagement and conversion rates. Personalization fosters a deeper
-                                connection between brands and their customers.
-                            </p>
+                            <p className="h3">Deskripsi: </p>
+                            <div className="p-body-text-lg prose mb-10" dangerouslySetInnerHTML={{ __html: sanitizedDescriptionContent }}></div>
                         </div>
-                        <Link href='' className='bg-primary-color text-white p-2 px-5 rounded-3xl'>Beli Sekarang</Link>
+                        <div className="-mt-5">
+                            <p className="h3">Spesifikasi: </p>
+                            <div className="p-body-text-lg prose mb-10" dangerouslySetInnerHTML={{ __html: sanitizedSpecificationContent }}></div>
+                        </div>
+                        <div className="-mt-5">
+                            <p className="h3">Info: </p>
+                            <div className="p-body-text-lg prose mb-10" dangerouslySetInnerHTML={{ __html: sanitizedInfoContent }}></div>
+                        </div>
+                        <Link href="" className="bg-primary-color rounded-3xl p-2 px-5 text-white">
+                            Beli Sekarang
+                        </Link>
                     </div>
                 </div>
             </section>
 
-            <section className='text-secondary-color mx-auto px-4 md:px-6 my-20'>
-                <div className='grid lg:grid-cols-12'>
-                    <div className='lg:col-span-4'>
-                        <p className='h2 text-primary-color'>Produk Lainnya</p>
+            <section className="text-secondary-color mx-auto my-20 px-4 md:px-6">
+                <div className="grid lg:grid-cols-12">
+                    <div className="lg:col-span-4">
+                        <p className="h2 text-primary-color">Produk Lainnya</p>
                     </div>
-                    <div className='lg:col-span-8'>
-                        <p className='h1'>HCL Pump Ponorogo Menghadirkan Inovasi dan Kualitas Terbaik untuk Solusi Pompa Air</p>
+                    <div className="lg:col-span-8">
+                        <p className="h1">HCL Pump Indonesia Menghadirkan Inovasi dan Kualitas Terbaik untuk Solusi Pompa Air</p>
                     </div>
                 </div>
 
-                <div className='grid lg:grid-cols-3 gap-6 my-10'>
-                    <div>
-                        <ProductCard/>
-                    </div>
-                    <div>
-                        <ProductCard/>
-                    </div>
-                    <div>
-                        <ProductCard/>
-                    </div>
+                <div className="my-10 grid gap-6 lg:grid-cols-3">
+                    {products.length > 0 ? (
+                        products.map((item) => {
+                            if (item.id != product.id) {
+                                return (
+                                    <div>
+                                        <ProductCard title={item.title} img={item.product_images![0].image_path} href={`/product/${item.slug}`} />
+                                    </div>
+                                );
+                            }
+                        })
+                    ) : (
+                        <p>Belun ada product.</p>
+                    )}
                 </div>
             </section>
 
-            <CtaComponent/>
+            <CtaComponent />
 
-            <Footer/>
+            <Footer />
         </>
     );
 }

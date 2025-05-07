@@ -37,7 +37,8 @@ class FrontendController extends Controller
 
     public function product()
     {
-        return Inertia::render('frontends/product/index');
+        $product = $this->product_service->getAllProducts();
+        return Inertia::render('frontends/product/index', ['products' => $product]);
     }
 
     public function article(AboutService $aboutService, ArticleService $articleService)
@@ -118,11 +119,12 @@ class FrontendController extends Controller
     {
         try {
             $product = $this->product_service->getProductBySlug($slug);
+            $products = $this->product_service->getAllProducts();
             if(!$product) {
                 abort(404, 'Produk tidak ditemukan.');
             }
 
-            return Inertia::render('frontends/product/detail', ['product' => $product]);
+            return Inertia::render('frontends/product/detail', ['product' => $product, 'products' => $products]);
         } catch (\Exception $err) {
             return back()->with('failed', 'Produk tidak ditemukan.');
         }

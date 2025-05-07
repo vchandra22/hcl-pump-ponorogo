@@ -1,65 +1,66 @@
+import { ProductImage } from '@/types/product';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CircleChevronLeft, CircleChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 
 interface CaraouselProps {
-    images: string[];
+    images: ProductImage[];
     alt?: string;
 }
 
-export default function Caraousel({ images, alt }: CaraouselProps) {
-    const [[current, direction], setCurrent] = useState([0, 0]);
+const variants = {
+    enter: (direction: number) => ({
+        x: direction > 0 ? 300 : -300,
+        opacity: 0,
+    }),
+    center: {
+        x: 0,
+        opacity: 1,
+    },
+    exit: (direction: number) => ({
+        x: direction < 0 ? 300 : -300,
+        opacity: 0,
+    }),
+};
 
-    const variants = {
-        enter: (dir: number) => ({
-            x: dir > 0 ? '100%' : '-100%',
-            opacity: 0
-        }),
-        center: {
-            x: 0,
-            opacity: 1
-        },
-        exit: (dir: number) => ({
-            x: dir > 0 ? '-100%' : '100%',
-            opacity: 0
-        }),
-    };
+export default function Caraousel({ images, alt }: CaraouselProps) {
+    const [[page, direction], setPage] = useState([0, 0]);
+
+    const imageIndex = ((page % images.length) + images.length) % images.length;
 
     const paginate = (newDirection: number) => {
-        setCurrent(([prev]) => {
-            const nextIndex = (prev + newDirection + images.length) % images.length;
-            return [nextIndex, newDirection];
-        });
+        setPage([page + newDirection, newDirection]);
     };
 
     return (
-        <div className="relative sm:h-110 lg:h-120 sm:w-full sm:max-w-120 lg:w-200">
-            <div className="absolute flex h-full w-full items-center justify-between px-3">
-                <button className="cursor-pointer" onClick={() => paginate(1)}>
-                    <CircleChevronLeft size={40} />
-                </button>
-                <button className="cursor-pointer" onClick={() => paginate(-1)}>
-                    <CircleChevronRight size={40} />
-                </button>
-            </div>
-
-            <div className="h-full w-full overflow-hidden">
+        <div className="relative mx-auto w-full max-w-xl overflow-hidden">
+            <div className="relative h-120 w-full bg-gray-100">
                 <AnimatePresence initial={false} custom={direction}>
                     <motion.img
-                        key={current}
+                        key={page}
+                        src={images[imageIndex].image_path}
+                        custom={direction}
+                        variants={variants}
                         initial="enter"
                         animate="center"
                         exit="exit"
-                        src={images[current]}
-                        custom={direction}
-                        variants={variants}
-                        transition={{ duration: 0.3 }}
-                        className="object-fit h-full w-full object-center"
+                        transition={{
+                            x: { type: 'spring', stiffness: 300, damping: 30 },
+                            opacity: { duration: 0.2 },
+                        }}
+                        className="absolute h-full w-full object-cover"
                         alt={alt}
-                        width={100}
-                        height={100}
                     />
                 </AnimatePresence>
+            </div>
+
+            <div className="absolute inset-0 flex items-center justify-between px-4">
+                <button onClick={() => paginate(-1)} className="bg-opacity-70 hover:bg-opacity-90 rounded-full bg-white p-2 shadow">
+                    <ChevronLeft size={20} />
+                </button>
+                <button onClick={() => paginate(1)} className="bg-opacity-70 hover:bg-opacity-90 rounded-full bg-white p-2 shadow">
+                    <ChevronRight size={20} />
+                </button>
             </div>
         </div>
     );

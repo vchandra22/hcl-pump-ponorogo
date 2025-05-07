@@ -1,4 +1,5 @@
 import CustomInputFile from '@/components/custom/CustomInputFile';
+import QuillEditor from '@/components/custom/quill-editor';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -73,7 +74,7 @@ export default function CreateProduct({ status }: CreateProductProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Tambah Produk" />
-            <Toaster/>
+            <Toaster />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <Tabs defaultValue="product" className="w-full">
                     <TabsList className="grid w-full grid-cols-2">
@@ -190,39 +191,40 @@ export default function CreateProduct({ status }: CreateProductProps) {
 
                                 <p className="-mb-4 text-lg font-bold">Detail Produk</p>
 
-                                <div className="space-y-2">
+                                <div className="mb-10">
                                     <Label htmlFor="description">Deskripsi</Label>
-                                    <Textarea
+                                    <QuillEditor
                                         id="description"
                                         value={data.description}
-                                        onChange={(e) => setData('description', e.target.value)}
+                                        onChange={(value) => setData('description', value)}
                                         placeholder="Masukkan deskripsi produk"
-                                        rows={3}
+                                        height="250px"
                                     />
                                     <InputError />
                                 </div>
 
-                                <div className="space-y-2">
+                                <div className="mb-10">
                                     <Label htmlFor="specification">Spesifikasi</Label>
-                                    <Textarea
+                                    <QuillEditor
                                         id="specification"
                                         value={data.specification}
-                                        onChange={(e) => setData('specification', e.target.value)}
+                                        onChange={(value) => setData('specification', value)}
                                         placeholder="Masukkan spesifikasi produk"
-                                        rows={3}
+                                        height="250px"
                                     />
                                     <InputError />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="additional_info">Info(opsional)</Label>
-                                    <Textarea
+                                    <QuillEditor
                                         id="additional_info"
                                         value={data.additional_info}
-                                        onChange={(e) => setData('additional_info', e.target.value)}
-                                        placeholder="Masukkan info produk"
-                                        rows={3}
+                                        onChange={(value) => setData('additional_info', value)}
+                                        placeholder="Masukkan spesifikasi produk"
+                                        height="250px"
                                     />
+
                                     <InputError />
                                 </div>
                             </div>
@@ -276,7 +278,7 @@ export default function CreateProduct({ status }: CreateProductProps) {
                                             accept="image/*"
                                             className="flex-1"
                                             onChange={(e) => {
-                                               if(e.target.files) setData('og_image', e.target.files[0]);
+                                                if (e.target.files) setData('og_image', e.target.files[0]);
                                             }}
                                         />
                                         <Button type="button" variant="outline" onClick={() => og_image.current?.click()}>
@@ -290,7 +292,7 @@ export default function CreateProduct({ status }: CreateProductProps) {
                                             onClick={() => {
                                                 setData('og_image', null);
 
-                                                if (og_image.current) og_image.current.value = ''; 
+                                                if (og_image.current) og_image.current.value = '';
                                             }}
                                         >
                                             <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-3 lg:grid-cols-7">
