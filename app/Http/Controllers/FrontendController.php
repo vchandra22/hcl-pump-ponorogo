@@ -52,12 +52,15 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function about(AboutService $aboutService)
+    public function about(AboutService $aboutService, ProductService $productService)
     {
         $about = $aboutService->getAllAbout();
+        $product = $productService->getFeaturedProducts();
 
         return Inertia::render('frontends/about_us/index', [
             'about' => $about,
+            'product' => $product,
+            'base_url' => url('/'),
         ]);
     }
 

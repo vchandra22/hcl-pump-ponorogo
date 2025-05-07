@@ -10,7 +10,7 @@ export default function ProductIndex() {
             <Head title="Produk" />
             <Navigasi />
 
-            <section className="px-4 md:px-12 mx-auto my-15 w-full">
+            <section className="mx-auto my-15 w-full px-4 md:px-12">
                 <div className="grid lg:grid-cols-12">
                     <p className="text-primary-color h2 lg:col-span-4">Produk Kami</p>
                     <div className="flex flex-col gap-y-9 lg:col-span-8">
@@ -24,23 +24,23 @@ export default function ProductIndex() {
                 </div>
             </section>
 
-          <section className="container mx-auto w-full mb-15">
-              <div className="grid w-full gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-6">
-                  <div>
-                      <ProductCard />
-                  </div>
-                  <div>
-                      <ProductCard />
-                  </div>
-                  <div>
-                      <ProductCard />
-                  </div>
-                  <div>
-                      <ProductCard />
-                  </div>
-              </div>
-          </section>
-          
+            <section className="container mx-auto mb-15 w-full">
+                <div className="grid w-full gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-6">
+                    <div>
+                        <ProductCard />
+                    </div>
+                    <div>
+                        <ProductCard />
+                    </div>
+                    <div>
+                        <ProductCard />
+                    </div>
+                    <div>
+                        <ProductCard />
+                    </div>
+                </div>
+            </section>
+
             <CtaComponent />
 
             <Footer />

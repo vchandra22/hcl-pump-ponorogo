@@ -87,7 +87,7 @@ export default function ArticleDetail({ article, listArticle, base_url = '' }: A
                 <div className="relative z-20 w-full mx-auto px-4">
                     <div className="mb-9 grid mx-auto px-8 w-full grid-cols-1 md:mb-0 lg:grid-cols-12">
                         <div className="lg:col-span-4">
-                            <Link href="/article" prefetch={false}>
+                            <Link href="/artikel" prefetch={false}>
                                 <p className="group border text-md font-regular text-bg-color inline-flex h-9 items-center rounded-full px-6 py-3 hover:bg-gray-100 hover:text-gray-900">
                                     Kembali
                                 </p>
@@ -137,7 +137,7 @@ export default function ArticleDetail({ article, listArticle, base_url = '' }: A
                                         date={item.date}
                                         author={item.author}
                                         shortDescription={item.short_description}
-                                        href={`/article/${item.slug}`}
+                                        href={`/artikel/${item.slug}`}
                                     />
                                 ))
                         ) : (

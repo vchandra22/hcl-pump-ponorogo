@@ -18,28 +18,21 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 Route::get('/', [FrontendController::class, 'home'])->name('home');
-Route::prefix('/product')->group(function () {
+Route::prefix('/produk')->group(function () {
     Route::get('/', [FrontendController::class, 'product'])->name('product');
     Route::get('/{slug}', [FrontendController::class, 'productDetail'])->name('product.detail');
 });
-
-Route::prefix('/article')->group(function () {
+Route::prefix('/artikel')->group(function () {
     Route::get('/', [FrontendController::class, 'article'])->name('article.index');
     Route::get('/{slug}', [FrontendController::class, 'articleDetail'])->name('article.detail');
 });
-
-Route::prefix('/about')->group(function () {
+Route::prefix('/tentang-kami')->group(function () {
     Route::get('/', [FrontendController::class, 'about'])->name('about.index');
 });
-
-Route::get('/contact', [FrontendController::class, 'contact'])->name('frontend-contact.index');
-
+Route::get('/kontak', [FrontendController::class, 'contact'])->name('frontend-contact.index');
 Route::post('/pesan/store', [FrontendController::class, 'pesanStore'])->name('pesan.store');
-
 Route::get('/syarat-ketentuan', [FrontendController::class, 'termsCondition'])->name('terms-condition.index');
-
 Route::get('/kebijakan-privasi', [FrontendController::class, 'privacyPolicy'])->name('privacy-policy.index');
-
 Route::get('/penafian', [FrontendController::class, 'disclaimer'])->name('penafian.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {

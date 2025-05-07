@@ -9,19 +9,19 @@ const navLinks = [
     },
     {
         name: 'Tentang Kami',
-        href: '/about',
+        href: '/tentang-kami',
     },
     {
         name: 'Produk',
-        href: '/product',
+        href: '/produk',
     },
     {
         name: 'Artikel',
-        href: '/article',
+        href: '/artikel',
     },
     {
         name: 'Kontak',
-        href: '/contact',
+        href: '/kontak',
     },
 ];
 

@@ -35,7 +35,7 @@ export default function Article({ about = [], articles = [], base_url = '' }: Ar
             <Head title="Artikel">
                 <meta
                     name="title"
-                    content="Artikel | HCL Pump Ponorogo"
+                    content="Artikel"
                 />
                 <meta
                     name="description"
@@ -49,7 +49,7 @@ export default function Article({ about = [], articles = [], base_url = '' }: Ar
                 {/* Meta untuk Open Graph dan SEO */}
                 <meta
                     property="og:title"
-                    content={"Artikel | HCL Pump Ponorogo"}
+                    content={"Artikel"}
                 />
                 <meta
                     property="og:description"
@@ -109,7 +109,7 @@ export default function Article({ about = [], articles = [], base_url = '' }: Ar
                             date={article.date}
                             author={article.author}
                             shortDescription={article.short_description}
-                            href={`/article/${article.slug}`}
+                            href={`/artikel/${article.slug}`}
                         />
                     ))
                 ) : (
@@ -129,7 +129,7 @@ export default function Article({ about = [], articles = [], base_url = '' }: Ar
                 <CtaComponent
                     title="Layanan & Harga"
                     description="Tentang HCL Pump Ponorogo"
-                    href="/about"
+                    href="/tentang-kami"
                     buttonText="Tentang Kami"
                 />
             </section>

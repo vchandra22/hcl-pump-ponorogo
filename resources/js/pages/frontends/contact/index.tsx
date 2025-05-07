@@ -37,7 +37,7 @@ export default function Contact({ contacts = {}, base_url = '' }) { // Removed f
             <Head title={"Kontak Kami"}>
                 <meta
                     name="title"
-                    content={contactData?.meta?.meta_title ?? "Kontak Kami | HCL Pump Ponorogo"}
+                    content={contactData?.meta?.meta_title ?? "Kontak Kami"}
                 />
                 <meta
                     name="description"
@@ -51,7 +51,7 @@ export default function Contact({ contacts = {}, base_url = '' }) { // Removed f
                 {/* Meta untuk Open Graph dan SEO */}
                 <meta
                     property="og:title"
-                    content={contactData?.meta?.meta_title ?? "Kontak Kami | HCL Pump Ponorogo"}
+                    content={contactData?.meta?.meta_title ?? "Kontak Kami"}
                 />
                 <meta
                     property="og:description"
