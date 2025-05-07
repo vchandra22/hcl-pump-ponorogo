@@ -18,22 +18,91 @@ interface HomepageData {
         image_alt?: string;
     }
 }
+
+interface ProductData {
+    id: string;
+    title: string;
+    slug: string;
+    product_images: {
+        image_path: string;
+    };
+    meta: {
+        image_alt?: string;
+    }
+}
+
+interface ArticleData {
+    id: string;
+    title: string;
+    summary: string;
+    content: string;
+    author: string;
+    image_article: string;
+    image_alt?: string;
+    created_at: string;
+    updated_at: string;
+}
 interface HomepageProps {
     homepage?: HomepageData[];
+    product?: ProductData[];
+    articles?: ArticleData[];
 }
-export default function Beranda({ homepage }: HomepageProps) {
+export default function Beranda({ homepage, product, articles, base_url = '' }: HomepageProps) {
     const homepageData = homepage?.[0] || {};
     const bannerImage = homepageData.banner_image ? `/storage/${homepageData.banner_image}` : '/asset/logo-hcl-pump-ponorogo.png';
 
     const sanitizedContent = homepageData.description ? DOMPurify.sanitize(homepageData.description) : '';
     return (
         <>
-            <Head title="Beranda">{/*some head meta*/}</Head>
+            <Head title="Beranda">
+                <meta
+                    name="title"
+                    content={`${homepageData.meta?.meta_title ?? 'Beranda - HCL Pump Ponorogo'}`}
+                />
+                <meta
+                    name="description"
+                    content={
+                        homepageData.meta?.meta_description ??
+                        'HCL Pump Ponorogo - Produsen dan distributor pompa air berkualitas tinggi untuk kebutuhan rumah tangga, industri, dan pertanian.'
+                    }
+                />
+                <meta
+                    name="keywords"
+                    content={
+                        `${homepageData.meta?.meta_keywords ?? 'pompa air, HCL Pump, pompa industri'}, distributor pompa, pompa sumur dalam, pompa submersible`
+                    }
+                />
+
+                {/* Open Graph Meta Tags */}
+                <meta
+                    property="og:title"
+                    content={`${homepageData.meta?.meta_title ?? 'Beranda - HCL Pump Ponorogo'}`}
+                />
+                <meta
+                    property="og:description"
+                    content={
+                        homepageData.meta?.meta_description ??
+                        'Solusi lengkap untuk kebutuhan pompa air dengan produk berkualitas dan layanan terbaik dari HCL Pump Ponorogo.'
+                    }
+                />
+                <meta
+                    property="og:image"
+                    content={
+                        homepageData.meta?.og_image
+                            ? `${base_url}/storage/${homepageData.meta.og_image}`
+                            : `${base_url}/asset/logo-hcl-pump-ponorogo.png`
+                    }
+                />
+                <meta property="og:url" content={`${base_url}${location.pathname}`} />
+                <meta property="og:type" content="website" />
+                <meta name="robots" content="index, follow" />
+                <meta name="language" content="Indonesian" />
+            </Head>
 
             <Navigasi />
 
             <section className="relative w-full overflow-hidden py-12 text-white md:px-6 md:py-24 lg:py-72">
-                <img src={bannerImage} className={'absolute top-0 left-0 h-full w-full overflow-hidden object-cover'} alt="" />
+                <img src={bannerImage} width="100" height="100" className={'absolute top-0 left-0 h-full w-full overflow-hidden object-cover'} alt={homepageData.meta?.image_alt ?? 'HCL Pump Ponorogo'} />
                 <div className={'bg-secondary-color/60 absolute top-0 left-0 z-10 h-full w-full'}></div>
                 <div className="relative z-20 container mx-auto px-4">
                     <div className="lg:max-w-2/3">
@@ -80,15 +149,16 @@ export default function Beranda({ homepage }: HomepageProps) {
 
                     <section className="mx-auto w-full md:py-12 lg:py-24">
                         <div className="grid w-full gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-6">
-                            <div>
-                                <ProductCard />
-                            </div>
-                            <div>
-                                <ProductCard />
-                            </div>
-                            <div>
-                                <ProductCard />
-                            </div>
+                            {product && product.map((item) => (
+                                <div key={item.id}>
+                                    <ProductCard
+                                        title={item.title}
+                                        img={item.product_images[0].image_path ? `${item.product_images[0].image_path}` : '/asset/logo-hcl-pump-ponorogo.png'}
+                                        href={`/produk/${item.slug}`}
+                                        image_alt={item.meta.image_alt ?? 'HCL Pump Ponorogo'}
+                                    />
+                                </div>
+                            ))}
                         </div>`
                     </section>
 
@@ -154,16 +224,31 @@ export default function Beranda({ homepage }: HomepageProps) {
                         </div>
                     </div>
 
-                    <ArticleCard />
-                    <ArticleCard />
-                    <ArticleCard />
-                    <ArticleCard />
+                    {articles.length > 0 ? (
+                        articles.map((article) => (
+                            <ArticleCard
+                                key={article.id}
+                                img={`/storage/${article.image_article}`}
+                                title={article.title}
+                                alt={article.title}
+                                date={article.date}
+                                author={article.author}
+                                shortDescription={article.short_description}
+                                href={`/artikel/${article.slug}`}
+                            />
+                        ))
+                    ) : (
+                        <p className="text-center text-gray-500 py-12">Belum ada artikel yang tersedia.</p>
+                    )}
 
-                    <div className="text-primary-color flex items-center justify-center py-12">
-                        <Link href="#" as="button" preserveScroll className="cursor-pointer text-lg hover:underline md:text-2xl">
-                            Lihat Artikel Lainnya
-                        </Link>
-                    </div>
+                    {articles.length > 0 && (
+                        <div className="text-primary-color flex items-center justify-center py-12">
+                            <Link href="/artikel" preserveScroll className="cursor-pointer text-lg hover:underline md:text-2xl">
+                                Lihat Artikel Lainnya
+                            </Link>
+                        </div>
+                    )}
+
                 </div>
             </section>
 

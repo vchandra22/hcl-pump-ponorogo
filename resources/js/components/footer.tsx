@@ -28,15 +28,21 @@ const navLinks = [
 export default function Footer() {
     return (
         <footer className="w-full">
-            <div className="bg-bg-color border border-t-slate-200 mx-auto px-4 md:px-6">
+            <div className="bg-bg-color mx-auto border border-t-slate-200 px-4 md:px-6">
                 <div className="grid w-full grid-cols-1 gap-12 py-4 md:py-12 lg:grid-cols-3">
                     <div className="flex flex-col items-center justify-center space-y-6">
                         <div className="item-center mb-8 flex w-full justify-center">
-                            <img src="/asset/logo-hcl-pump-ponorogo.png" width="100" height="100" className="h-full w-96" alt="" />
+                            <img
+                                src="/asset/logo-hcl-pump-ponorogo.png"
+                                width={'100'}
+                                height={'100'}
+                                className="h-full w-96"
+                                alt="HCL Pump Ponorogo"
+                            />
                         </div>
                         <div className="flex items-start space-x-2 px-8">
-                            <MapPin className="mt-1 h-5 w-5 flex-shrink-0 hidden lg:block" />
-                            <p className="text-text-color font-regular text text-center lg:text-start text-lg md:text-xl">
+                            <MapPin className="mt-1 hidden h-5 w-5 flex-shrink-0 lg:block" />
+                            <p className="text-text-color font-regular text text-center text-lg md:text-xl lg:text-start">
                                 Jl. Trunojoyo No. 88, Krajan, Mangkujayan, Kec. Ponorogo, Kabupaten Ponorogo, Jawa Timur 63413
                             </p>
                         </div>
@@ -71,8 +77,8 @@ export default function Footer() {
                     </div>
 
                     {/* Footer Links */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div className="font-regular text-text-color flex flex-col items-center lg:items-start space-y-8">
+                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                        <div className="font-regular text-text-color flex flex-col items-center space-y-8 lg:items-start">
                             {/* Use the same navLinks from Navigasi component */}
                             {navLinks.map((link, i) => (
                                 <Link key={i} href={link.href} className="cursor-pointer text-lg hover:underline md:text-xl" prefetch={false}>
@@ -80,7 +86,7 @@ export default function Footer() {
                                 </Link>
                             ))}
                         </div>
-                        <div className="font-regular text-text-color flex flex-col items-center lg:items-start space-y-8">
+                        <div className="font-regular text-text-color flex flex-col items-center space-y-8 lg:items-start">
                             <Link href="/syarat-ketentuan" className="cursor-pointer text-lg hover:underline md:text-xl">
                                 Syarat & Ketentuan
                             </Link>

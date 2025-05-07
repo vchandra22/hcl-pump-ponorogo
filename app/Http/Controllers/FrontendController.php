@@ -27,11 +27,16 @@ class FrontendController extends Controller
         $this->product_service = $product_service;
     }
 
-    public function home() {
+    public function home(ProductService $productService, ArticleService $articleService) {
         $homepage = $this->homepageService->getAllHomepages();
+        $product = $productService->getFeaturedProducts();
+        $articles = $articleService->getAllArticles();
 
         return Inertia::render('frontends/index', [
-            'homepage' => $homepage
+            'homepage' => $homepage,
+            'product' => $product,
+            'articles' => $articles,
+            'base_url' => url('/'),
         ]);
     }
 

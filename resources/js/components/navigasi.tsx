@@ -50,7 +50,13 @@ export default function Navigasi() {
                 </SheetTrigger>
                 <SheetContent side="right">
                     <Link href="/" className="mr-6 hidden lg:flex" prefetch={false}>
-                        <img src="/asset/logo-hcl-pump-ponorogo.png" alt="Logo" className="h-8 w-auto" />
+                        <img
+                            src="/asset/logo-hcl-pump-ponorogo.png"
+                            width={'100'}
+                            height={'100'}
+                            alt="Logo HCL Pump Ponorogo"
+                            className="h-8 w-auto"
+                        />
                         <span className="sr-only">{appName}</span>
                     </Link>
                     <div className="grid gap-2 px-8 py-6">
@@ -71,7 +77,7 @@ export default function Navigasi() {
                     <Link
                         key={i}
                         href={link.href}
-                        className={`${link.className} relative ${(link.href == url && link.href != '/contact') ? 'navbar-active' : ''}`}
+                        className={`${link.className} relative ${link.href == url && link.href != '/contact' ? 'navbar-active' : ''}`}
                         prefetch={false}
                     >
                         {link.name}

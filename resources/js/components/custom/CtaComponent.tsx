@@ -10,7 +10,7 @@ interface CtaComponentProps {
 export default function CtaComponent({ title, description, buttonText, href }: CtaComponentProps) {
     return (
         <section className="relative w-full overflow-hidden py-8 text-white md:py-12 lg:py-32">
-            <img src="/asset/gambar-ilustrasi-background.png" className={'absolute top-0 left-0 h-full w-full overflow-hidden object-cover'} alt="" />
+            <img src="/asset/gambar-ilustrasi-background.png" width={"100"} height={"100"} className={'absolute top-0 left-0 h-full w-full overflow-hidden object-cover'} alt="HCL Pump Ponorogo" />
             <div className="relative z-20 container mx-auto">
                 <div className="mx-auto max-w-11/12">
                     <div className="flex flex-col justify-center space-y-4">
