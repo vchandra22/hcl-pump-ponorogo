@@ -34,7 +34,7 @@ export default function Caraousel({ images, alt }: CaraouselProps) {
 
     return (
         <div className="relative mx-auto w-full max-w-xl overflow-hidden">
-            <div className="relative h-120 w-full bg-gray-100">
+            <div className="relative h-100 md:h-120 w-full bg-gray-100">
                 <AnimatePresence initial={false} custom={direction}>
                     <motion.img
                         key={page}

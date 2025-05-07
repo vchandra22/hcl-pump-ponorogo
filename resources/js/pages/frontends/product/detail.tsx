@@ -54,7 +54,7 @@ export default function ProductDetail({ product, products }: ProductDetailProps)
                     </div>
                     <div className="lg:col-span-8">
                         <h1 className="h1 font-medium">{product.title}</h1>
-                        <p className="p-body-text-lg my-15">{product.short_description}</p>
+                        <p className="p-body-text-lg my-5 md:my-15">{product.short_description}</p>
                         <div className="my-10 flex justify-center">
                             <Caraousel images={product.product_images!} />
                         </div>
@@ -103,13 +103,21 @@ export default function ProductDetail({ product, products }: ProductDetailProps)
                     </div>
                 </div>
 
-                <div className="my-10 grid gap-6 lg:grid-cols-3">
+                <div className="my-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {products.length > 0 ? (
                         products.map((item) => {
                             if (item.id != product.id) {
                                 return (
                                     <div>
-                                        <ProductCard title={item.title} img={item.product_images![0].image_path} href={`/product/${item.slug}`} />
+                                        <ProductCard
+                                            title={item.title}
+                                            img={
+                                                item.product_images!.length > 0
+                                                    ? item.product_images![0].image_path
+                                                    : '/asset/logo-hcl-pump-ponorogo.png'
+                                            }
+                                            href={`/produk/${item.slug}`}
+                                        />
                                     </div>
                                 );
                             }

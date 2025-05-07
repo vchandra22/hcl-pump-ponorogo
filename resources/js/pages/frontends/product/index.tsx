@@ -32,10 +32,10 @@ export default function ProductIndex({ products }: ProductIndexProps) {
 
             <section className="container mx-auto mb-15 w-full">
                 {products.length > 0 ? (
-                    <div className="grid w-full gap-6 md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-6">
+                    <div className="grid w-full gap-6 px-4 md:px-0 md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-6">
                         {products.map((product: Product, i) => (
                             <div key={i}>
-                                <ProductCard title={product.title} img={product.product_images![0].image_path} href={`/product/${product.slug}`} />
+                                <ProductCard title={product.title} img={product.product_images![0].image_path} href={`/produk/${product.slug}`} />
                             </div>
                         ))}
                     </div>
