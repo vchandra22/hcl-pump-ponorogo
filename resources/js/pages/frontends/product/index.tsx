@@ -14,9 +14,9 @@ export default function ProductIndex() {
                 <div className="grid lg:grid-cols-12">
                     <p className="text-primary-color h2 lg:col-span-4">Produk Kami</p>
                     <div className="flex flex-col gap-y-9 lg:col-span-8">
-                        <h1 className="h1">HCL Pump Indonesia Menghadirkan Inovasi dan Kualitas Terbaik untuk Solusi Pompa Air</h1>
+                        <h1 className="h1">HCL Pump Ponorogo Menghadirkan Inovasi dan Kualitas Terbaik untuk Solusi Pompa Air</h1>
                         <p className="p-body-text-lg">
-                            HCL Pump Indonesia menyediakan solusi pompa air berkualitas tinggi yang dirancang untuk memenuhi berbagai kebutuhan, mulai
+                            HCL Pump Ponorogo menyediakan solusi pompa air berkualitas tinggi yang dirancang untuk memenuhi berbagai kebutuhan, mulai
                             dari rumah tangga hingga industri. Dengan sertifikasi SNI, produk kami, seperti pompa submersible dan centrifugal,
                             menawarkan efisiensi energi, daya tahan tinggi, dan instalasi yang mudah.
                         </p>

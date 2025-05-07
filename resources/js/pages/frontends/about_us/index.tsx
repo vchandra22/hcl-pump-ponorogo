@@ -15,6 +15,7 @@ interface AboutData {
         meta_description: string;
         meta_keywords: string;
         og_image?: string;
+        image_alt?: string;
     };
 }
 
@@ -25,6 +26,9 @@ interface ProductData {
     product_images: {
         image_path: string;
     };
+    meta: {
+        image_alt?: string;
+    }
 }
 
 interface AboutProps {
@@ -89,15 +93,15 @@ console.log(product);
                     <p className="text-primary-color h2 lg:col-span-4">Tentang Kami</p>
                     <div className="flex flex-col gap-y-9 lg:col-span-8">
                         <h1 className="h1">
-                            {aboutData.title ? aboutData.title : 'HCL Pump Indonesia hadir sebagai solusi terpercaya untuk kebutuhan pompa air'}
+                            {aboutData.title ? aboutData.title : 'HCL Pump Ponorogo hadir sebagai solusi terpercaya untuk kebutuhan pompa air'}
                         </h1>
                         {sanitizedContent ? (
                             <article className="text-text-color max-w-none" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
                         ) : (
                             <article className="text-text-color max-w-none">
                                 <p>
-                                    HCL Pump Indonesia adalah penyedia pompa air dan minyak berkualitas tinggi yang telah dipercaya oleh ribuan
-                                    pelanggan di seluruh Indonesia. Kami tidak hanya menjual produk pompa, tetapi juga menawarkan solusi menyeluruh
+                                    HCL Pump Ponorogo adalah penyedia pompa air dan minyak berkualitas tinggi yang telah dipercaya oleh ribuan
+                                    pelanggan di seluruh Ponorogo. Kami tidak hanya menjual produk pompa, tetapi juga menawarkan solusi menyeluruh
                                     untuk kebutuhan distribusi air, termasuk layanan pengeboran sumur profesional. Dengan pengalaman dan komitmen
                                     terhadap kualitas, kami menghadirkan pompa celup bersertifikat SNI yang dirancang untuk ketahanan, efisiensi, dan
                                     performa maksimal. Mulai dari kebutuhan rumah tangga hingga industri, produk HCL hadir sebagai pilihan terbaik
@@ -110,7 +114,7 @@ console.log(product);
             </section>
 
             <section className="my-15 px-4 md:px-12">
-                <img src={companyImage} width="100" height="100" className="mx-auto h-full min-h-52 w-full overflow-hidden object-cover" alt="" />
+                <img src={companyImage} width="100" height="100" className="mx-auto h-full min-h-52 w-full overflow-hidden object-cover" alt={aboutData.meta.image_alt ?? 'HCL Pump Ponorogo'} />
             </section>
 
             <section>
@@ -200,6 +204,7 @@ console.log(product);
                                         title={item.title}
                                         img={item.product_images[0].image_path ? `${item.product_images[0].image_path}` : '/asset/logo-hcl-pump-ponorogo.png'}
                                         href={`/products/${item.slug}`}
+                                        image_alt={item.meta.image_alt ?? 'HCL Pump Ponorogo'}
                                     />
                                 </div>
                             ))}

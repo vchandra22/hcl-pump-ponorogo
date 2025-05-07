@@ -62,10 +62,10 @@ export default function ProductDetail() {
                         <p className='h2 text-primary-color'>Produk Lainnya</p>
                     </div>
                     <div className='lg:col-span-8'>
-                        <p className='h1'>HCL Pump Indonesia Menghadirkan Inovasi dan Kualitas Terbaik untuk Solusi Pompa Air</p>
+                        <p className='h1'>HCL Pump Ponorogo Menghadirkan Inovasi dan Kualitas Terbaik untuk Solusi Pompa Air</p>
                     </div>
                 </div>
-                
+
                 <div className='grid lg:grid-cols-3 gap-6 my-10'>
                     <div>
                         <ProductCard/>
@@ -80,7 +80,7 @@ export default function ProductDetail() {
             </section>
 
             <CtaComponent/>
-            
+
             <Footer/>
         </>
     );

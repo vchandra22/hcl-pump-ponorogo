@@ -126,7 +126,7 @@ export default function ArticleDetail({ article, listArticle, base_url = '' }: A
                     <div className="lg:col-span-8">
                         {listArticle.length > 0 ? (
                             listArticle
-                                .filter(item => item.id !== article.id)
+                                .filter(item => item.slug !== article.slug)
                                 .slice(0, 3)
                                 .map((item) => (
                                     <ArticleCard

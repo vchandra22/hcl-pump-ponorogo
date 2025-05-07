@@ -48,7 +48,7 @@ export default function ArticleCard({
                                     '                                    minima minus porro, provident ratione tempora totam, ullam velit. Blanditiis, molestias.'}
                             </p>
                             <div className="text-primary-color flex w-full items-center justify-between pt-2 xl:pt-4">
-                                <Link href={href ?? '#'} as="button" preserveScroll className="cursor-pointer h3 hover:underline">
+                                <Link href={href ?? '#'} className="cursor-pointer h3 hover:underline">
                                     Baca Selengkapnya
                                 </Link>
                                 <CircleChevronRight color="#0fae7d" className="text-primary-color me-8" size="28" />

@@ -30,7 +30,7 @@ export default function Footer() {
         <footer className="w-full">
             <div className="bg-bg-color border border-t-slate-200 mx-auto px-4 md:px-6">
                 <div className="grid w-full grid-cols-1 gap-12 py-4 md:py-12 lg:grid-cols-3">
-                    <div className="space-y-12">
+                    <div className="flex flex-col items-center justify-center space-y-6">
                         <div className="item-center mb-8 flex w-full justify-center">
                             <img src="/asset/logo-hcl-pump-ponorogo.png" width="100" height="100" className="h-full w-96" alt="" />
                         </div>
@@ -43,7 +43,7 @@ export default function Footer() {
                     </div>
 
                     {/* Social Media Links */}
-                    <div className="flex flex-col items-center justify-center space-y-6">
+                    <div className="flex flex-col items-center justify-start space-y-6">
                         <div className="flex items-center space-x-2">
                             <FacebookIcons className="bg-secondary-color h-72 w-72" />
                             <Link href="#" className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">

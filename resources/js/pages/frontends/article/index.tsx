@@ -71,7 +71,7 @@ export default function Article({ about = [], articles = [], base_url = '' }: Ar
                     <div className="flex flex-col gap-y-9 lg:col-span-8">
                         <h1 className="h1 text-secondary-color">Update Terbaru Seputar Inovasi dan Teknologi Pompa</h1>
                         <p className="p-body-text-lg text-text-color">
-                            Halaman ini menyediakan berbagai artikel dan berita terkait solusi pompa air dari HCL Pump Indonesia, yang bisa Anda baca kapan saja. Temukan ide dan wawasan terbaru mengenai produk kami serta inovasi yang dapat meningkatkan efisiensi sistem pompa Anda dalam berbagai sektor industri.
+                            Halaman ini menyediakan berbagai artikel dan berita terkait solusi pompa air dari HCL Pump Ponorogo, yang bisa Anda baca kapan saja. Temukan ide dan wawasan terbaru mengenai produk kami serta inovasi yang dapat meningkatkan efisiensi sistem pompa Anda dalam berbagai sektor industri.
                         </p>
                     </div>
                 </div>
