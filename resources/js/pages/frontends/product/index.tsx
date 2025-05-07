@@ -2,9 +2,15 @@ import CtaComponent from '@/components/custom/CtaComponent';
 import ProductCard from '@/components/custom/ProductCard';
 import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
+import { Product } from '@/types/product';
 import { Head } from '@inertiajs/react';
 
-export default function ProductIndex() {
+interface ProductIndexProps {
+    products: Product[];
+}
+
+export default function ProductIndex({ products }: ProductIndexProps) {
+    console.log(products);
     return (
         <>
             <Head title="Produk" />
@@ -25,20 +31,19 @@ export default function ProductIndex() {
             </section>
 
             <section className="container mx-auto mb-15 w-full">
-                <div className="grid w-full gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-6">
-                    <div>
-                        <ProductCard />
+                {products.length > 0 ? (
+                    <div className="grid w-full gap-6 px-4 md:px-0 md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-6">
+                        {products.map((product: Product, i) => (
+                            <div key={i}>
+                                <ProductCard title={product.title} img={product.product_images![0].image_path} href={`/produk/${product.slug}`} />
+                            </div>
+                        ))}
                     </div>
-                    <div>
-                        <ProductCard />
+                ) : (
+                    <div className="w-full text-center py-10">
+                        <p className='h3 opacity-50'>Belum ada produk yang tersedia.</p>
                     </div>
-                    <div>
-                        <ProductCard />
-                    </div>
-                    <div>
-                        <ProductCard />
-                    </div>
-                </div>
+                )}
             </section>
 
             <CtaComponent />
