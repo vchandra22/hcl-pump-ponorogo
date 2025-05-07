@@ -3,8 +3,29 @@ import { Head, Link } from '@inertiajs/react';
 import Footer from '@/components/footer';
 import ProductCard from '@/components/custom/ProductCard';
 import ArticleCard from '@/components/custom/ArticleCard';
+import DOMPurify from 'dompurify';
 
-export default function Beranda() {
+interface HomepageData {
+    id: string;
+    title: string;
+    description: string;
+    banner_image: string;
+    meta: {
+        meta_title: string;
+        meta_description: string;
+        meta_keywords: string;
+        og_image?: string;
+        image_alt?: string;
+    }
+}
+interface HomepageProps {
+    homepage?: HomepageData[];
+}
+export default function Beranda({ homepage }: HomepageProps) {
+    const homepageData = homepage?.[0] || {};
+    const bannerImage = homepageData.banner_image ? `/storage/${homepageData.banner_image}` : '/asset/logo-hcl-pump-ponorogo.png';
+
+    const sanitizedContent = homepageData.description ? DOMPurify.sanitize(homepageData.description) : '';
     return (
         <>
             <Head title="Beranda">{/*some head meta*/}</Head>
@@ -12,20 +33,28 @@ export default function Beranda() {
             <Navigasi />
 
             <section className="relative w-full overflow-hidden py-12 text-white md:px-6 md:py-24 lg:py-72">
-                <img src="/asset/gambar-banner.png" className={'absolute top-0 left-0 h-full w-full overflow-hidden object-cover'} alt="" />
+                <img src={bannerImage} className={'absolute top-0 left-0 h-full w-full overflow-hidden object-cover'} alt="" />
                 <div className={'bg-secondary-color/60 absolute top-0 left-0 z-10 h-full w-full'}></div>
                 <div className="relative z-20 container mx-auto px-4">
                     <div className="lg:max-w-2/3">
                         <div className="flex flex-col justify-center space-y-4">
                             <div className="space-y-2">
                                 <h1 className="text-bg-color text-center text-xl h1 font-bold tracking-tighter sm:text-5xl lg:text-start xl:text-6xl/none">
-                                    HCL – Pilihan Cerdas untuk Pompa Air yang Mengalir Tanpa Henti
+                                    { homepageData.title ? homepageData.title : 'HCL – Pilihan Cerdas untuk Pompa Air yang Mengalir Tanpa Henti' }
                                 </h1>
-                                <p className="text-bg-color pt-2 text-center md:text-xl lg:pt-8 lg:text-start">
-                                    HCL Water Pump hadir sebagai solusi terbaik untuk Anda yang membutuhkan pompa air dengan performa tangguh dan daya
-                                    tahan luar biasa. Dengan teknologi modern dan material berkualitas, pompa HCL mampu bekerja terus-menerus tanpa
-                                    mudah panas atau macet. Cocok untuk kebutuhan rumah tangga, industri, hingga pertanian.
-                                </p>
+
+                                {sanitizedContent ? (
+                                    <div
+                                        className="max-w-none force-white"
+                                        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                                    />
+                                ) : (
+                                    <article className="force-white max-w-none">
+                                        HCL Water Pump hadir sebagai solusi terbaik untuk Anda yang membutuhkan pompa air dengan performa tangguh dan daya
+                                        tahan luar biasa. Dengan teknologi modern dan material berkualitas, pompa HCL mampu bekerja terus-menerus tanpa
+                                        mudah panas atau macet. Cocok untuk kebutuhan rumah tangga, industri, hingga pertanian.
+                                    </article>
+                                )}
                             </div>
                         </div>
                     </div>

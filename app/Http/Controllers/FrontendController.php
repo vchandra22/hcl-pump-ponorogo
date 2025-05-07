@@ -28,10 +28,10 @@ class FrontendController extends Controller
     }
 
     public function home() {
-        $homepages = $this->homepageService->getAllHomepages();
+        $homepage = $this->homepageService->getAllHomepages();
 
         return Inertia::render('frontends/index', [
-            'homepages' => $homepages
+            'homepage' => $homepage
         ]);
     }
 
