@@ -3,7 +3,18 @@ import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
 
-export default function DisclaimerIndex({ disclaimer = {}, base_url = '' }) {
+interface SocialMediaData {
+    id: string;
+    icon_social_media: string;
+    platform: string;
+    title: string;
+    social_media_link: string;
+}
+interface DisclaimerIndexProps {
+    social_media: SocialMediaData[];
+}
+
+export default function DisclaimerIndex({ disclaimer = {}, social_media, base_url = '' }: DisclaimerIndexProps) {
 
     const disclaimerData = Array.isArray(disclaimer) ? disclaimer[0] : disclaimer;
 
@@ -78,7 +89,7 @@ export default function DisclaimerIndex({ disclaimer = {}, base_url = '' }) {
                 <div className="text-text-color"></div>
             </section>
 
-            <Footer />
+            <Footer social_media={social_media}  />
         </>
     );
 }

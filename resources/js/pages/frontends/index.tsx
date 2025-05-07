@@ -42,12 +42,22 @@ interface ArticleData {
     created_at: string;
     updated_at: string;
 }
+
+interface SocialMediaData {
+    id: string;
+    icon_social_media: string;
+    platform: string;
+    title: string;
+    social_media_link: string;
+}
+
 interface HomepageProps {
     homepage?: HomepageData[];
     product?: ProductData[];
     articles?: ArticleData[];
+    social_media: SocialMediaData[];
 }
-export default function Beranda({ homepage, product, articles, base_url = '' }: HomepageProps) {
+export default function Beranda({ homepage, product, articles, social_media, base_url = '' }: HomepageProps) {
     const homepageData = homepage?.[0] || {};
     const bannerImage = homepageData.banner_image ? `/storage/${homepageData.banner_image}` : '/asset/logo-hcl-pump-ponorogo.png';
 
@@ -87,6 +97,8 @@ export default function Beranda({ homepage, product, articles, base_url = '' }: 
                 />
                 <meta
                     property="og:image"
+                    width="100"
+                    height="100"
                     content={
                         homepageData.meta?.og_image
                             ? `${base_url}/storage/${homepageData.meta.og_image}`
@@ -256,7 +268,7 @@ export default function Beranda({ homepage, product, articles, base_url = '' }: 
                 <img
                     src="/asset/gambar-ilustrasi-background.png"
                     className={'absolute top-0 left-0 h-full w-full overflow-hidden object-cover'}
-                    alt=""
+                    alt="HCL Pump Ponorogo"
                 />
                 <div className="relative z-20 container mx-auto">
                     <div className="mx-auto max-w-11/12">
@@ -270,7 +282,7 @@ export default function Beranda({ homepage, product, articles, base_url = '' }: 
                                 </div>
                                 <div className="mx-auto w-full flex justify-center mt-8">
                                     <Link
-                                        href="#"
+                                        href="/kontak"
                                         className="w-max border-bg-color text-center font-regular text-bg-color t ransition-colors inline-flex h-9 items-center justify-center rounded-full border bg-transparent px-12 py-6 text-2xl hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
                                         prefetch={false}
                                     >
@@ -283,7 +295,7 @@ export default function Beranda({ homepage, product, articles, base_url = '' }: 
                 </div>
             </section>
 
-            <Footer />
+            <Footer social_media={social_media}  />
         </>
     );
 }

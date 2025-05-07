@@ -3,7 +3,15 @@ import Navigasi from '@/components/navigasi';
 import { Head, Link } from '@inertiajs/react';
 import ArticleCard from '@/components/custom/ArticleCard';
 import DOMPurify from 'dompurify';
+import { transformYoutubeIframes } from '@/utils/youtubeUtils';
 
+interface SocialMediaData {
+    id: string;
+    icon_social_media: string;
+    platform: string;
+    title: string;
+    social_media_link: string;
+}
 interface ArticleDetailProps {
     article: {
         title: string;
@@ -28,6 +36,7 @@ interface ArticleDetailProps {
         author: string;
         date: string;
     }[];
+    social_media: SocialMediaData[];
 }
 
 const formatDate = (dateString: string) => {
@@ -38,13 +47,19 @@ const formatDate = (dateString: string) => {
     });
 };
 
-export default function ArticleDetail({ article, listArticle, base_url = '' }: ArticleDetailProps) {
+export default function ArticleDetail({ article, listArticle, social_media, base_url = '' }: ArticleDetailProps) {
     const coverImage = article.image_article
         ? `/storage/${article.image_article}`
         : '/asset/gambar-ilustrasi-artikel.png';
 
-    const sanitizedContent = article.content
-        ? DOMPurify.sanitize(article.content)
+    const transformedContent = transformYoutubeIframes(article.content);
+
+    const sanitizedContent = transformedContent
+        ? DOMPurify.sanitize(transformedContent, {
+            ADD_TAGS: ['iframe'],
+            ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'width', 'height', 'style'],
+            ALLOWED_URI_REGEXP: /^(?:(?:https?|ftp):|data:image\/)/i,
+        })
         : '';
 
     return (
@@ -107,7 +122,7 @@ export default function ArticleDetail({ article, listArticle, base_url = '' }: A
             <section className="w-full py-12 px-4 md:px-12 md:py-24 lg:py-32">
                 {sanitizedContent ? (
                     <article
-                        className="prose max-w-none text-text-color"
+                        className="prose max-w-none text-text-color article-content"
                         dangerouslySetInnerHTML={{ __html: sanitizedContent }}
                     />
                 ) : (
@@ -147,7 +162,7 @@ export default function ArticleDetail({ article, listArticle, base_url = '' }: A
                 </div>
             </section>
 
-            <Footer />
+            <Footer social_media={social_media}  />
         </>
     );
 }

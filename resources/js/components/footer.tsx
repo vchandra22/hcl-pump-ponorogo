@@ -25,7 +25,20 @@ const navLinks = [
     },
 ];
 
-export default function Footer() {
+interface SocialMediaData {
+    id: string;
+    icon_social_media: string;
+    platform: string;
+    title: string;
+    social_media_link: string;
+}
+
+interface FooterProps {
+    social_media: SocialMediaData[];
+}
+
+export default function Footer({ social_media }: FooterProps) {
+
     return (
         <footer className="w-full">
             <div className="bg-bg-color mx-auto border border-t-slate-200 px-4 md:px-6">
@@ -50,30 +63,17 @@ export default function Footer() {
 
                     {/* Social Media Links */}
                     <div className="flex flex-col items-center justify-start space-y-6">
-                        <div className="flex items-center space-x-2">
-                            <FacebookIcons className="bg-secondary-color h-72 w-72" />
-                            <Link href="#" className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">
-                                HCLPUMP_PONOROGO
-                            </Link>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <FacebookIcons className="bg-secondary-color h-72 w-72" />
-                            <Link href="#" className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">
-                                HCLPUMP_PONOROGO
-                            </Link>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <FacebookIcons className="bg-secondary-color h-72 w-72" />
-                            <Link href="#" className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">
-                                HCLPUMP_PONOROGO
-                            </Link>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <FacebookIcons className="bg-secondary-color h-72 w-72" />
-                            <Link href="#" className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">
-                                HCLPUMP_PONOROGO
-                            </Link>
-                        </div>
+                        {social_media.map((media) => {
+                            const socialMediaIcon = media.icon_social_media ? `/storage/${media.icon_social_media}` : '/favicon.ico';
+                            return (
+                                <div key={media.id} className="flex items-center space-x-2">
+                                    <img src={socialMediaIcon} alt={media.platform} className="h-6 w-6" />
+                                    <Link href={media.social_media_link} className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">
+                                        {media.title}
+                                    </Link>
+                                </div>
+                            );
+                        })}
                     </div>
 
                     {/* Footer Links */}

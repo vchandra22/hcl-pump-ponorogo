@@ -31,12 +31,21 @@ interface ProductData {
     }
 }
 
+interface SocialMediaData {
+    id: string;
+    icon_social_media: string;
+    platform: string;
+    title: string;
+    social_media_link: string;
+}
+
 interface AboutProps {
     about?: AboutData[];
     product?: ProductData[];
+    social_media: SocialMediaData[];
 }
 
-export default function AboutUsIndex({ about, product, base_url = '' }: AboutProps) {
+export default function AboutUsIndex({ about, product, social_media, base_url = '' }: AboutProps) {
     const aboutData = about[0] || {};
     const companyImage = aboutData.image_company ? `/storage/${aboutData.image_company}` : '/asset/gambar-perusahaan.png';
 
@@ -217,8 +226,10 @@ export default function AboutUsIndex({ about, product, base_url = '' }: AboutPro
                     </Link>
                 </div>
             </section>
-            <CtaComponent />
-            <Footer />
+            <CtaComponent href="/kontak" />
+
+            <Footer social_media={social_media}  />
+
         </>
     );
 }

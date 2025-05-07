@@ -3,7 +3,19 @@ import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
 
-export default function PrivacyPolicy({ privacy_policy = {}, base_url = '' }) {
+
+interface SocialMediaData {
+    id: string;
+    icon_social_media: string;
+    platform: string;
+    title: string;
+    social_media_link: string;
+}
+
+interface PrivacyPolicyIndexProps {
+    social_media: SocialMediaData[];
+}
+export default function PrivacyPolicy({ privacy_policy = {}, social_media, base_url = '' }: PrivacyPolicyIndexProps) {
 
     const privacyPolicyData = Array.isArray(privacy_policy) ? privacy_policy[0] : privacy_policy;
 
@@ -73,7 +85,7 @@ export default function PrivacyPolicy({ privacy_policy = {}, base_url = '' }) {
                 <div className="text-text-color"></div>
             </section>
 
-            <Footer />
+            <Footer social_media={social_media}  />
         </>
     );
 }

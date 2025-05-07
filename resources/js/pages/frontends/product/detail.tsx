@@ -8,12 +8,20 @@ import formatRupiah from '@/utils/formatRupiah';
 import { Head, Link, usePage } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
 
+interface SocialMediaData {
+    id: string;
+    icon_social_media: string;
+    platform: string;
+    title: string;
+    social_media_link: string;
+}
 interface ProductDetailProps {
     product: Product;
     products: Product[];
+    social_media: SocialMediaData[];
 }
 
-export default function ProductDetail({ product, products }: ProductDetailProps) {
+export default function ProductDetail({ product, products, social_media }: ProductDetailProps) {
     const {
         props: {
             ziggy: { url },
@@ -128,9 +136,9 @@ export default function ProductDetail({ product, products }: ProductDetailProps)
                 </div>
             </section>
 
-            <CtaComponent />
+            <CtaComponent href="/kontak" />
 
-            <Footer />
+            <Footer social_media={social_media}  />
         </>
     );
 }

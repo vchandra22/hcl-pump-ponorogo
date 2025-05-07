@@ -18,13 +18,21 @@ interface ArticleItem {
     slug: string;
 }
 
+interface SocialMediaData {
+    id: string;
+    icon_social_media: string;
+    platform: string;
+    title: string;
+    social_media_link: string;
+}
 interface ArticleProps {
     about?: AboutData[];
     articles?: ArticleItem[];
+    social_media: SocialMediaData[];
     base_url?: string;
 }
 
-export default function Article({ about = [], articles = [], base_url = '' }: ArticleProps) {
+export default function Article({ about = [], articles = [], social_media, base_url = '' }: ArticleProps) {
     const aboutData = about[0] || {};
     const companyImage = aboutData.image_company
         ? `/storage/${aboutData.image_company}`
@@ -134,7 +142,7 @@ export default function Article({ about = [], articles = [], base_url = '' }: Ar
                 />
             </section>
 
-            <Footer />
+            <Footer social_media={social_media}  />
         </>
     );
 }

@@ -5,12 +5,19 @@ import Navigasi from '@/components/navigasi';
 import { Product } from '@/types/product';
 import { Head } from '@inertiajs/react';
 
+interface SocialMediaData {
+    id: string;
+    icon_social_media: string;
+    platform: string;
+    title: string;
+    social_media_link: string;
+}
 interface ProductIndexProps {
     products: Product[];
+    social_media: SocialMediaData[];
 }
 
-export default function ProductIndex({ products }: ProductIndexProps) {
-    console.log(products);
+export default function ProductIndex({ products, social_media, base_url = '' }: ProductIndexProps) {
     return (
         <>
             <Head title={`Produk | HCL Pump Ponorogo`}>
@@ -26,7 +33,9 @@ export default function ProductIndex({ products }: ProductIndexProps) {
                     property="og:description"
                     content="Lihat daftar produk unggulan dari HCL Pump Ponorogo yang siap memenuhi kebutuhan pompa air Anda dengan performa terbaik."
                 />
-                <meta property="og:image" content={'/asset/logo-hcl-pump-ponorogo.png'} />
+                <meta property="og:image" content={`${base_url}/asset/logo-hcl-pump-ponorogo.png`} />
+
+                <meta property="og:url" content={`${base_url}${location.pathname}`} />
                 <meta property="og:type" content="article" />
 
                 {/* SEO Related */}
@@ -55,7 +64,12 @@ export default function ProductIndex({ products }: ProductIndexProps) {
                     <div className="grid w-full gap-6 px-4 md:grid-cols-2 md:gap-4 md:px-0 lg:grid-cols-3 lg:gap-6">
                         {products.map((product: Product, i) => (
                             <div key={i}>
-                                <ProductCard title={product.title} img={product.product_images![0].image_path} href={`/produk/${product.slug}`} />
+                                <ProductCard
+                                    title={product.title}
+                                    img={product.product_images![0].image_path}
+                                    href={`/produk/${product.slug}`}
+                                    image_alt={product.title}
+                                />
                             </div>
                         ))}
                     </div>
@@ -66,9 +80,9 @@ export default function ProductIndex({ products }: ProductIndexProps) {
                 )}
             </section>
 
-            <CtaComponent />
+            <CtaComponent href="/kontak" />
 
-            <Footer />
+            <Footer social_media={social_media}  />
         </>
     );
 }
