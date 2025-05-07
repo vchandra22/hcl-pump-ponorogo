@@ -45,6 +45,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+const stripHtmlTags = (html: string) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || '';
+};
+
 export default function TermsIndex() {
     const { termsConditions, status } = usePage<PageProps>().props;
     const [searchTerm, setSearchTerm] = useState('');
@@ -128,7 +134,7 @@ export default function TermsIndex() {
                                 <TableBody>
                                     {filteredTerms.map((term, index) => (
                                         <TableRow key={term.id}>
-                                            <TableCell className="max-w-md truncate">{truncateText(term.terms_and_condition)}</TableCell>
+                                            <TableCell className="max-w-md truncate">{stripHtmlTags(term.terms_and_condition)}</TableCell>
                                             <TableCell>{term.meta?.meta_title || '-'}</TableCell>
                                             <TableCell>
                                                 {new Date(term.created_at).toLocaleDateString('id-ID', {

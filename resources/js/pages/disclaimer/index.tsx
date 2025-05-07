@@ -45,6 +45,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+const stripHtmlTags = (html: string) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || '';
+};
+
 export default function DisclaimerIndex() {
     const { disclaimer, status } = usePage<PageProps>().props;
     const [searchTerm, setSearchTerm] = useState('');
@@ -129,7 +135,7 @@ export default function DisclaimerIndex() {
                                     {filteredDisclaimer.map((item, index) => (
                                         <TableRow key={item.id}>
                                             <TableCell className="max-w-md truncate">
-                                                <div> {item.disclaimer} </div>
+                                                <div> {stripHtmlTags(item.disclaimer)} </div>
                                             </TableCell>
                                             <TableCell>{item.meta?.meta_title || '-'}</TableCell>
                                             <TableCell>

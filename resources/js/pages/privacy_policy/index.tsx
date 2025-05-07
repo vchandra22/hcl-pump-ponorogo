@@ -45,6 +45,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+const stripHtmlTags = (html: string) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || '';
+};
+
 export default function PrivacyPolicyIndex() {
     const { privacyPolicy, status } = usePage<PageProps>().props;
     const [searchTerm, setSearchTerm] = useState('');
@@ -124,7 +130,7 @@ export default function PrivacyPolicyIndex() {
                                     {filteredPolicies.map((policy, index) => (
                                         <TableRow key={policy.id}>
                                             <TableCell className="max-w-md truncate">
-                                                <div>{ policy.privacy_policy }</div>
+                                                <div>{stripHtmlTags(policy.privacy_policy)}</div>
                                             </TableCell>
                                             <TableCell>{policy.meta?.meta_title || '-'}</TableCell>
                                             <TableCell>
