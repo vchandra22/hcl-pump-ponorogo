@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ContactService;
 use App\Services\DisclaimerService;
 use App\Services\HomepageService;
 use App\Services\PrivacyPolicyService;
 use App\Services\ProductService;
+use App\Services\SubmissionService;
 use App\Services\TermsConditionService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Termwind\Components\Dd;
 
@@ -49,9 +53,41 @@ class FrontendController extends Controller
         return Inertia::render('frontends/article/detail');
     }
 
-    public function contact()
+    public function contact(ContactService $contactService)
     {
-        return Inertia::render('frontends/contact/index');
+        $contacts = $contactService->getAllContacts();
+
+        return Inertia::render('frontends/contact/index', [
+            'contacts' => $contacts,
+            'status' => session('status'),
+        ]);
+    }
+
+    public function pesanStore(Request $request, SubmissionService $submissionService)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20|regex:/^[0-9+\-\s()]+$/',
+            'message' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $data = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'message' => $request->input('message'),
+        ];
+
+        $submissionService->createSubmission($data);
+
+        return redirect()->route('frontend-contact.index');
     }
 
     public function productDetail(string $slug)

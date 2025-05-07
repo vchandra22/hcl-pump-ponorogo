@@ -32,7 +32,9 @@ Route::prefix('/about')->group(function () {
     Route::get('/', [FrontendController::class, 'about'])->name('about.index');
 });
 
-Route::get('/contact', [FrontendController::class, 'contact'])->name('contact.index');
+Route::get('/contact', [FrontendController::class, 'contact'])->name('frontend-contact.index');
+
+Route::post('/pesan/store', [FrontendController::class, 'pesanStore'])->name('pesan.store');
 
 Route::get('/syarat-ketentuan', [FrontendController::class, 'termsCondition'])->name('terms-condition.index');
 
