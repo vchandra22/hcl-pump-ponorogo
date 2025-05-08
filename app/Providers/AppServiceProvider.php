@@ -13,6 +13,8 @@ use App\Repositories\Homepage\HomepageRepositoryInterface;
 use App\Repositories\Meta\MetaRepository;
 use App\Repositories\Meta\MetaRepositoryInterface;
 use App\Repositories\PrivacyPolicy\PrivacyPolicyRepository;
+use App\Repositories\Reason\ReasonRepository;
+use App\Repositories\Reason\ReasonRepositoryInterface;
 use App\Repositories\Submission\SubmissionRepository;
 use App\Repositories\Submission\SubmissionRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(MetaRepositoryInterface::class, MetaRepository::class);
         $this->app->bind(HomepageRepositoryInterface::class, HomepageRepository::class);
+
         $this->app->bind(ContactRepositoryInterface::class, ContactRepository::class);
         $this->app->bind(AboutRepositoryInterface::class, AboutRepository::class);
         $this->app->bind(SubmissionRepositoryInterface::class, SubmissionRepository::class);
@@ -41,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProductDetailRepositoryInterface::class, ProductDetailRepository::class);
         $this->app->bind(ProductImageRepositoryInterface::class, ProductImageRepository::class);
         $this->app->bind(ProductRepositoryInterface::class, PrivacyPolicyRepository::class);
+        $this->app->bind(ReasonRepositoryInterface::class, ReasonRepository::class);
     }
 
     /**

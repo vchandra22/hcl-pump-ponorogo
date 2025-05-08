@@ -15,6 +15,7 @@ import {
     SettingsIcon,
     Shield, MonitorXIcon
 } from 'lucide-react';
+import { LayoutGrid, HomeIcon, Phone, Info, Mail, EarthIcon, NewspaperIcon,BookmarkPlusIcon } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -72,6 +73,11 @@ const mainNavItems: NavItem[] = [
         title: 'Disclaimer',
         href: '/disclaimer',
         icon: MonitorXIcon,
+    },
+    {
+        title: 'Alasan',
+        href: '/reasons',
+        icon: BookmarkPlusIcon,
     },
 ];
 
