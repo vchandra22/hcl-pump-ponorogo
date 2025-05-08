@@ -48,7 +48,7 @@ export default function Caraousel({ images, alt }: CaraouselProps) {
                             x: { type: 'spring', stiffness: 300, damping: 30 },
                             opacity: { duration: 0.2 },
                         }}
-                        className="absolute h-full w-full object-cover"
+                        className="absolute h-full w-full object-fit"
                         alt={alt}
                     />
                 </AnimatePresence>
