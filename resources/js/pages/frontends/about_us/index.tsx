@@ -232,7 +232,7 @@ export default function AboutUsIndex({ about, product, social_media, social_medi
                 </div>
             </section>
             <CtaComponent
-                href={social_media_link}
+                href={social_media_link || '/kontak'}
             />
 
             <Footer social_media={social_media}  />

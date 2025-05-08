@@ -10,6 +10,7 @@ use App\Services\DisclaimerService;
 use App\Services\HomepageService;
 use App\Services\PrivacyPolicyService;
 use App\Services\ProductService;
+use App\Services\ReasonService;
 use App\Services\SocialMediaService;
 use App\Services\SubmissionService;
 use App\Services\TermsConditionService;
@@ -29,17 +30,21 @@ class FrontendController extends Controller
         $this->product_service = $product_service;
     }
 
-    public function home(ProductService $productService, ArticleService $articleService, SocialMediaService $socialMediaService) {
+    public function home(ProductService $productService, ArticleService $articleService, ReasonService $reasonService, SocialMediaService $socialMediaService) {
         $homepage = $this->homepageService->getAllHomepages();
         $product = $productService->getFeaturedProducts();
         $articles = $articleService->getAllArticles();
         $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
+        $reasonService = $reasonService->getAllReasons();
 
         return Inertia::render('frontends/index', [
             'homepage' => $homepage,
             'product' => $product,
             'articles' => $articles,
             'base_url' => url('/'),
+            'social_media_link' => $socialMediaLink['social_media_link'],
+            'reason_service' => $reasonService,
             'social_media' => $socialMedia,
         ]);
     }
@@ -77,7 +82,7 @@ class FrontendController extends Controller
         $about = $aboutService->getAllAbout();
         $product = $productService->getFeaturedProducts();
         $socialMedia = $socialMediaService->getAllSocialMedia();
-        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
+        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->firstOrFail();
 
         return Inertia::render('frontends/about_us/index', [
             'about' => $about,

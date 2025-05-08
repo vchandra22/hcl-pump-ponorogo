@@ -77,7 +77,7 @@ export default function ReasonIndex() {
                     <div>
                         <h1 className="text-2xl font-bold">Reason Management</h1>
                     </div>
-                    {reasons.length < 3 ? (
+                    {reasons.length < 4 ? (
                         <Button asChild>
                         <Link href={route('reasons.create')}>
                             <PlusIcon className="mr-2 h-4 w-4" />
@@ -85,7 +85,7 @@ export default function ReasonIndex() {
                         </Link>
                     </Button>
                     ) : null}
-                
+
                 </div>
 
                 <div className="w-full md:w-1/3">

@@ -13,9 +13,8 @@ import {
     EarthIcon,
     NewspaperIcon,
     SettingsIcon,
-    Shield, MonitorXIcon
+    Shield, MonitorXIcon, BookmarkPlusIcon
 } from 'lucide-react';
-import { LayoutGrid, HomeIcon, Phone, Info, Mail, EarthIcon, NewspaperIcon,BookmarkPlusIcon } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
