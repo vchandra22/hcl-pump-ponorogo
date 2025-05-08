@@ -226,8 +226,8 @@ export default function AboutUsIndex({ about, product, social_media, social_medi
                     </section>
                 </div>
                 <div className="mt-9 flex justify-center text-center md:mb-4 lg:mt-0 lg:mb-3">
-                    <Link href="/product" as="button" preserveScroll className="cursor-pointer text-primary-color p-subheading hover:underline md:text-2xl">
-                        Lihat produk lainya
+                    <Link href={`/produk`} as="button" preserveScroll className="cursor-pointer text-primary-color p-subheading hover:underline md:text-2xl">
+                        Lihat produk lainnya
                     </Link>
                 </div>
             </section>

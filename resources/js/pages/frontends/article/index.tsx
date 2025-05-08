@@ -14,7 +14,7 @@ interface ArticleItem {
     image_article: string;
     date: string;
     author: string;
-    short_description: string;
+    summary: string;
     slug: string;
 }
 
@@ -116,7 +116,7 @@ export default function Article({ about = [], articles = [], social_media, base_
                             alt={article.title}
                             date={article.date}
                             author={article.author}
-                            shortDescription={article.short_description}
+                            shortDescription={article.summary}
                             href={`/artikel/${article.slug}`}
                         />
                     ))

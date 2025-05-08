@@ -68,7 +68,7 @@ export default function Navigasi() {
                     </div>
                 </SheetContent>
             </Sheet>
-            <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
+            <Link href="/" className="mr-6 hidden lg:flex" prefetch={false}>
                 <img src="/asset/logo-hcl-pump-ponorogo.png" alt="Logo" className="h-12 w-auto" />
                 <span className="sr-only">{appName}</span>
             </Link>

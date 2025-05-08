@@ -4,6 +4,8 @@ import Footer from '@/components/footer';
 import ProductCard from '@/components/custom/ProductCard';
 import ArticleCard from '@/components/custom/ArticleCard';
 import DOMPurify from 'dompurify';
+import formatDate from '@/utils/formatDate';
+import CtaComponent from '@/components/custom/CtaComponent';
 
 interface HomepageData {
     id: string;
@@ -276,7 +278,7 @@ export default function Beranda({
                                 img={`/storage/${article.image_article}`}
                                 title={article.title}
                                 alt={article.image_alt || article.title}
-                                date={article.created_at}
+                                date={formatDate(article.created_at)}
                                 author={article.author}
                                 shortDescription={article.summary}
                                 href={`/artikel/${article.slug}`}
@@ -288,7 +290,7 @@ export default function Beranda({
 
                     {articles.length > 0 && (
                         <div className="text-primary-color flex items-center justify-center py-12">
-                            <Link href="/artikel" preserveScroll className="cursor-pointer text-lg hover:underline md:text-2xl">
+                            <Link onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} href="/artikel" preserveScroll className="cursor-pointer text-lg hover:underline md:text-2xl">
                                 Lihat Artikel Lainnya
                             </Link>
                         </div>
@@ -297,36 +299,7 @@ export default function Beranda({
             </section>
 
             {/* CTA Section */}
-            <section className="relative w-full overflow-hidden py-8 text-white md:py-12 lg:py-32">
-                <img
-                    src="/asset/gambar-ilustrasi-background.png"
-                    className="absolute top-0 left-0 h-full w-full overflow-hidden object-cover"
-                    alt="HCL Pump Ponorogo"
-                />
-                <div className="relative z-20 container mx-auto">
-                    <div className="mx-auto max-w-11/12">
-                        <div className="flex flex-col justify-center space-y-4">
-                            <div className="space-y-8">
-                                <div className="space-y-4">
-                                    <p className="text-bg-color pt-2 text-center text-2xl">Layanan & Harga</p>
-                                    <p className="text-bg-color font-regular text-center text-3xl sm:text-5xl xl:text-6xl/none">
-                                        Butuh Pompa dan Pengeboran Sekaligus? Kami Siap Bantu!
-                                    </p>
-                                </div>
-                                <div className="mx-auto w-full flex justify-center mt-8">
-                                    <Link
-                                        href="/kontak"
-                                        className="border-bg-color font-regular text-bg-color transition-colors inline-flex h-9 w-max items-center justify-center rounded-full border bg-transparent px-12 py-6 text-center text-2xl hover:bg-gray-100 hover:text-text-color focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50"
-                                        prefetch={false}
-                                    >
-                                        Hubungi Kami
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <CtaComponent href='/kontak'/>
 
             <Footer social_media={social_media} />
         </>

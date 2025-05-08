@@ -10,7 +10,9 @@ interface ProductCardProps {
 
 export default function ProductCard({ title, img, href, image_alt }: ProductCardProps) {
     return (
-        <div className="w-full rounded-3xl border border-slate-200 lg:col-span-4 overflow-hidden">
+        <div className="w-full rounded-3xl border border-slate-200 lg:col-span-4 overflow-hidden cursor-pointer" onClick={() => { 
+            window.location.href = href! }
+            }>
             <div className='w-full h-80 md:h-100 overflow-hidden flex justify-center'>
                 <img src={img ?? `/asset/contoh-gambar-pompa.png`} alt={image_alt} width="100" height="100" className="mx-auto w-full overflow-hidden min-h-44 object-cover" />
             </div>

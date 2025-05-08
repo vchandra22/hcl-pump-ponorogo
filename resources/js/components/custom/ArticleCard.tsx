@@ -1,5 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { CircleChevronRight } from 'lucide-react';
+import DOMPurify from 'dompurify';
+import formatDate from '@/utils/formatDate';
 
 interface ArticleCardProps {
     img: string;
@@ -20,8 +22,13 @@ export default function ArticleCard({
         shortDescription,
         href,
     }: ArticleCardProps) {
+    
+        const sanitizedContent = DOMPurify.sanitize(shortDescription ?? ''); 
+
     return (
-        <section className="w-full">
+        <section className="w-full cursor-pointer" onClick={() => {
+            window.location.href = href
+        }}>
             <div className="mx-auto">
                 <div className="grid w-full grid-cols-1 py-4 md:py-8 lg:grid-cols-12">
                     <div className="lg:col-span-4">
@@ -37,16 +44,13 @@ export default function ArticleCard({
                     </div>
                     <div className="lg:col-span-8">
                         <div className="flex h-full flex-col items-start justify-between py-2">
-                            <p className="text-primary-color font-regular line-clamp-2 h-[4.5rem] cursor-pointer h2 hover:underline h2">
+                            <a href={href ?? '#'} className="text-primary-color font-regular line-clamp-2 h-[4.5rem] cursor-pointer h2 hover:underline h2">
                                 {title ?? 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam asperiores dolores exercitationem expedita id\n' +
                                     'incidunt, iste magnam neque officia, perferendis quis rem velit voluptatem!'}
-                            </p>
+                            </a>
                             <p className="text-text-color font-regular pt-2 p">{date ?? '12 Maret 2025'}, {author ?? 'Admin'}</p>
-                            <p className="text-text-color font-regular line-clamp-3 h-20 py-2 p">
-                                {shortDescription ?? 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi ducimus est exercitationem inventore, magnam\n' +
-                                    '                                    nostrum quo sit voluptates. Amet animi at autem doloremque earum, enim eos facere impedit ipsum itaque magnam\n' +
-                                    '                                    minima minus porro, provident ratione tempora totam, ullam velit. Blanditiis, molestias.'}
-                            </p>
+                            <p className="text-text-color font-regular line-clamp-3 h-20 py-2 p" dangerouslySetInnerHTML={{  __html: sanitizedContent  }}>
+                                                            </p>
                             <div className="text-primary-color flex w-full items-center justify-between pt-2 xl:pt-4">
                                 <Link href={href ?? '#'} className="cursor-pointer h3 hover:underline">
                                     Baca Selengkapnya
