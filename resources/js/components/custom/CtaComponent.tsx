@@ -24,7 +24,7 @@ export default function CtaComponent({ title, description, buttonText, href }: C
                             <div className="mx-auto mt-8 flex w-full justify-center">
                                 <Link
                                     href={ href ?? '#'}
-                                    className="border-bg-color font-regular text-bg-color t ransition-colors inline-flex h-9 w-max items-center justify-center rounded-full border bg-transparent px-12 py-6 text-center text-2xl hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+                                    className="border-bg-color font-regular text-bg-color t ransition-colors inline-flex h-9 w-max items-center justify-center rounded-full border bg-transparent px-12 py-6 text-center text-2xl hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50"
                                     prefetch={false}
                                 >
                                     { buttonText ?? 'Hubungi Kami'}
