@@ -15,13 +15,18 @@ interface SocialMediaData {
     title: string;
     social_media_link: string;
 }
+
+interface SocialMediaLink {
+    social_media_link: string;
+}
 interface ProductDetailProps {
     product: Product;
     products: Product[];
     social_media: SocialMediaData[];
+    social_media_link: SocialMediaLink[];
 }
 
-export default function ProductDetail({ product, products, social_media }: ProductDetailProps) {
+export default function ProductDetail({ product, products, social_media_link, social_media }: ProductDetailProps) {
     const {
         props: {
             ziggy: { url },
@@ -76,9 +81,9 @@ export default function ProductDetail({ product, products, social_media }: Produ
                             </div>
                         ) : (
                             <div className="my-5">
-                                <Link href="https://www.youtube.com" className="cursor-pointer text-blue-600 hover:underline">
+                                <a href={social_media_link} target={"_blank"} className="cursor-pointer text-blue-600 hover:underline">
                                     Hubungi kami untuk info lebih lanjut!!
-                                </Link>
+                                </a>
                             </div>
                         )}
 
@@ -94,7 +99,7 @@ export default function ProductDetail({ product, products, social_media }: Produ
                             <p className="h3">Info: </p>
                             <div className="p-body-text-lg prose mb-10" dangerouslySetInnerHTML={{ __html: sanitizedInfoContent }}></div>
                         </div>
-                        <Link href="" className="bg-primary-color rounded-3xl p-2 px-5 text-white">
+                        <Link href={social_media_link} target={"_blank"} className="bg-primary-color rounded-3xl p-2 px-5 text-white">
                             Beli Sekarang
                         </Link>
                     </div>
@@ -136,7 +141,9 @@ export default function ProductDetail({ product, products, social_media }: Produ
                 </div>
             </section>
 
-            <CtaComponent href="/kontak" />
+            <CtaComponent
+                href={social_media_link}
+            />
 
             <Footer social_media={social_media}  />
         </>

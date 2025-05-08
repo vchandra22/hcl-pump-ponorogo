@@ -3,7 +3,6 @@ import Navigasi from '@/components/navigasi';
 import { Head, useForm } from '@inertiajs/react';
 import { ClockIcon, LocateIcon, LucideMail, PhoneIcon } from 'lucide-react';
 import { Toaster, toast } from 'sonner';
-import { Product } from '@/types/product';
 
 interface SocialMediaData {
     id: string;
@@ -113,10 +112,10 @@ export default function Contact({ contacts = {}, social_media, base_url = '' }: 
                             <div className="flex items-center space-x-8">
                                 <PhoneIcon />
                                 <a
-                                    href={`tel:${contactData.phone}`}
+                                    href={`https://wa.me/${contactData.phone}`} target={'_blank'}
                                     className="font-regular text-text-color p-body-text-lg cursor-pointer hover:underline"
                                 >
-                                    {contactData.phone}
+                                    +{contactData.phone}
                                 </a>
                             </div>
                             <div className="flex items-center space-x-8">

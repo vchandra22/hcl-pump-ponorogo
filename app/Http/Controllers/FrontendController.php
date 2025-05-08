@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SocialMediaModel;
 use App\Services\AboutService;
 use App\Services\ArticleService;
 use App\Services\ContactService;
@@ -47,10 +48,12 @@ class FrontendController extends Controller
     {
         $product = $this->product_service->getAllProducts();
         $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
 
         return Inertia::render('frontends/product/index', [
             'products' => $product,
             'social_media' => $socialMedia,
+            'social_media_link' => $socialMediaLink['social_media_link'],
             'base_url' => url('/')
         ]);
     }
@@ -74,11 +77,13 @@ class FrontendController extends Controller
         $about = $aboutService->getAllAbout();
         $product = $productService->getFeaturedProducts();
         $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
 
         return Inertia::render('frontends/about_us/index', [
             'about' => $about,
             'product' => $product,
             'social_media' => $socialMedia,
+            'social_media_link' => $socialMediaLink['social_media_link'],
             'base_url' => url('/'),
         ]);
     }
@@ -143,6 +148,7 @@ class FrontendController extends Controller
             $product = $this->product_service->getProductBySlug($slug);
             $products = $this->product_service->getAllProducts();
             $socialMedia = $socialMediaService->getAllSocialMedia();
+            $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
 
             if(!$product) {
                 abort(404, 'Produk tidak ditemukan.');
@@ -152,6 +158,7 @@ class FrontendController extends Controller
                 'product' => $product,
                 'products' => $products,
                 'social_media' => $socialMedia,
+                'social_media_link' => $socialMediaLink['social_media_link'],
             ]);
         } catch (\Exception $err) {
             return back()->with('failed', 'Produk tidak ditemukan.');

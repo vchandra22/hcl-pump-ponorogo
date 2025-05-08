@@ -68,9 +68,9 @@ export default function Footer({ social_media }: FooterProps) {
                             return (
                                 <div key={media.id} className="flex items-center space-x-2">
                                     <img src={socialMediaIcon} alt={media.platform} className="h-6 w-6" />
-                                    <Link href={media.social_media_link} className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">
+                                    <a href={media.social_media_link} target="_blank" className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">
                                         {media.title}
-                                    </Link>
+                                    </a>
                                 </div>
                             );
                         })}

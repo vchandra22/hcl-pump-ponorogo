@@ -22,13 +22,13 @@ export default function CtaComponent({ title, description, buttonText, href }: C
                                 </p>
                             </div>
                             <div className="mx-auto mt-8 flex w-full justify-center">
-                                <Link
+                                <a
                                     href={ href ?? '#'}
+                                    target="_blank"
                                     className="border-bg-color font-regular text-bg-color t ransition-colors inline-flex h-9 w-max items-center justify-center rounded-full border bg-transparent px-12 py-6 text-center text-2xl hover:bg-gray-100 hover:text-text-color focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50"
-                                    prefetch={false}
                                 >
                                     { buttonText ?? 'Hubungi Kami'}
-                                </Link>
+                                </a>
                             </div>
                         </div>
                     </div>
