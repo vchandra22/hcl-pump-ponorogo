@@ -25,18 +25,37 @@ const navLinks = [
     },
 ];
 
-export default function Footer() {
+interface SocialMediaData {
+    id: string;
+    icon_social_media: string;
+    platform: string;
+    title: string;
+    social_media_link: string;
+}
+
+interface FooterProps {
+    social_media: SocialMediaData[];
+}
+
+export default function Footer({ social_media }: FooterProps) {
+
     return (
         <footer className="w-full">
-            <div className="bg-bg-color border border-t-slate-200 mx-auto px-4 md:px-6">
+            <div className="bg-bg-color mx-auto border border-t-slate-200 px-4 md:px-6">
                 <div className="grid w-full grid-cols-1 gap-12 py-4 md:py-12 lg:grid-cols-3">
                     <div className="flex flex-col items-center justify-center space-y-6">
                         <div className="item-center mb-8 flex w-full justify-center">
-                            <img src="/asset/logo-hcl-pump-ponorogo.png" width="100" height="100" className="h-full w-96" alt="" />
+                            <img
+                                src="/asset/logo-hcl-pump-ponorogo.png"
+                                width={'100'}
+                                height={'100'}
+                                className="h-full w-96"
+                                alt="HCL Pump Ponorogo"
+                            />
                         </div>
                         <div className="flex items-start space-x-2 px-8">
-                            <MapPin className="mt-1 h-5 w-5 flex-shrink-0 hidden lg:block" />
-                            <p className="text-text-color font-regular text text-center lg:text-start text-lg md:text-xl">
+                            <MapPin className="mt-1 hidden h-5 w-5 flex-shrink-0 lg:block" />
+                            <p className="text-text-color font-regular text text-center text-lg md:text-xl lg:text-start">
                                 Jl. Trunojoyo No. 88, Krajan, Mangkujayan, Kec. Ponorogo, Kabupaten Ponorogo, Jawa Timur 63413
                             </p>
                         </div>
@@ -44,35 +63,22 @@ export default function Footer() {
 
                     {/* Social Media Links */}
                     <div className="flex flex-col items-center justify-start space-y-6">
-                        <div className="flex items-center space-x-2">
-                            <FacebookIcons className="bg-secondary-color h-72 w-72" />
-                            <Link href="#" className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">
-                                HCLPUMP_PONOROGO
-                            </Link>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <FacebookIcons className="bg-secondary-color h-72 w-72" />
-                            <Link href="#" className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">
-                                HCLPUMP_PONOROGO
-                            </Link>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <FacebookIcons className="bg-secondary-color h-72 w-72" />
-                            <Link href="#" className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">
-                                HCLPUMP_PONOROGO
-                            </Link>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <FacebookIcons className="bg-secondary-color h-72 w-72" />
-                            <Link href="#" className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">
-                                HCLPUMP_PONOROGO
-                            </Link>
-                        </div>
+                        {social_media.map((media) => {
+                            const socialMediaIcon = media.icon_social_media ? `/storage/${media.icon_social_media}` : '/favicon.ico';
+                            return (
+                                <div key={media.id} className="flex items-center space-x-2">
+                                    <img src={socialMediaIcon} alt={media.platform} className="h-6 w-6" />
+                                    <a href={media.social_media_link} target="_blank" className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">
+                                        {media.title}
+                                    </a>
+                                </div>
+                            );
+                        })}
                     </div>
 
                     {/* Footer Links */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div className="font-regular text-text-color flex flex-col items-center lg:items-start space-y-8">
+                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                        <div className="font-regular text-text-color flex flex-col items-center space-y-8 lg:items-start">
                             {/* Use the same navLinks from Navigasi component */}
                             {navLinks.map((link, i) => (
                                 <Link key={i} href={link.href} className="cursor-pointer text-lg hover:underline md:text-xl" prefetch={false}>
@@ -80,7 +86,7 @@ export default function Footer() {
                                 </Link>
                             ))}
                         </div>
-                        <div className="font-regular text-text-color flex flex-col items-center lg:items-start space-y-8">
+                        <div className="font-regular text-text-color flex flex-col items-center space-y-8 lg:items-start">
                             <Link href="/syarat-ketentuan" className="cursor-pointer text-lg hover:underline md:text-xl">
                                 Syarat & Ketentuan
                             </Link>

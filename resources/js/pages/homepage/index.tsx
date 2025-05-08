@@ -48,6 +48,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+const stripHtmlTags = (html: string) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || '';
+};
+
 export default function HomepageIndex() {
     const { homepages, status } = usePage<PageProps>().props;
     const [searchTerm, setSearchTerm] = useState('');
@@ -122,7 +128,7 @@ export default function HomepageIndex() {
                                     {filteredHomepages.map((homepage) => (
                                         <TableRow key={homepage.id}>
                                             <TableCell className="font-medium">{homepage.title}</TableCell>
-                                            <TableCell className="max-w-md truncate">{homepage.description}</TableCell>
+                                            <TableCell className="max-w-md truncate">{stripHtmlTags(homepage.description)}</TableCell>
                                             <TableCell>
                                                 {new Date(homepage.created_at).toLocaleDateString('id-ID', {
                                                     day: '2-digit',

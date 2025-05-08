@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SocialMediaModel;
 use App\Services\AboutService;
 use App\Services\ArticleService;
 use App\Services\ContactService;
@@ -9,6 +10,8 @@ use App\Services\DisclaimerService;
 use App\Services\HomepageService;
 use App\Services\PrivacyPolicyService;
 use App\Services\ProductService;
+use App\Services\ReasonService;
+use App\Services\SocialMediaService;
 use App\Services\SubmissionService;
 use App\Services\TermsConditionService;
 use Illuminate\Http\Request;
@@ -27,62 +30,91 @@ class FrontendController extends Controller
         $this->product_service = $product_service;
     }
 
-    public function home() {
+    public function home(ProductService $productService, ArticleService $articleService, ReasonService $reasonService, SocialMediaService $socialMediaService) {
         $homepage = $this->homepageService->getAllHomepages();
+        $product = $productService->getFeaturedProducts();
+        $articles = $articleService->getAllArticles();
+        $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
+        $reasonService = $reasonService->getAllReasons();
 
         return Inertia::render('frontends/index', [
-            'homepage' => $homepage
+            'homepage' => $homepage,
+            'product' => $product,
+            'articles' => $articles,
+            'base_url' => url('/'),
+            'social_media_link' => $socialMediaLink['social_media_link'],
+            'reason_service' => $reasonService,
+            'social_media' => $socialMedia,
         ]);
     }
 
-    public function product()
+    public function product(SocialMediaService $socialMediaService)
     {
         $product = $this->product_service->getAllProducts();
-        return Inertia::render('frontends/product/index', ['products' => $product]);
+        $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
+
+        return Inertia::render('frontends/product/index', [
+            'products' => $product,
+            'social_media' => $socialMedia,
+            'social_media_link' => $socialMediaLink['social_media_link'],
+            'base_url' => url('/')
+        ]);
     }
 
-    public function article(AboutService $aboutService, ArticleService $articleService)
+    public function article(AboutService $aboutService, ArticleService $articleService, SocialMediaService $socialMediaService)
     {
         $about = $aboutService->getAllAbout();
         $articles = $articleService->getAllArticles();
+        $socialMedia = $socialMediaService->getAllSocialMedia();
 
         return Inertia::render('frontends/article/index', [
             'about' => $about,
             'articles' => $articles,
+            'social_media' => $socialMedia,
             'base_url' => url('/'),
         ]);
     }
 
-    public function about(AboutService $aboutService, ProductService $productService)
+    public function about(AboutService $aboutService, ProductService $productService, SocialMediaService $socialMediaService)
     {
         $about = $aboutService->getAllAbout();
         $product = $productService->getFeaturedProducts();
+        $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->firstOrFail();
 
         return Inertia::render('frontends/about_us/index', [
             'about' => $about,
             'product' => $product,
+            'social_media' => $socialMedia,
+            'social_media_link' => $socialMediaLink['social_media_link'],
             'base_url' => url('/'),
         ]);
     }
 
-    public function articleDetail($slug, ArticleService $articleService)
+    public function articleDetail($slug, ArticleService $articleService, SocialMediaService $socialMediaService)
     {
         $article = $articleService->getArticleBySlug($slug);
         $listArticle = $articleService->getAllArticles();
+        $socialMedia = $socialMediaService->getAllSocialMedia();
 
         return Inertia::render('frontends/article/detail', [
             'article' => $article,
             'listArticle' => $listArticle,
+            'social_media' => $socialMedia,
             'base_url' => url('/'),
         ]);
     }
 
-    public function contact(ContactService $contactService)
+    public function contact(ContactService $contactService, SocialMediaService $socialMediaService)
     {
         $contacts = $contactService->getAllContacts();
+        $socialMedia = $socialMediaService->getAllSocialMedia();
 
         return Inertia::render('frontends/contact/index', [
             'contacts' => $contacts,
+            'social_media' => $socialMedia,
             'base_url' => url('/'),
             'status' => session('status'),
         ]);
@@ -115,47 +147,61 @@ class FrontendController extends Controller
         return redirect()->route('frontend-contact.index');
     }
 
-    public function productDetail(string $slug)
+    public function productDetail(string $slug, SocialMediaService $socialMediaService)
     {
         try {
             $product = $this->product_service->getProductBySlug($slug);
             $products = $this->product_service->getAllProducts();
+            $socialMedia = $socialMediaService->getAllSocialMedia();
+            $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
+
             if(!$product) {
                 abort(404, 'Produk tidak ditemukan.');
             }
 
-            return Inertia::render('frontends/product/detail', ['product' => $product, 'products' => $products]);
+            return Inertia::render('frontends/product/detail', [
+                'product' => $product,
+                'products' => $products,
+                'social_media' => $socialMedia,
+                'social_media_link' => $socialMediaLink['social_media_link'],
+            ]);
         } catch (\Exception $err) {
             return back()->with('failed', 'Produk tidak ditemukan.');
         }
     }
 
-    public function termsCondition(TermsConditionService $termsConditionService)
+    public function termsCondition(TermsConditionService $termsConditionService, SocialMediaService $socialMediaService)
     {
         $termsCondition = $termsConditionService->getAllTermsCondition();
+        $socialMedia = $socialMediaService->getAllSocialMedia();
 
         return Inertia::render('frontends/terms/index', [
             'terms_condition' => $termsCondition,
+            'social_media' => $socialMedia,
             'base_url' => url('/'),
         ]);
     }
 
-    public function privacyPolicy(PrivacyPolicyService $privacyPolicyService)
+    public function privacyPolicy(PrivacyPolicyService $privacyPolicyService, SocialMediaService $socialMediaService)
     {
         $privacyPolicy = $privacyPolicyService->getAllPrivacyPolicy();
+        $socialMedia = $socialMediaService->getAllSocialMedia();
 
         return Inertia::render('frontends/privacy_policy/index', [
             'privacy_policy' => $privacyPolicy,
+            'social_media' => $socialMedia,
             'base_url' => url('/'),
         ]);
     }
 
-    public function disclaimer(DisclaimerService $disclaimerService)
+    public function disclaimer(DisclaimerService $disclaimerService, SocialMediaService $socialMediaService)
     {
         $disclaimer = $disclaimerService->getAllDisclaimer();
+        $socialMedia = $socialMediaService->getAllSocialMedia();
 
         return Inertia::render('frontends/disclaimer/index', [
             'disclaimer' => $disclaimer,
+            'social_media' => $socialMedia,
             'base_url' => url('/'),
         ]);
     }

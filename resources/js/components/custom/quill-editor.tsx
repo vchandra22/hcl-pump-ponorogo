@@ -19,6 +19,8 @@ interface QuillEditorProps {
     readOnly?: boolean;
 }
 
+
+
 const QuillEditor = ({
     id,
     label,
@@ -43,13 +45,13 @@ const QuillEditor = ({
             ['bold', 'italic', 'underline', 'strike'],
             [{ list: 'ordered' }, { list: 'bullet' }],
             [{ align: [] }],
-            ['link'],
+            ['link', 'video'],
             ['clean'],
         ],
     };
 
     // Format yang diizinkan dalam editor
-    const formats = ['header', 'bold', 'italic', 'underline', 'strike', 'list', 'bullet', 'align', 'link'];
+    const formats = ['header', 'bold', 'video', 'italic', 'underline', 'strike', 'list', 'bullet', 'align', 'link'];
 
     useEffect(() => {
         // Menandai komponen sudah di-mount

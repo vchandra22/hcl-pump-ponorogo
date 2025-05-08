@@ -3,7 +3,19 @@ import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
 
-export default function FrontendTermsIndex({ terms_condition = {}, base_url = '' }) {
+interface SocialMediaData {
+    id: string;
+    icon_social_media: string;
+    platform: string;
+    title: string;
+    social_media_link: string;
+}
+
+interface TermsConditionIndexProps {
+    social_media: SocialMediaData[];
+}
+
+export default function FrontendTermsIndex({ terms_condition = {}, social_media, base_url = '' }: TermsConditionIndexProps) {
 
     const termsConditionData = Array.isArray(terms_condition) ? terms_condition[0] : terms_condition;
 
@@ -77,7 +89,7 @@ export default function FrontendTermsIndex({ terms_condition = {}, base_url = ''
                 <div className="text-text-color"></div>
             </section>
 
-            <Footer />
+            <Footer social_media={social_media}  />
         </>
     );
 }

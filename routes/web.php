@@ -7,6 +7,7 @@ use App\Http\Controllers\DisclaimerController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\PrivacyPolicyController;
+use App\Http\Controllers\ReasonController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\ProductController;
@@ -45,7 +46,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', [HomepageController::class, 'create'])->name('homepage.create');
         Route::post('/store', [HomepageController::class, 'store'])->name('homepage.store');
         Route::get('/{id}/edit', [HomepageController::class, 'edit'])->name('homepage.edit');
-        Route::post('/{id}/update', [HomepageController::class, 'update'])->name('homepage.update');
+        Route::put('/{id}/update', [HomepageController::class, 'update'])->name('homepage.update');
         Route::delete('/{id}/delete', [HomepageController::class, 'destroy'])->name('homepage.delete');
     });
 
@@ -159,6 +160,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
             dd($err);
             return back()->with('failed', 'Delete OG image failed. Error: '.$err);
         }
+    });
+
+    Route::prefix('reasons')->name('reasons.')->group(function () {
+        Route::get('/', [ReasonController::class, 'index'])->name('index'); // List all reasons
+        Route::get('/create', [ReasonController::class, 'create'])->name('create'); // Show create form
+        Route::post('/', [ReasonController::class, 'store'])->name('store'); // Store a new reason
+        Route::get('/{id}/edit', [ReasonController::class, 'edit'])->name('edit'); // Show edit form
+        Route::put('/{id}', [ReasonController::class, 'update'])->name('update'); // Update a reason
+        Route::delete('/{id}', [ReasonController::class, 'destroy'])->name('destroy'); // Delete a reason
     });
 });
 

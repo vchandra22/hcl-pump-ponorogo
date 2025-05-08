@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
+import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
@@ -19,42 +20,34 @@ import { PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'sonner';
 
-interface Disclaimer {
-    id: number;
-    disclaimer: string;
+interface Reason {
+    id: string;
+    title: string;
+    description: string;
     created_at: string;
     updated_at: string;
-    meta: {
-        meta_title: string | null;
-        meta_description: string | null;
-        meta_keywords: string | null;
-        og_image: string | null;
-        image_alt: string | null;
-    };
 }
 
 interface PageProps {
-    disclaimer: Disclaimer[];
+    reasons: Reason[];
     status?: string;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Disclaimer',
-        href: '/disclaimer',
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+    {
+        title: 'Reason Management',
+        href: '/reasons',
     },
 ];
 
-const stripHtmlTags = (html: string) => {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    return tempDiv.textContent || tempDiv.innerText || '';
-};
-
-export default function DisclaimerIndex() {
-    const { disclaimer, status } = usePage<PageProps>().props;
+export default function ReasonIndex() {
+    const { reasons, status } = usePage().props as unknown as PageProps;
     const [searchTerm, setSearchTerm] = useState('');
-    const [filteredDisclaimer, setFilteredDisclaimer] = useState<Disclaimer[]>(disclaimer);
+    const [filteredReasons, setFilteredReasons] = useState<Reason[]>(reasons);
 
     useEffect(() => {
         if (status) {
@@ -63,98 +56,102 @@ export default function DisclaimerIndex() {
     }, [status]);
 
     useEffect(() => {
-        const results = disclaimer.filter((item) =>
-            Object.values(item).some((value) => {
-                if (value && typeof value === 'string') {
-                    return value.toLowerCase().includes(searchTerm.toLowerCase());
-                }
-                return false;
-            })
+        const results = reasons.filter(item =>
+            Object.values(item).some(
+                value =>
+                    value &&
+                    typeof value === 'string' &&
+                    value.toLowerCase().includes(searchTerm.toLowerCase())
+            )
         );
-        setFilteredDisclaimer(results);
-    }, [searchTerm, disclaimer]);
-
-    const truncateText = (text: string, maxLength: number = 100) => {
-        if (text.length <= maxLength) return text;
-        return text.substring(0, maxLength) + '...';
-    };
+        setFilteredReasons(results);
+    }, [searchTerm, reasons]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Disclaimer" />
+            <Head title="Reason Management" />
             <Toaster />
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold">Disclaimer</h1>
+                        <h1 className="text-2xl font-bold">Reason Management</h1>
                     </div>
-                    {disclaimer.length < 1 && (
+                    {reasons.length < 4 ? (
                         <Button asChild>
-                            <Link href="/disclaimer/create">
-                                <PlusIcon className="mr-2 h-4 w-4" />
-                                Tambah Baru
-                            </Link>
-                        </Button>
-                    )}
+                        <Link href={route('reasons.create')}>
+                            <PlusIcon className="mr-2 h-4 w-4" />
+                            Add Reason
+                        </Link>
+                    </Button>
+                    ) : null}
+
+                </div>
+
+                <div className="w-full md:w-1/3">
+                    <Input
+                        type="text"
+                        placeholder="Search reasons..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                 </div>
 
                 <div>
-                    {filteredDisclaimer.length === 0 ? (
-                        <div className="flex min-h-svh items-center justify-center pb-20">
-                            <EmptyState
-                                title={searchTerm ? 'Tidak dapat menemukan disclaimer' : 'Belum ada disclaimer'}
-                                description={
-                                    searchTerm
-                                        ? 'Tidak ada disclaimer yang sesuai dengan pencarian Anda'
-                                        : 'Mulai dengan menambahkan disclaimer baru'
-                                }
-                                action={
-                                    <Button asChild>
-                                        <Link href="disclaimer/create">
-                                            <PlusIcon className="mr-2 h-4 w-4" />
-                                            Tambah Baru
-                                        </Link>
-                                    </Button>
-                                }
-                            />
-                        </div>
+                    {filteredReasons.length === 0 ? (
+                        <EmptyState
+                            title={searchTerm ? "No reasons found" : "No reasons yet"}
+                            description={searchTerm ?
+                                "No reasons match your search criteria" :
+                                "Start by adding a new reason"}
+                            action={
+                                <Button asChild>
+                                    <Link href={route('reasons.create')}>
+                                        <PlusIcon className="mr-2 h-4 w-4" />
+                                        Add Reason
+                                    </Link>
+                                </Button>
+                            }
+                        />
                     ) : (
                         <div className="rounded-md border">
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Disclaimer</TableHead>
-                                        <TableHead>Meta Title</TableHead>
-                                        <TableHead>Tanggal Dibuat</TableHead>
-                                        <TableHead>Tanggal Diperbarui</TableHead>
-                                        <TableHead>Aksi</TableHead>
+                                        <TableHead>Title</TableHead>
+                                        <TableHead>Description</TableHead>
+                                        <TableHead>Created At</TableHead>
+                                        <TableHead>Updated At</TableHead>
+                                        <TableHead>Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {filteredDisclaimer.map((item, index) => (
+                                    {filteredReasons.map((item) => (
                                         <TableRow key={item.id}>
-                                            <TableCell className="max-w-md truncate">
-                                                <div> {stripHtmlTags(item.disclaimer)} </div>
-                                            </TableCell>
-                                            <TableCell>{item.meta?.meta_title || '-'}</TableCell>
+                                            <TableCell className="font-medium">{item.title}</TableCell>
+                                            <TableCell className="max-w-md truncate">{item.description}</TableCell>
                                             <TableCell>
                                                 {new Date(item.created_at).toLocaleDateString('id-ID', {
                                                     day: '2-digit',
                                                     month: 'long',
-                                                    year: 'numeric',
+                                                    year: 'numeric'
                                                 })}
                                             </TableCell>
                                             <TableCell>
                                                 {new Date(item.updated_at).toLocaleDateString('id-ID', {
                                                     day: '2-digit',
                                                     month: 'long',
-                                                    year: 'numeric',
+                                                    year: 'numeric'
                                                 })}
                                             </TableCell>
                                             <TableCell className="flex justify-start gap-2">
-                                                <Button variant="ghost" size="icon" asChild className="hover:bg-neutral-100">
-                                                    <Link href={`/disclaimer/${item.id}/edit`}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    asChild
+                                                    className="hover:bg-neutral-100"
+                                                >
+                                                    <Link href={route('reasons.edit', item.id)}>
                                                         <PencilIcon className="h-4 w-4" />
                                                     </Link>
                                                 </Button>
@@ -171,21 +168,21 @@ export default function DisclaimerIndex() {
                                                     </AlertDialogTrigger>
                                                     <AlertDialogContent>
                                                         <AlertDialogHeader>
-                                                            <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
+                                                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                                                             <AlertDialogDescription>
-                                                                Data disclaimer akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.
+                                                                This reason will be permanently deleted. This action cannot be undone.
                                                             </AlertDialogDescription>
                                                         </AlertDialogHeader>
                                                         <AlertDialogFooter>
-                                                            <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
                                                             <AlertDialogAction asChild>
                                                                 <Link
-                                                                    href={`/disclaimer/${item.id}/delete`}
+                                                                    href={route('reasons.destroy', item.id)}
                                                                     method="delete"
                                                                     as="button"
                                                                     preserveScroll
                                                                 >
-                                                                    Hapus
+                                                                    Delete
                                                                 </Link>
                                                             </AlertDialogAction>
                                                         </AlertDialogFooter>

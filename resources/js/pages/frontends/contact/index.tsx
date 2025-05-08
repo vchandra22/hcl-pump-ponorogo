@@ -4,7 +4,18 @@ import { Head, useForm } from '@inertiajs/react';
 import { ClockIcon, LocateIcon, LucideMail, PhoneIcon } from 'lucide-react';
 import { Toaster, toast } from 'sonner';
 
-export default function Contact({ contacts = {}, base_url = '' }) { // Removed flash prop
+interface SocialMediaData {
+    id: string;
+    icon_social_media: string;
+    platform: string;
+    title: string;
+    social_media_link: string;
+}
+
+interface ContactProps {
+    social_media: SocialMediaData[];
+}
+export default function Contact({ contacts = {}, social_media, base_url = '' }: ContactProps) { // Removed flash prop
     const contactData = Array.isArray(contacts) ? contacts[0] : contacts;
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -101,10 +112,10 @@ export default function Contact({ contacts = {}, base_url = '' }) { // Removed f
                             <div className="flex items-center space-x-8">
                                 <PhoneIcon />
                                 <a
-                                    href={`tel:${contactData.phone}`}
+                                    href={`https://wa.me/${contactData.phone}`} target={'_blank'}
                                     className="font-regular text-text-color p-body-text-lg cursor-pointer hover:underline"
                                 >
-                                    {contactData.phone}
+                                    +{contactData.phone}
                                 </a>
                             </div>
                             <div className="flex items-center space-x-8">
@@ -220,7 +231,7 @@ export default function Contact({ contacts = {}, base_url = '' }) { // Removed f
                 </div>
             </section>
 
-            <Footer />
+            <Footer social_media={social_media}  />
         </>
     );
 }

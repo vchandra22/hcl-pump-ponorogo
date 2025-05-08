@@ -31,12 +31,26 @@ interface ProductData {
     }
 }
 
+interface SocialMediaData {
+    id: string;
+    icon_social_media: string;
+    platform: string;
+    title: string;
+    social_media_link: string;
+}
+
+interface SocialMediaLink {
+    social_media_link: string;
+}
+
 interface AboutProps {
     about?: AboutData[];
     product?: ProductData[];
+    social_media: SocialMediaData[];
+    social_media_link: SocialMediaLink[];
 }
 
-export default function AboutUsIndex({ about, product, base_url = '' }: AboutProps) {
+export default function AboutUsIndex({ about, product, social_media, social_media_link, base_url = '' }: AboutProps) {
     const aboutData = about[0] || {};
     const companyImage = aboutData.image_company ? `/storage/${aboutData.image_company}` : '/asset/gambar-perusahaan.png';
 
@@ -47,38 +61,38 @@ export default function AboutUsIndex({ about, product, base_url = '' }: AboutPro
             <Head title="Tentang Kami">
                 <meta
                     name="title"
-                    content={`${aboutData.meta.meta_title ?? 'Tentang Kami'}`}
+                    content={`${aboutData.meta?.meta_title ?? 'Tentang Kami'}`}
                 />
                 <meta
                     name="description"
                     content={
-                        aboutData.meta.meta_description ??
+                        aboutData.meta?.meta_description ??
                         'Kenali lebih dekat HCL Pump Ponorogo, perusahaan spesialis teknologi pompa air industri.'
                     }
                 />
                 <meta
                     name="keywords"
                     content={
-                        `${aboutData.meta.meta_keywords ?? 'tentang kami, HCL Pump Ponorogo'}, profil perusahaan, teknologi pompa`
+                        `${aboutData.meta?.meta_keywords ?? 'tentang kami, HCL Pump Ponorogo'}, profil perusahaan, teknologi pompa`
                     }
                 />
 
                 <meta
                     property="og:title"
-                    content={`${aboutData.meta.meta_title ?? 'Tentang Kami'}`}
+                    content={`${aboutData.meta?.meta_title ?? 'Tentang Kami'}`}
                 />
                 <meta
                     property="og:description"
                     content={
-                        aboutData.meta.meta_description ??
+                        aboutData.meta?.meta_description ??
                         'Kenali lebih dekat HCL Pump Ponorogo dan bagaimana kami menghadirkan solusi pompa terbaik untuk industri Anda.'
                     }
                 />
                 <meta
                     property="og:image"
                     content={
-                        aboutData.meta.og_image
-                            ? `${base_url}/storage/${aboutData.meta.og_image}`
+                        aboutData.meta?.og_image
+                            ? `${base_url}/storage/${aboutData.meta?.og_image}`
                             : `${base_url}/asset/logo-hcl-pump-ponorogo.png`
                     }
                 />
@@ -217,8 +231,12 @@ export default function AboutUsIndex({ about, product, base_url = '' }: AboutPro
                     </Link>
                 </div>
             </section>
-            <CtaComponent />
-            <Footer />
+            <CtaComponent
+                href={social_media_link || '/kontak'}
+            />
+
+            <Footer social_media={social_media}  />
+
         </>
     );
 }

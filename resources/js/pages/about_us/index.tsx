@@ -52,6 +52,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+const stripHtmlTags = (html: string) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || '';
+};
+
 export default function AboutUsIndex() {
     const { about, status } = usePage().props as unknown as PageProps;
     const [searchTerm, setSearchTerm] = useState('');
@@ -123,7 +129,7 @@ export default function AboutUsIndex() {
                                 {filteredAbout.map((item) => (
                                     <TableRow key={item.id}>
                                         <TableCell className="font-medium">{item.title}</TableCell>
-                                        <TableCell className="max-w-md truncate">{item.description}</TableCell>
+                                        <TableCell className="max-w-md truncate">{stripHtmlTags(item.description)}</TableCell>
                                         <TableCell>
                                             {new Date(item.created_at).toLocaleDateString('id-ID', {
                                                 day: '2-digit',

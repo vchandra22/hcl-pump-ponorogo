@@ -167,8 +167,7 @@ export default function SocialMediaForm({ social_media, errors }: SocialMediaFor
                     <div className="bg-destructive/10 p-3 rounded-md flex items-start gap-2">
                         <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
                         <div>
-                            <p className="font-medium text-destructive">Harap perbaiki kesalahan di kedua tab sebelum mengirim</p>
-                            <p className="text-sm text-muted-foreground">Terdapat kesalahan validasi di tab SEO & Meta</p>
+                            <p className="font-medium text-destructive">Harap perbaiki kesalahan sebelum mengirim</p>
                         </div>
                     </div>
                 )}
