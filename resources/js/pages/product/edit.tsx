@@ -220,7 +220,7 @@ export default function EditPage({ product }: EditPageProps) {
                                     <InputError />
                                 </div>
 
-                                <div className="space-y-2">
+                                <div className="mb-10">
                                     <Label htmlFor="additional_info">Info(opsional)</Label>
                                     <QuillEditor
                                         id="additional_info"

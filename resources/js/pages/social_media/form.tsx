@@ -42,15 +42,17 @@ export default function SocialMediaForm({ social_media, errors }: SocialMediaFor
     ];
 
     const { data, setData, post, processing } = useForm<SocialMedia>({
-        icon_social_media: social_media?.icon_social_media || null,
+        icon_social_media: null,
         platform: social_media?.platform || null,
         title: social_media?.title || null,
         social_media_link: social_media?.social_media_link || null,
         icon_social_media_url: social_media?.icon_social_media
             ? `/storage/${social_media.icon_social_media}`
-            : undefined,
-        keep_image: 'true'
+            : null,
+        keep_image: 'true',
+        icon_social_media_old: social_media?.icon_social_media
     });
+    
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
@@ -73,7 +75,7 @@ export default function SocialMediaForm({ social_media, errors }: SocialMediaFor
         const url = data.icon_social_media_url;
         const hasFile = data.icon_social_media instanceof File;
 
-        if (data.icon_social_media === null) {
+        if (!url && data[`keep_image`] === 'false') {
             return (
                 <div className="mt-2 p-4 border rounded-md bg-gray-50 text-center">
                     <p className="text-sm text-gray-500">Tidak ada gambar</p>
@@ -99,7 +101,7 @@ export default function SocialMediaForm({ social_media, errors }: SocialMediaFor
             );
         }
 
-        if (!hasFile && url && isEditMode) {
+        if (url && isEditMode) {
             return (
                 <div className="mt-2">
                     <div className="relative rounded-md border overflow-hidden max-w-lg">

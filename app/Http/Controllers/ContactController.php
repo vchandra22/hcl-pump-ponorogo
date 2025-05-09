@@ -132,6 +132,7 @@ class ContactController extends Controller
             'meta_keywords' => 'nullable|string|max:255',
             'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'image_alt' => 'nullable|string|max:255',
+            'og_image_old' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -148,16 +149,14 @@ class ContactController extends Controller
             'meta_title', 'meta_description', 'meta_keywords', 'image_alt'
         ]);
 
-        if ($request->hasFile('og_image')) {
+        if ($request['og_image']) {
             if ($contact->meta->og_image && Storage::disk('public')->exists($contact->meta->og_image)) {
                 Storage::disk('public')->delete($contact->meta->og_image);
             }
             $data['og_image'] = $request->file('og_image')->store('contact/og', 'public');
-        } elseif ($request->input('keep_og_image') === 'true') {
-            $data['og_image'] = $contact->meta->og_image;
-        } else {
-            $data['og_image'] = null;
-        }
+        } 
+        
+        $data['og_image'] = $request['og_image'] ? $data['og_image'] : $request['og_image_old'];
 
         $this->contactService->updateContactWithMeta($id, $data);
 

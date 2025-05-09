@@ -57,6 +57,7 @@ class AboutController extends Controller
             'meta_keywords' => 'nullable|string|regex:/^[a-zA-Z0-9,\s]+$/',
             'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'image_alt' => 'nullable|string',
+
         ]);
 
         if ($validator->fails()) {
@@ -108,6 +109,7 @@ class AboutController extends Controller
             'image_alt' => $about->meta->image_alt
         ];
 
+
         return Inertia::render('about_us/form', ['about' => $data]);
     }
 
@@ -125,6 +127,8 @@ class AboutController extends Controller
             'meta_keywords' => 'nullable|string|regex:/^[a-zA-Z0-9,\s]+$/',
             'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'image_alt' => 'nullable|string',
+            'og_image_old' => 'nullable|string',
+            'image_company_old' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -141,28 +145,23 @@ class AboutController extends Controller
         ]);
 
         // Handle image_company
-        if ($request->hasFile('image_company')) {
+        if ($request['image_company']) {
             if ($about->image_company && Storage::disk('public')->exists($about->image_company)) {
                 Storage::disk('public')->delete($about->image_company);
             }
             $data['image_company'] = $request->file('image_company')->store('about-us', 'public');
-        } elseif ($request->input('keep_image') === 'true') {
-            $data['image_company'] = $about->image_company;
-        } else {
-            $data['image_company'] = null;
         }
-
+        
         // Handle og_image
-        if ($request->hasFile('og_image')) {
+        if ($request['og_image']) {
             if ($about->meta->og_image && Storage::disk('public')->exists($about->meta->og_image)) {
                 Storage::disk('public')->delete($about->meta->og_image);
             }
             $data['og_image'] = $request->file('og_image')->store('about-us/og', 'public');
-        } elseif ($request->input('keep_og_image') === 'true') {
-            $data['og_image'] = $about->meta->og_image;
-        } else {
-            $data['og_image'] = null;
-        }
+        } 
+        
+        $data['image_company'] = $request['image_company'] ? $data['image_company'] : $request['image_company_old'];
+        $data['og_image'] = $request['og_image'] ? $data['og_image'] : $request['og_image_old'];
 
         $this->aboutService->updateAboutWithMeta($id, $data);
 
