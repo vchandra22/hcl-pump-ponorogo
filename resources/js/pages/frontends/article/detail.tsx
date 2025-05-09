@@ -4,12 +4,17 @@ import { Head, Link } from '@inertiajs/react';
 import ArticleCard from '@/components/custom/ArticleCard';
 import DOMPurify from 'dompurify';
 import { transformYoutubeIframes } from '@/utils/youtubeUtils';
+import HotlineWhatsapp from '@/components/custom/HotlineWhatsapp';
 
 interface SocialMediaData {
     id: string;
     icon_social_media: string;
     platform: string;
     title: string;
+    social_media_link: string;
+}
+
+interface SocialMediaLink {
     social_media_link: string;
 }
 
@@ -43,6 +48,7 @@ interface ArticleDetailProps {
     social_media: SocialMediaData[];
     base_url?: string;
     addressData?: addressData[];
+    social_media_link: SocialMediaLink[];
 }
 
 const formatDate = (dateString: string) => {
@@ -53,7 +59,7 @@ const formatDate = (dateString: string) => {
     });
 };
 
-export default function ArticleDetail({ article, listArticle, social_media, base_url = '' ,addressData}: ArticleDetailProps) {
+export default function ArticleDetail({ article, listArticle, social_media, base_url = '' ,addressData, social_media_link}: ArticleDetailProps) {
     const coverImage = article.image_article
         ? `/storage/${article.image_article}`
         : '/asset/gambar-ilustrasi-artikel.png';
@@ -169,6 +175,7 @@ export default function ArticleDetail({ article, listArticle, social_media, base
             </section>
 
             <Footer social_media={social_media} address={addressData} />
+            <HotlineWhatsapp href={social_media_link} />
         </>
     );
 }

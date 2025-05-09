@@ -39,7 +39,7 @@ class FrontendController extends Controller
         $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
         $address = SocialMediaModel::where('platform', 'address')->get();
         $sendAddress = $address->pluck('title')->toArray();
-        // dd($sendaddress);    
+        // dd($sendaddress);
         $reasonService = $reasonService->getAllReasons();
         return Inertia::render('frontends/index', [
             'homepage' => $homepage,
@@ -80,6 +80,7 @@ class FrontendController extends Controller
         );
         $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $address = SocialMediaModel::where('platform', 'address')->get();
+        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->firstOrFail();
         $sendAddress = $address->pluck('title')->toArray();
 
         return Inertia::render('frontends/article/index', [
@@ -87,6 +88,7 @@ class FrontendController extends Controller
             'articles' => $articles,
             'social_media' => $socialMedia,
             'base_url' => url('/'),
+            'social_media_link' => $socialMediaLink['social_media_link'],
             'addressData' => $sendAddress,
 
         ]);
@@ -117,6 +119,7 @@ class FrontendController extends Controller
         $listArticle = $articleService->getAllArticles();
         $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $address = SocialMediaModel::where('platform', 'address')->get();
+        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
         $sendAddress = $address->pluck('title')->toArray();
 
         return Inertia::render('frontends/article/detail', [
@@ -124,6 +127,7 @@ class FrontendController extends Controller
             'listArticle' => $listArticle,
             'social_media' => $socialMedia,
             'base_url' => url('/'),
+            'social_media_link' => $socialMediaLink['social_media_link'],
             'addressData' => $sendAddress,
         ]);
     }
@@ -133,6 +137,7 @@ class FrontendController extends Controller
         $contacts = $contactService->getAllContacts();
         $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $address = SocialMediaModel::where('platform', 'address')->get();
+        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
         $sendAddress = $address->pluck('title')->toArray();
 
         return Inertia::render('frontends/contact/index', [
@@ -140,6 +145,7 @@ class FrontendController extends Controller
             'social_media' => $socialMedia,
             'base_url' => url('/'),
             'status' => session('status'),
+            'social_media_link' => $socialMediaLink['social_media_link'],
             'addressData' => $sendAddress,
         ]);
     }
@@ -202,12 +208,14 @@ class FrontendController extends Controller
         $termsCondition = $termsConditionService->getAllTermsCondition();
         $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $address = SocialMediaModel::where('platform', 'address')->get();
+        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
         $sendAddress = $address->pluck('title')->toArray();
 
         return Inertia::render('frontends/terms/index', [
             'terms_condition' => $termsCondition,
             'social_media' => $socialMedia,
             'base_url' => url('/'),
+            'social_media_link' => $socialMediaLink['social_media_link'],
             'addressData' => $sendAddress,
         ]);
     }
@@ -217,12 +225,14 @@ class FrontendController extends Controller
         $privacyPolicy = $privacyPolicyService->getAllPrivacyPolicy();
         $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $address = SocialMediaModel::where('platform', 'address')->get();
+        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
         $sendAddress = $address->pluck('title')->toArray();
 
         return Inertia::render('frontends/privacy_policy/index', [
             'privacy_policy' => $privacyPolicy,
             'social_media' => $socialMedia,
             'base_url' => url('/'),
+            'social_media_link' => $socialMediaLink['social_media_link'],
             'addressData' => $sendAddress,
         ]);
     }
@@ -232,12 +242,14 @@ class FrontendController extends Controller
         $disclaimer = $disclaimerService->getAllDisclaimer();
         $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $address = SocialMediaModel::where('platform', 'address')->get();
+        $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
         $sendAddress = $address->pluck('title')->toArray();
 
         return Inertia::render('frontends/disclaimer/index', [
             'disclaimer' => $disclaimer,
             'social_media' => $socialMedia,
             'base_url' => url('/'),
+            'social_media_link' => $socialMediaLink['social_media_link'],
             'addressData' => $sendAddress,
         ]);
     }

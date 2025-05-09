@@ -17,6 +17,7 @@ createInertiaApp({
             <>
                 <App {...props} />
                 <Toaster position="bottom-right" richColors />
+
             </>,
         );
     },

@@ -1,3 +1,4 @@
+import HotlineWhatsapp from '@/components/custom/HotlineWhatsapp';
 import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
 import { Head, useForm } from '@inertiajs/react';
@@ -14,12 +15,17 @@ interface SocialMediaData {
 interface addressData {
     address: string[];
 }
+
+interface SocialMediaLink {
+    social_media_link: string;
+}
 interface ContactProps {
     social_media: SocialMediaData[];
     addressData?: addressData[];
+    social_media_link: SocialMediaLink[];
 }
 
-export default function Contact({ contacts = {}, social_media, base_url = '' ,addressData}: ContactProps) {
+export default function Contact({ contacts = {}, social_media, base_url = '' ,addressData, social_media_link}: ContactProps) {
     // Removed flash prop
     const contactData = Array.isArray(contacts) ? contacts[0] : contacts;
 
@@ -245,6 +251,7 @@ export default function Contact({ contacts = {}, social_media, base_url = '' ,ad
             </section>
 
             <Footer social_media={social_media} address={addressData}/>
+            <HotlineWhatsapp href={social_media_link} />
         </>
     );
 }

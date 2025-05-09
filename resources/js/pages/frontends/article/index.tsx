@@ -4,6 +4,7 @@ import { Head, Link } from '@inertiajs/react';
 import Footer from '@/components/footer';
 import CtaComponent from '@/components/custom/CtaComponent';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+import HotlineWhatsapp from '@/components/custom/HotlineWhatsapp';
 
 interface AboutData {
     image_company?: string;
@@ -37,15 +38,20 @@ interface SocialMediaData {
 interface addressData {
     address: string[];
 }
+
+interface SocialMediaLink {
+    social_media_link: string;
+}
 interface ArticleProps {
     about?: AboutData[];
     articles?: PaginatedArticles;
     social_media: SocialMediaData[];
     base_url?: string;
     addressData?: addressData[];
+    social_media_link?: SocialMediaLink[];
 }
 
-export default function Article({ about = [], articles = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, social_media, base_url = '', addressData }: ArticleProps) {
+export default function Article({ about = [], articles = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, social_media, base_url = '', addressData, social_media_link }: ArticleProps) {
     const aboutData = about[0] || {};
     const companyImage = aboutData.image_company
         ? `/storage/${aboutData.image_company}`
@@ -210,6 +216,7 @@ export default function Article({ about = [], articles = { data: [], current_pag
             </section>
 
             <Footer social_media={social_media} address={addressData} />
+            <HotlineWhatsapp href={social_media_link} />
         </>
     );
 }

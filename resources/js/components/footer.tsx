@@ -39,8 +39,6 @@ interface FooterProps {
 }
 
 export default function Footer({ social_media, address }: FooterProps) {
-    // Get address data from social_media if it's not passed directly
-    // console.log('Address Data:', address);
     return (
         <footer className="w-full">
             <div className="bg-bg-color mx-auto border border-t-slate-200 px-4 md:px-6">

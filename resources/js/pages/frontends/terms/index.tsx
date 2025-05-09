@@ -2,6 +2,7 @@ import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
+import HotlineWhatsapp from '@/components/custom/HotlineWhatsapp';
 
 interface SocialMediaData {
     id: string;
@@ -11,15 +12,20 @@ interface SocialMediaData {
     social_media_link: string;
 }
 
+interface SocialMediaLink {
+    social_media_link: string;
+}
+
 interface addressData {
     address: string[];
 }
 interface TermsConditionIndexProps {
     social_media: SocialMediaData[];
     addressData?: addressData[];
+    social_media_link: SocialMediaLink[];
 }
 
-export default function FrontendTermsIndex({ terms_condition = {}, social_media, base_url = '' ,addressData}: TermsConditionIndexProps) {
+export default function FrontendTermsIndex({ terms_condition = {}, social_media, base_url = '' ,addressData, social_media_link}: TermsConditionIndexProps) {
 
     const termsConditionData = Array.isArray(terms_condition) ? terms_condition[0] : terms_condition;
 
@@ -94,6 +100,7 @@ export default function FrontendTermsIndex({ terms_condition = {}, social_media,
             </section>
 
             <Footer social_media={social_media}  address={addressData}/>
+            <HotlineWhatsapp href={social_media_link} />
         </>
     );
 }

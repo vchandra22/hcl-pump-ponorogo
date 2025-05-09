@@ -2,6 +2,7 @@ import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
+import HotlineWhatsapp from '@/components/custom/HotlineWhatsapp';
 
 
 interface SocialMediaData {
@@ -16,11 +17,16 @@ interface addressData {
     address: string[];
 }
 
+interface SocialMediaLink {
+    social_media_link: string;
+}
+
 interface PrivacyPolicyIndexProps {
     social_media: SocialMediaData[];
     addressData?: addressData[];
+    social_media_link: SocialMediaLink[];
 }
-export default function PrivacyPolicy({ privacy_policy = {}, social_media, base_url = '',addressData }: PrivacyPolicyIndexProps) {
+export default function PrivacyPolicy({ privacy_policy = {}, social_media, base_url = '',addressData, social_media_link }: PrivacyPolicyIndexProps) {
 
     const privacyPolicyData = Array.isArray(privacy_policy) ? privacy_policy[0] : privacy_policy;
 
@@ -91,6 +97,7 @@ export default function PrivacyPolicy({ privacy_policy = {}, social_media, base_
             </section>
 
             <Footer social_media={social_media}  address={addressData} />
+            <HotlineWhatsapp href={social_media_link} />
         </>
     );
 }

@@ -2,6 +2,7 @@ import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
 import { Head } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
+import HotlineWhatsapp from '@/components/custom/HotlineWhatsapp';
 
 interface SocialMediaData {
     id: string;
@@ -14,12 +15,16 @@ interface SocialMediaData {
 interface addressData {
     address: string[];
 }
+interface SocialMediaLink {
+    social_media_link: string;
+}
 interface DisclaimerIndexProps {
     social_media: SocialMediaData[];
     addressData?: addressData[];
+    social_media_link: SocialMediaLink[];
 }
 
-export default function DisclaimerIndex({ disclaimer = {}, social_media, base_url = '',addressData }: DisclaimerIndexProps) {
+export default function DisclaimerIndex({ disclaimer = {}, social_media, base_url = '',addressData, social_media_link }: DisclaimerIndexProps) {
 
     const disclaimerData = Array.isArray(disclaimer) ? disclaimer[0] : disclaimer;
 
@@ -95,6 +100,8 @@ export default function DisclaimerIndex({ disclaimer = {}, social_media, base_ur
             </section>
 
             <Footer social_media={social_media} address={addressData} />
+            <HotlineWhatsapp href={social_media_link} />
+
         </>
     );
 }

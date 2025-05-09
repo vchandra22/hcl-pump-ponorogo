@@ -4,6 +4,7 @@ import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
 import { Head, Link } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
+import HotlineWhatsapp from '@/components/custom/HotlineWhatsapp';
 
 interface AboutData {
     id: string;
@@ -247,6 +248,8 @@ export default function AboutUsIndex({ about, product, social_media, social_medi
             />
 
             <Footer social_media={social_media} address={addressData}  />
+
+            <HotlineWhatsapp href={social_media_link} />
 
         </>
     );

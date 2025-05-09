@@ -7,6 +7,7 @@ import { Product } from '@/types/product';
 import formatRupiah from '@/utils/formatRupiah';
 import { Head, Link, usePage } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
+import HotlineWhatsapp from '@/components/custom/HotlineWhatsapp';
 
 interface SocialMediaData {
     id: string;
@@ -150,6 +151,8 @@ export default function ProductDetail({ product, products, social_media_link, so
             />
 
             <Footer social_media={social_media} address={addressData} />
+            <HotlineWhatsapp href={social_media_link} />
+
         </>
     );
 }

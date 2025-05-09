@@ -6,6 +6,7 @@ import Navigasi from '@/components/navigasi';
 import formatDate from '@/utils/formatDate';
 import { Head, Link } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
+import HotlineWhatsapp from '@/components/custom/HotlineWhatsapp';
 
 interface HomepageData {
     id: string;
@@ -63,6 +64,10 @@ interface ReasonData {
     description: string;
 }
 
+interface SocialMediaLink {
+    social_media_link: string;
+}
+
 interface HomepageProps {
     homepage?: HomepageData[];
     product?: ProductData[];
@@ -71,6 +76,7 @@ interface HomepageProps {
     reason_service?: ReasonData[];
     base_url?: string;
     addressData?: addressData[];
+    social_media_link?: SocialMediaLink[];
 }
 
 export default function Beranda({
@@ -79,13 +85,15 @@ export default function Beranda({
     articles = [],
     social_media = [],
     reason_service = [],
+    social_media_link,
     base_url = '',
     addressData = [],
 }: HomepageProps) {
     const homepageData = homepage[0] || {};
     const bannerImage = homepageData.banner_image ? `/storage/${homepageData.banner_image}` : '/asset/gambar-banner.png';
     const sanitizedContent = homepageData.description ? DOMPurify.sanitize(homepageData.description) : '';
-// console.log(addressData)
+    console.log('ini social media link :')
+    console.log(social_media_link);
     // Fallback reasons data
     const fallbackReasons = [
         {
@@ -160,30 +168,28 @@ export default function Beranda({
             <Navigasi />
 
             {/* Banner Section */}
-            <section className="relative w-full overflow-hidden py-12 text-white md:px-6 md:py-24 lg:py-72">
+            <section className="relative w-full overflow-hidden py-12 text-white md:px-6 md:py-24 lg:py-96">
                 <img
                     src={bannerImage}
                     width="100"
                     height="100"
-                    className="absolute top-0 left-0 h-full w-full overflow-hidden object-cover"
+                    className="absolute top-0 left-0 h-full w-full overflow-hidden object-fit object-center"
                     alt={homepageData.meta?.image_alt ?? 'HCL Pump Ponorogo'}
                 />
-                <div className="bg-secondary-color/60 absolute top-0 left-0 z-10 h-full w-full"></div>
+                <div className="absolute top-0 left-0 z-10 h-full w-full bg-gradient-to-r from-secondary-color/70 to-transparent"></div>
                 <div className="relative z-20 container mx-auto px-4">
                     <div className="lg:max-w-2/3">
                         <div className="flex flex-col justify-center space-y-4">
                             <div className="space-y-2">
                                 <h1 className="text-bg-color h1 text-center text-xl font-bold tracking-tighter sm:text-5xl lg:text-start xl:text-6xl/none">
-                                    {homepageData.title || 'HCL – Pilihan Cerdas untuk Pompa Air yang Mengalir Tanpa Henti'}
+                                    {homepageData.title || ''}
                                 </h1>
 
                                 {sanitizedContent ? (
                                     <div className="force-white max-w-none" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
                                 ) : (
                                     <div className="force-white max-w-none">
-                                        HCL Water Pump hadir sebagai solusi terbaik untuk Anda yang membutuhkan pompa air dengan performa tangguh dan
-                                        daya tahan luar biasa. Dengan teknologi modern dan material berkualitas, pompa HCL mampu bekerja terus-menerus
-                                        tanpa mudah panas atau macet. Cocok untuk kebutuhan rumah tangga, industri, hingga pertanian.
+                                        <p></p>
                                     </div>
                                 )}
                             </div>
@@ -299,6 +305,9 @@ export default function Beranda({
             <CtaComponent href="/kontak" />
 
             <Footer social_media={social_media} address={addressData}/>
+
+            <HotlineWhatsapp href={social_media_link} />
+
         </>
     );
 }

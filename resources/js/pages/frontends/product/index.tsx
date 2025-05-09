@@ -4,6 +4,7 @@ import Footer from '@/components/footer';
 import Navigasi from '@/components/navigasi';
 import { Product } from '@/types/product';
 import { Head } from '@inertiajs/react';
+import HotlineWhatsapp from '@/components/custom/HotlineWhatsapp';
 
 interface SocialMediaData {
     id: string;
@@ -95,6 +96,8 @@ export default function ProductIndex({ products, social_media, social_media_link
             />
 
             <Footer social_media={social_media} address={addressData} />
+            <HotlineWhatsapp href={social_media_link} />
+
         </>
     );
 }
