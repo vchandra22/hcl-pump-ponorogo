@@ -126,17 +126,15 @@ class TermsConditionController extends Controller
             'meta_title', 'meta_description', 'meta_keywords', 'image_alt'
         ]);
 
-        // Handle og_image
-        if ($request->hasFile('og_image')) {
+        // handle og image
+        if ($request['og_image']) {
             if ($termsCondition->meta->og_image && Storage::disk('public')->exists($termsCondition->meta->og_image)) {
                 Storage::disk('public')->delete($termsCondition->meta->og_image);
             }
-            $data['og_image'] = $request->file('og_image')->store('homepage/og', 'public');
-        } elseif ($request->input('keep_og_image') === 'true') {
-            $data['og_image'] = $termsCondition->meta->og_image;
-        } else {
-            $data['og_image'] = null;
+            $data['og_image'] = $request->file('og_image')->store('terms/og', 'public');
         }
+
+        $data['og_image'] = $request['og_image'] ? $data['og_image'] : $request['og_image_old'];
 
         $this->termsConditionService->updateTermsConditionWithMeta($id, $data);
 

@@ -134,8 +134,6 @@ class HomepageController extends Controller
                 ->withInput();
         }
 
-        // dd($request->all());
-
         $homepage = $this->homepageService->getHomepageWithMeta($id);
 
         $data = $request->only([

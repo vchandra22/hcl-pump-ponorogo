@@ -57,11 +57,12 @@ export default function TermsConditionForm({ termsCondition, errors }: TermsCond
         meta_title: termsCondition?.meta_title || null,
         meta_description: termsCondition?.meta_description || null,
         meta_keywords: termsCondition?.meta_keywords || null,
-        og_image: termsCondition?.og_image,
+        og_image: null,
         og_image_url: termsCondition?.og_image
             ? `/storage/${termsCondition.og_image}`
             : null,
         image_alt: termsCondition?.image_alt || null,
+        og_image_old: termsCondition?.og_image
     });
 
     const handleSubmit = (e: React.FormEvent) => {
