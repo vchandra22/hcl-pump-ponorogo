@@ -124,6 +124,8 @@ class HomepageController extends Controller
             'meta_keywords' => 'nullable|string',
             'og_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'image_alt' => 'nullable|string',
+            'banner_image_old' => 'nullable|string',
+            'og_image_old' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -132,6 +134,8 @@ class HomepageController extends Controller
                 ->withInput();
         }
 
+        // dd($request->all());
+
         $homepage = $this->homepageService->getHomepageWithMeta($id);
 
         $data = $request->only([
@@ -139,31 +143,28 @@ class HomepageController extends Controller
             'meta_title', 'meta_description', 'meta_keywords', 'image_alt'
         ]);
 
-        // Handle banner_image
-        if ($request->hasFile('banner_image')) {
+        // handle banner image
+        if ($request['banner_image']) {
             if ($homepage->banner_image && Storage::disk('public')->exists($homepage->banner_image)) {
                 Storage::disk('public')->delete($homepage->banner_image);
             }
             $data['banner_image'] = $request->file('banner_image')->store('homepage', 'public');
-        } elseif ($request->input('keep_image') === 'true') {
-            $data['banner_image'] = $homepage->banner_image;
-        } else {
-            $data['banner_image'] = null;
         }
 
-        // Handle og_image
-        if ($request->hasFile('og_image')) {
+        // handle og image
+        if ($request['og_image']) {
             if ($homepage->meta->og_image && Storage::disk('public')->exists($homepage->meta->og_image)) {
                 Storage::disk('public')->delete($homepage->meta->og_image);
             }
             $data['og_image'] = $request->file('og_image')->store('homepage/og', 'public');
-        } elseif ($request->input('keep_og_image') === 'true') {
-            $data['og_image'] = $homepage->meta->og_image;
-        } else {
-            $data['og_image'] = null;
         }
 
+        $data['banner_image'] = $request['banner_image'] ? $data['banner_image'] : $request['banner_image_old'];
+
+        $data['og_image'] = $request['og_image'] ? $data['og_image'] : $request['og_image_old'];
+
         $this->homepageService->updateHomepageWithMeta($id, $data);
+        // dd($data);
 
         return redirect()->route('homepage.index')
             ->with('status', 'Homepage berhasil diperbarui!');

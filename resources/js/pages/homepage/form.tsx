@@ -58,18 +58,20 @@ export default function HomepageForm({ homepage, errors }: HomepageFormProps) {
     const { data, setData, post, processing } = useForm<Homepage>({
         title: homepage?.title || '',
         description: homepage?.description || '',
-        banner_image: homepage?.banner_image,
+        banner_image: null,
         banner_image_url: homepage?.banner_image
             ? `/storage/${homepage.banner_image}`
             : null,
         meta_title: homepage?.meta_title || null,
         meta_description: homepage?.meta_description || null,
         meta_keywords: homepage?.meta_keywords || null,
-        og_image: homepage?.og_image,
+        og_image: null,
         og_image_url: homepage?.og_image
             ? `/storage/${homepage.og_image}`
             : null,
         image_alt: homepage?.image_alt || null,
+        banner_image_old: homepage?.banner_image,
+        og_image_old: homepage?.og_image
     });
 
     const handleSubmit = (e: React.FormEvent) => {
