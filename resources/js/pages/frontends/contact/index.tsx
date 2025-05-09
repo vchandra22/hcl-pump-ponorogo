@@ -15,7 +15,9 @@ interface SocialMediaData {
 interface ContactProps {
     social_media: SocialMediaData[];
 }
-export default function Contact({ contacts = {}, social_media, base_url = '' }: ContactProps) { // Removed flash prop
+
+export default function Contact({ contacts = {}, social_media, base_url = '' }: ContactProps) {
+    // Removed flash prop
     const contactData = Array.isArray(contacts) ? contacts[0] : contacts;
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -45,28 +47,28 @@ export default function Contact({ contacts = {}, social_media, base_url = '' }: 
 
     return (
         <>
-            <Head title={"Kontak Kami"}>
-                <meta
-                    name="title"
-                    content={contactData?.meta?.meta_title ?? "Kontak Kami"}
-                />
+            <Head title={'Kontak Kami'}>
+                <meta name="title" content={contactData?.meta?.meta_title ?? 'Kontak Kami'} />
                 <meta
                     name="description"
-                    content={contactData?.meta?.meta_description ?? "Hubungi HCL Pump Ponorogo untuk informasi produk, layanan, dan konsultasi pompa industri terpercaya."}
+                    content={
+                        contactData?.meta?.meta_description ??
+                        'Hubungi HCL Pump Ponorogo untuk informasi produk, layanan, dan konsultasi pompa industri terpercaya.'
+                    }
                 />
                 <meta
                     name="keywords"
-                    content={contactData?.meta?.meta_keywords ?? "kontak HCL Pump, Ponorogo, layanan pelanggan, konsultasi pompa, informasi produk"}
+                    content={contactData?.meta?.meta_keywords ?? 'kontak HCL Pump, Ponorogo, layanan pelanggan, konsultasi pompa, informasi produk'}
                 />
 
                 {/* Meta untuk Open Graph dan SEO */}
-                <meta
-                    property="og:title"
-                    content={contactData?.meta?.meta_title ?? "Kontak Kami"}
-                />
+                <meta property="og:title" content={contactData?.meta?.meta_title ?? 'Kontak Kami'} />
                 <meta
                     property="og:description"
-                    content={contactData?.meta?.meta_description ?? "Hubungi HCL Pump Ponorogo untuk informasi produk, layanan, dan konsultasi pompa industri terpercaya."}
+                    content={
+                        contactData?.meta?.meta_description ??
+                        'Hubungi HCL Pump Ponorogo untuk informasi produk, layanan, dan konsultasi pompa industri terpercaya.'
+                    }
                 />
                 <meta property="og:image" content={`${base_url}/asset/logo-hcl-pump-ponorogo.png`} />
                 <meta property="og:url" content={`${base_url}${location.pathname}`} />
@@ -112,16 +114,24 @@ export default function Contact({ contacts = {}, social_media, base_url = '' }: 
                             <div className="flex items-center space-x-8">
                                 <PhoneIcon />
                                 <a
-                                    href={`https://wa.me/${contactData.phone}`} target={'_blank'}
+                                    href={`https://wa.me/${contactData.phone}`}
+                                    target={'_blank'}
                                     className="font-regular text-text-color p-body-text-lg cursor-pointer hover:underline"
                                 >
                                     +{contactData.phone}
                                 </a>
                             </div>
-                            <div className="flex items-center space-x-8">
-                                <LocateIcon />
-                                <span className="font-regular text-text-color p-body-text-lg">{contactData.address}</span>
-                            </div>
+                            {contactData.address.split(',').map((alamat, index) => (
+                                <div className="flex items-center space-x-8">
+                                    <LocateIcon />
+                                    <div className="flex flex-col">
+                                            <span key={index} className="font-regular text-text-color p-body-text-lg">
+                                                {alamat.trim()}
+                                            </span>
+                                    </div>
+                                </div>
+                            ))
+                            }
                             <div className="flex items-center space-x-8">
                                 <ClockIcon />
                                 <span className="font-regular text-text-color p-body-text-lg">{contactData.business_hours}</span>
@@ -231,7 +241,7 @@ export default function Contact({ contacts = {}, social_media, base_url = '' }: 
                 </div>
             </section>
 
-            <Footer social_media={social_media}  />
+            <Footer social_media={social_media} />
         </>
     );
 }
