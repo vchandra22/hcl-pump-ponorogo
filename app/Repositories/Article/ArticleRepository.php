@@ -4,6 +4,7 @@ namespace App\Repositories\Article;
 
 use App\Models\ArticleModel;
 use App\Models\HomepageModel;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ArticleRepository implements ArticleRepositoryInterface
 {
@@ -45,5 +46,18 @@ class ArticleRepository implements ArticleRepositoryInterface
     public function findBySlug($slug)
     {
         return $this->model->with('meta')->where('slug', $slug)->first();
+    }
+
+    public function paginate(
+        int $perPage = 4,
+        array $columns = ['*'],
+        string $pageName = 'page',
+        int|null $page = null
+    ): LengthAwarePaginator {
+        return $this->model->query()
+            ->select($columns)
+            ->with('meta')
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage, $columns, $pageName, $page);
     }
 }

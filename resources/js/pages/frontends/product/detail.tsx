@@ -99,9 +99,9 @@ export default function ProductDetail({ product, products, social_media_link, so
                             <p className="h3">Info: </p>
                             <div className="p-body-text-lg prose mb-10" dangerouslySetInnerHTML={{ __html: sanitizedInfoContent }}></div>
                         </div>
-                        <Link href={social_media_link} target={"_blank"} className="bg-primary-color rounded-3xl p-2 px-5 text-white">
+                        <a href={social_media_link} target={"_blank"} className="bg-primary-color rounded-3xl p-2 px-5 text-white">
                             Beli Sekarang
-                        </Link>
+                        </a>
                     </div>
                 </div>
             </section>

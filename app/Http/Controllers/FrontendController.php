@@ -66,7 +66,11 @@ class FrontendController extends Controller
     public function article(AboutService $aboutService, ArticleService $articleService, SocialMediaService $socialMediaService)
     {
         $about = $aboutService->getAllAbout();
-        $articles = $articleService->getAllArticles();
+        $articles = $articleService->getPaginatedArticles(
+            perPage: 4,
+            columns: ['id', 'title', 'slug', 'summary', 'content', 'image_article', 'author', 'meta_id', 'created_at'], // Select specific columns
+            pageName: 'articles_page'
+        );
         $socialMedia = $socialMediaService->getAllSocialMedia();
 
         return Inertia::render('frontends/article/index', [

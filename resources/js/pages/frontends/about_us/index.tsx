@@ -128,7 +128,13 @@ export default function AboutUsIndex({ about, product, social_media, social_medi
             </section>
 
             <section className="my-15 px-4 md:px-12">
-                <img src={companyImage} width="100" height="100" className="mx-auto h-full min-h-52 w-full overflow-hidden object-cover" alt={aboutData.meta.image_alt ?? 'HCL Pump Ponorogo'} />
+                <img
+                    src={companyImage}
+                    width="100"
+                    height="100"
+                    className="mx-auto h-full min-h-52 w-full overflow-hidden object-fit"
+                    alt="Company Image"
+                />
             </section>
 
             <section>

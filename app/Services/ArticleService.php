@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\ArticleModel;
 use App\Repositories\Article\ArticleRepository;
 use App\Repositories\Meta\MetaRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -159,5 +161,19 @@ class ArticleService
             DB::rollBack();
             throw $e;
         }
+    }
+
+    public function getPaginatedArticles(
+        int $perPage = 10,
+        array $columns = ['*'],
+        string $pageName = 'page',
+        int|null $page = null
+    ): LengthAwarePaginator {
+        return $this->articleRepository->paginate(
+            $perPage,
+            $columns,
+            $pageName,
+            $page
+        );
     }
 }

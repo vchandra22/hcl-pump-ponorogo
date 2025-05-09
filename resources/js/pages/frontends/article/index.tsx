@@ -3,6 +3,7 @@ import Navigasi from '@/components/navigasi';
 import { Head, Link } from '@inertiajs/react';
 import Footer from '@/components/footer';
 import CtaComponent from '@/components/custom/CtaComponent';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 
 interface AboutData {
     image_company?: string;
@@ -18,6 +19,14 @@ interface ArticleItem {
     slug: string;
 }
 
+interface PaginatedArticles {
+    data: ArticleItem[];
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+}
+
 interface SocialMediaData {
     id: string;
     icon_social_media: string;
@@ -27,16 +36,36 @@ interface SocialMediaData {
 }
 interface ArticleProps {
     about?: AboutData[];
-    articles?: ArticleItem[];
+    articles?: PaginatedArticles;
     social_media: SocialMediaData[];
     base_url?: string;
 }
 
-export default function Article({ about = [], articles = [], social_media, base_url = '' }: ArticleProps) {
+export default function Article({ about = [], articles = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, social_media, base_url = '' }: ArticleProps) {
     const aboutData = about[0] || {};
     const companyImage = aboutData.image_company
         ? `/storage/${aboutData.image_company}`
         : '/asset/gambar-perusahaan.png';
+
+    const getVisiblePages = () => {
+        const visiblePages = [];
+        const totalPages = articles.last_page;
+        const currentPage = articles.current_page;
+        const maxVisible = 5; // Maximum visible page numbers
+
+        let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+        let end = Math.min(totalPages, start + maxVisible - 1);
+
+        if (end - start + 1 < maxVisible) {
+            start = Math.max(1, end - maxVisible + 1);
+        }
+
+        for (let i = start; i <= end; i++) {
+            visiblePages.push(i);
+        }
+
+        return visiblePages;
+    };
 
     return (
         <>
@@ -91,7 +120,7 @@ export default function Article({ about = [], articles = [], social_media, base_
                     src={companyImage}
                     width="100"
                     height="100"
-                    className="mx-auto h-full min-h-52 w-full overflow-hidden object-cover"
+                    className="mx-auto h-full min-h-52 w-full overflow-hidden object-fit"
                     alt="Company Image"
                 />
             </section>
@@ -107,8 +136,8 @@ export default function Article({ about = [], articles = [], social_media, base_
             </section>
 
             <section className="w-full px-4 md:px-12 mx-auto">
-                {articles.length > 0 ? (
-                    articles.map((article) => (
+                {articles.data.length > 0 ? (
+                    articles.data.map((article) => (
                         <ArticleCard
                             key={article.id}
                             img={`/storage/${article.image_article}`}
@@ -124,11 +153,45 @@ export default function Article({ about = [], articles = [], social_media, base_
                     <p className="text-center text-gray-500 py-12">Belum ada artikel yang tersedia.</p>
                 )}
 
-                {articles.length > 0 && (
-                    <div className="text-primary-color flex items-center justify-center py-12">
-                        <Link href="#" as="button" preserveScroll className="cursor-pointer text-lg hover:underline md:text-2xl">
-                            Lihat Artikel Lainnya
-                        </Link>
+                {articles.data.length > 0 && (
+                    <div className="py-12">
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious
+                                        href={`/artikel?page=${articles.current_page - 1}`}
+                                        preserveScroll
+                                        className={articles.current_page <= 1 ? 'pointer-events-none opacity-50' : ''}
+                                    />
+                                </PaginationItem>
+
+                                {getVisiblePages().map((page) => (
+                                    <PaginationItem key={page}>
+                                        <PaginationLink
+                                            href={`/artikel?page=${page}`}
+                                            preserveScroll
+                                            isActive={page === articles.current_page}
+                                        >
+                                            {page}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                ))}
+
+                                <PaginationItem>
+                                    <PaginationNext
+                                        href={`/artikel?page=${articles.current_page + 1}`}
+                                        preserveScroll
+                                        className={articles.current_page >= articles.last_page ? 'pointer-events-none opacity-50' : ''}
+                                    />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+
+                        <div className="text-primary-color flex items-center justify-center mt-4">
+                            <p className="text-sm text-gray-600">
+                                Menampilkan halaman {articles.current_page} dari {articles.last_page} (Total {articles.total} artikel)
+                            </p>
+                        </div>
                     </div>
                 )}
             </section>

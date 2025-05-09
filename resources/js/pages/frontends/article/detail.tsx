@@ -19,7 +19,7 @@ interface ArticleDetailProps {
         created_at: string;
         author: string;
         image_article?: string;
-        shortDescription: string;
+        summary: string;
         meta: {
             meta_title: string;
             meta_description: string;
@@ -32,11 +32,12 @@ interface ArticleDetailProps {
         title: string;
         slug: string;
         image_article?: string;
-        short_description?: string;
+        summary?: string;
         author: string;
         date: string;
     }[];
     social_media: SocialMediaData[];
+    base_url?: string;
 }
 
 const formatDate = (dateString: string) => {
@@ -101,7 +102,7 @@ export default function ArticleDetail({ article, listArticle, social_media, base
                 <div className="bg-secondary-color/60 absolute top-0 left-0 z-10 h-full w-full"></div>
                 <div className="relative z-20 w-full mx-auto px-4">
                     <div className="mb-9 grid mx-auto px-8 w-full grid-cols-1 md:mb-0 lg:grid-cols-12">
-                        <div className="lg:col-span-4">
+                        <div className="lg:col-span-4 mb-4 md:mb-0">
                             <Link href="/artikel" prefetch={false}>
                                 <p className="group border text-md font-regular text-bg-color inline-flex h-9 items-center rounded-full px-6 py-3 hover:bg-gray-100 hover:text-gray-900">
                                     Kembali
@@ -119,7 +120,7 @@ export default function ArticleDetail({ article, listArticle, social_media, base
             </section>
 
             {/* Article Content */}
-            <section className="w-full py-12 px-4 md:px-12 md:py-24 lg:py-32">
+            <section className="w-full py-4 px-4 md:px-12 md:py-8 lg:py-12">
                 {sanitizedContent ? (
                     <article
                         className="prose max-w-none text-text-color article-content"
@@ -151,7 +152,7 @@ export default function ArticleDetail({ article, listArticle, social_media, base
                                         alt={item.title}
                                         date={item.date}
                                         author={item.author}
-                                        shortDescription={item.short_description}
+                                        shortDescription={item.summary}
                                         href={`/artikel/${item.slug}`}
                                     />
                                 ))
