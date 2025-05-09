@@ -120,19 +120,15 @@ class SocialMediaController extends Controller
             'social_media_link'
         ]);
 
-        if ($request->hasFile('icon_social_media')) {
+        if ($request['icon_social_media']) {
             if ($socialMedia->icon_social_media && Storage::disk('public')->exists($socialMedia->icon_social_media)) {
                 Storage::disk('public')->delete($socialMedia->icon_social_media);
             }
 
             $data['icon_social_media'] = $request->file('icon_social_media')->store('social-media', 'public');
-        } elseif ($request->input('keep_image') === 'false') {
-            if ($socialMedia->icon_social_media && Storage::disk('public')->exists($socialMedia->icon_social_media)) {
-                Storage::disk('public')->delete($socialMedia->icon_social_media);
-            }
-            $data['icon_social_media'] = null;
-        }
-
+        } 
+        
+        $data['icon_social_media'] = $request['icon_social_media'] ? $data['icon_social_media'] : $request['icon_social_media_old'];
 
         $this->socialMediaService->updateSocialMedia($id, $data);
 

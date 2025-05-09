@@ -58,18 +58,20 @@ export default function AboutForm({ about, errors }: AboutFormProps) {
     const { data, setData, post, processing } = useForm({
         title: about?.title || '',
         description: about?.description || '',
-        image_company: about?.image_company,
+        image_company: null,
         image_company_url: about?.image_company
             ? `/storage/${about.image_company}`
             : null,
         meta_title: about?.meta_title || null,
         meta_description: about?.meta_description || null,
         meta_keywords: about?.meta_keywords || null,
-        og_image: about?.og_image,
+        og_image: null,
         og_image_url: about?.og_image
             ? `/storage/${about.og_image}`
             : null,
         image_alt: about?.image_alt || null,
+        og_image_old: about?.og_image,
+        image_company_old: about?.image_company
     });
 
     const handleSubmit = (e: React.FormEvent) => {

@@ -69,11 +69,12 @@ export default function ContactForm({ contact, errors }: ContactFormProps) {
         meta_title: contact?.meta_title || '',
         meta_description: contact?.meta_description || '',
         meta_keywords: contact?.meta_keywords || '',
-        og_image: contact?.og_image,
+        og_image: null,
         og_image_url: contact?.og_image
             ? `/storage/${contact.og_image}`
             : null,
         image_alt: contact?.image_alt || '',
+        og_image_old: contact?.og_image
     });
 
     const handleSubmit = (e: React.FormEvent) => {
