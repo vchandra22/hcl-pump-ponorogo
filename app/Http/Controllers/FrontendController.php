@@ -56,7 +56,7 @@ class FrontendController extends Controller
     public function product(SocialMediaService $socialMediaService)
     {
         $product = $this->product_service->getAllProducts();
-        $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
         $address = SocialMediaModel::where('platform', 'address')->get();
         $sendAddress = $address->pluck('title')->toArray();
@@ -78,7 +78,7 @@ class FrontendController extends Controller
             columns: ['id', 'title', 'slug', 'summary', 'content', 'image_article', 'author', 'meta_id', 'created_at'], // Select specific columns
             pageName: 'articles_page'
         );
-        $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $address = SocialMediaModel::where('platform', 'address')->get();
         $sendAddress = $address->pluck('title')->toArray();
 
@@ -96,7 +96,7 @@ class FrontendController extends Controller
     {
         $about = $aboutService->getAllAbout();
         $product = $productService->getFeaturedProducts();
-        $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->firstOrFail();
         $address = SocialMediaModel::where('platform', 'address')->get();
         $sendAddress = $address->pluck('title')->toArray();
@@ -115,7 +115,7 @@ class FrontendController extends Controller
     {
         $article = $articleService->getArticleBySlug($slug);
         $listArticle = $articleService->getAllArticles();
-        $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $address = SocialMediaModel::where('platform', 'address')->get();
         $sendAddress = $address->pluck('title')->toArray();
 
@@ -131,7 +131,7 @@ class FrontendController extends Controller
     public function contact(ContactService $contactService, SocialMediaService $socialMediaService)
     {
         $contacts = $contactService->getAllContacts();
-        $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $address = SocialMediaModel::where('platform', 'address')->get();
         $sendAddress = $address->pluck('title')->toArray();
 
@@ -176,7 +176,7 @@ class FrontendController extends Controller
         try {
             $product = $this->product_service->getProductBySlug($slug);
             $products = $this->product_service->getAllProducts();
-            $socialMedia = $socialMediaService->getAllSocialMedia();
+            $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
             $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
             $address = SocialMediaModel::where('platform', 'address')->get();
             $sendAddress = $address->pluck('title')->toArray();
@@ -200,7 +200,7 @@ class FrontendController extends Controller
     public function termsCondition(TermsConditionService $termsConditionService, SocialMediaService $socialMediaService)
     {
         $termsCondition = $termsConditionService->getAllTermsCondition();
-        $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $address = SocialMediaModel::where('platform', 'address')->get();
         $sendAddress = $address->pluck('title')->toArray();
 
@@ -215,7 +215,7 @@ class FrontendController extends Controller
     public function privacyPolicy(PrivacyPolicyService $privacyPolicyService, SocialMediaService $socialMediaService)
     {
         $privacyPolicy = $privacyPolicyService->getAllPrivacyPolicy();
-        $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $address = SocialMediaModel::where('platform', 'address')->get();
         $sendAddress = $address->pluck('title')->toArray();
 
@@ -230,10 +230,10 @@ class FrontendController extends Controller
     public function disclaimer(DisclaimerService $disclaimerService, SocialMediaService $socialMediaService)
     {
         $disclaimer = $disclaimerService->getAllDisclaimer();
-        $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $address = SocialMediaModel::where('platform', 'address')->get();
         $sendAddress = $address->pluck('title')->toArray();
-        
+
         return Inertia::render('frontends/disclaimer/index', [
             'disclaimer' => $disclaimer,
             'social_media' => $socialMedia,
