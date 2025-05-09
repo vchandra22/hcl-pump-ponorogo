@@ -127,16 +127,14 @@ class DisclaimerController extends Controller
         ]);
 
         // Handle og_image
-        if ($request->hasFile('og_image')) {
+        if ($request['og_image']) {
             if ($disclaimer->meta->og_image && Storage::disk('public')->exists($disclaimer->meta->og_image)) {
                 Storage::disk('public')->delete($disclaimer->meta->og_image);
             }
             $data['og_image'] = $request->file('og_image')->store('disclaimer/og', 'public');
-        } elseif ($request->input('keep_og_image') === 'true') {
-            $data['og_image'] = $disclaimer->meta->og_image;
-        } else {
-            $data['og_image'] = null;
         }
+
+        $data['og_image'] = $request['og_image'] ? $data['og_image'] : $request['og_image_old'];
 
         $this->disclaimerService->updateDisclaimerWithMeta($id, $data);
 

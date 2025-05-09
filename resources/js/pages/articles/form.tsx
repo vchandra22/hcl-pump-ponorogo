@@ -62,11 +62,11 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
         title: article?.title || '',
         summary: article?.summary || '',
         content: article?.content || '',
-        image_article: article?.image_article,
+        image_article: null,
         image_article_url: article?.image_article
             ? `/storage/${article.image_article}`
             : null,
-        og_image: article?.og_image,
+        og_image: null,
         og_image_url: article?.og_image
             ? `/storage/${article.og_image}`
             : null,
@@ -76,6 +76,8 @@ export default function ArticleForm({ article, errors }: ArticleFormProps) {
         image_alt: article?.image_alt || '',
         keep_image_article: 'true',
         keep_og_image: 'true',
+        image_article_url_old: article?.image_article,
+        og_image_old: article?.og_image
     });
 
     const handleSubmit = (e: React.FormEvent) => {

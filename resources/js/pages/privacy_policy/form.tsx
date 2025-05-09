@@ -57,11 +57,12 @@ export default function PrivacyPolicyForm({ privacyPolicy, errors }: PrivacyPoli
         meta_title: privacyPolicy?.meta_title || null,
         meta_description: privacyPolicy?.meta_description || null,
         meta_keywords: privacyPolicy?.meta_keywords || null,
-        og_image: privacyPolicy?.og_image,
+        og_image: null,
         og_image_url: privacyPolicy?.og_image
             ? `/storage/${privacyPolicy.og_image}`
             : null,
         image_alt: privacyPolicy?.image_alt || null,
+        og_image_old: privacyPolicy?.og_image
     });
 
     const handleSubmit = (e: React.FormEvent) => {

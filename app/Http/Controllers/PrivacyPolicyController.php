@@ -129,16 +129,14 @@ class PrivacyPolicyController extends Controller
         ]);
 
         // Handle og_image
-        if ($request->hasFile('og_image')) {
+        if ($request['og_image']) {
             if ($privacyPolicy->meta->og_image && Storage::disk('public')->exists($privacyPolicy->meta->og_image)) {
                 Storage::disk('public')->delete($privacyPolicy->meta->og_image);
             }
             $data['og_image'] = $request->file('og_image')->store('privacy-policy/og', 'public');
-        } elseif ($request->input('keep_og_image') === 'true') {
-            $data['og_image'] = $privacyPolicy->meta->og_image;
-        } else {
-            $data['og_image'] = null;
         }
+
+        $data['og_image'] = $request['og_image'] ? $data['og_image'] : $request['og_image_old'];
 
         $this->privacyPolicyService->updatePrivacyPolicyWithMeta($id, $data);
 

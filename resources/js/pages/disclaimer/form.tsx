@@ -57,11 +57,12 @@ export default function DisclaimerForm({ disclaimer, errors }: DisclaimerFormPro
         meta_title: disclaimer?.meta_title || null,
         meta_description: disclaimer?.meta_description || null,
         meta_keywords: disclaimer?.meta_keywords || null,
-        og_image: disclaimer?.og_image,
+        og_image: null,
         og_image_url: disclaimer?.og_image
             ? `/storage/${disclaimer.og_image}`
             : null,
         image_alt: disclaimer?.image_alt || null,
+        og_image_old: disclaimer?.og_image
     });
 
     const handleSubmit = (e: React.FormEvent) => {

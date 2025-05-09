@@ -124,6 +124,8 @@ class ArticleController extends Controller
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string',
             'image_alt' => 'nullable|string',
+            'image_article_old' => 'nullable|string',
+            'og_image_old' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -139,29 +141,25 @@ class ArticleController extends Controller
             'meta_title', 'meta_description', 'meta_keywords', 'image_alt'
         ]);
 
-        // Handle image_article
-        if ($request->hasFile('image_article')) {
+        // handle banner image
+        if ($request['image_article']) {
             if ($article->image_article && Storage::disk('public')->exists($article->image_article)) {
                 Storage::disk('public')->delete($article->image_article);
             }
-            $data['image_article'] = $request->file('image_article')->store('articles/content', 'public');
-        } elseif ($request->input('keep_image') === 'true') {
-            $data['image_article'] = $article->image_article;
-        } else {
-            $data['image_article'] = null;
+            $data['image_article'] = $request->file('image_article')->store('article', 'public');
         }
 
-        // Handle og_image
-        if ($request->hasFile('og_image')) {
+        // handle og image
+        if ($request['og_image']) {
             if ($article->meta->og_image && Storage::disk('public')->exists($article->meta->og_image)) {
                 Storage::disk('public')->delete($article->meta->og_image);
             }
-            $data['og_image'] = $request->file('og_image')->store('articles/og', 'public');
-        } elseif ($request->input('keep_og_image') === 'true') {
-            $data['og_image'] = $article->meta->og_image;
-        } else {
-            $data['og_image'] = null;
+            $data['og_image'] = $request->file('og_image')->store('article/og', 'public');
         }
+
+        $data['image_article'] = $request['image_article'] ? $data['image_article'] : $request['image_article_old'];
+
+        $data['og_image'] = $request['og_image'] ? $data['og_image'] : $request['og_image_old'];
 
         // Update article
         $this->articleService->updateArticleWithMeta($id, $data);
