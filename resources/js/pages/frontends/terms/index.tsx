@@ -11,11 +11,15 @@ interface SocialMediaData {
     social_media_link: string;
 }
 
+interface addressData {
+    address: string[];
+}
 interface TermsConditionIndexProps {
     social_media: SocialMediaData[];
+    addressData?: addressData[];
 }
 
-export default function FrontendTermsIndex({ terms_condition = {}, social_media, base_url = '' }: TermsConditionIndexProps) {
+export default function FrontendTermsIndex({ terms_condition = {}, social_media, base_url = '' ,addressData}: TermsConditionIndexProps) {
 
     const termsConditionData = Array.isArray(terms_condition) ? terms_condition[0] : terms_condition;
 
@@ -89,7 +93,7 @@ export default function FrontendTermsIndex({ terms_condition = {}, social_media,
                 <div className="text-text-color"></div>
             </section>
 
-            <Footer social_media={social_media}  />
+            <Footer social_media={social_media}  address={addressData}/>
         </>
     );
 }

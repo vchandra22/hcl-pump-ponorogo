@@ -1,11 +1,11 @@
-import Navigasi from '@/components/navigasi';
-import { Head, Link } from '@inertiajs/react';
-import Footer from '@/components/footer';
-import ProductCard from '@/components/custom/ProductCard';
 import ArticleCard from '@/components/custom/ArticleCard';
-import DOMPurify from 'dompurify';
-import formatDate from '@/utils/formatDate';
 import CtaComponent from '@/components/custom/CtaComponent';
+import ProductCard from '@/components/custom/ProductCard';
+import Footer from '@/components/footer';
+import Navigasi from '@/components/navigasi';
+import formatDate from '@/utils/formatDate';
+import { Head, Link } from '@inertiajs/react';
+import DOMPurify from 'dompurify';
 
 interface HomepageData {
     id: string;
@@ -18,7 +18,7 @@ interface HomepageData {
         meta_keywords: string;
         og_image?: string;
         image_alt?: string;
-    }
+    };
 }
 
 interface ProductData {
@@ -30,9 +30,12 @@ interface ProductData {
     };
     meta: {
         image_alt?: string;
-    }
+    };
 }
 
+interface addressData {
+    address: string[];
+}
 interface ArticleData {
     id: string;
     title: string;
@@ -51,6 +54,7 @@ interface SocialMediaData {
     platform: string;
     title: string;
     social_media_link: string;
+    address: string[];
 }
 
 interface ReasonData {
@@ -66,57 +70,57 @@ interface HomepageProps {
     social_media: SocialMediaData[];
     reason_service?: ReasonData[];
     base_url?: string;
+    addressData?: addressData[];
 }
 
 export default function Beranda({
-                                    homepage = [],
-                                    product = [],
-                                    articles = [],
-                                    social_media = [],
-                                    reason_service = [],
-                                    base_url = ''
-                                }: HomepageProps) {
+    homepage = [],
+    product = [],
+    articles = [],
+    social_media = [],
+    reason_service = [],
+    base_url = '',
+    addressData = [],
+}: HomepageProps) {
     const homepageData = homepage[0] || {};
     const bannerImage = homepageData.banner_image ? `/storage/${homepageData.banner_image}` : '/asset/gambar-banner.png';
     const sanitizedContent = homepageData.description ? DOMPurify.sanitize(homepageData.description) : '';
-
+// console.log(addressData)
     // Fallback reasons data
     const fallbackReasons = [
         {
             id: 'fallback-1',
             title: 'Harga Terjangkau',
-            description: 'Kami menawarkan solusi pompa berkualitas tinggi dengan harga yang kompetitif, memastikan Anda mendapatkan nilai terbaik untuk investasi Anda.'
+            description:
+                'Kami menawarkan solusi pompa berkualitas tinggi dengan harga yang kompetitif, memastikan Anda mendapatkan nilai terbaik untuk investasi Anda.',
         },
         {
             id: 'fallback-2',
             title: 'Kualitas Tinggi',
-            description: 'Produk kami, termasuk pompa celup (submersible) dan berbagai jenis pompa lainnya, telah meraih sertifikat SNI, menjamin kualitas dan keandalan yang telah teruji.'
+            description:
+                'Produk kami, termasuk pompa celup (submersible) dan berbagai jenis pompa lainnya, telah meraih sertifikat SNI, menjamin kualitas dan keandalan yang telah teruji.',
         },
         {
             id: 'fallback-3',
             title: 'Bergaransi',
-            description: 'Kami memberikan garansi pada setiap produk kami, memberikan Anda ketenangan pikiran dan kepercayaan pada performa pompa kami.'
+            description:
+                'Kami memberikan garansi pada setiap produk kami, memberikan Anda ketenangan pikiran dan kepercayaan pada performa pompa kami.',
         },
         {
             id: 'fallback-4',
             title: 'Konsultasi Gratis',
-            description: 'Butuh bantuan untuk memilih pompa yang tepat? Tim ahli kami siap memberikan konsultasi gratis untuk memastikan Anda mendapatkan solusi yang sesuai dengan kebutuhan Anda.'
-        }
+            description:
+                'Butuh bantuan untuk memilih pompa yang tepat? Tim ahli kami siap memberikan konsultasi gratis untuk memastikan Anda mendapatkan solusi yang sesuai dengan kebutuhan Anda.',
+        },
     ];
 
     // Combine API reasons with fallback if needed
-    const displayedReasons = [
-        ...reason_service,
-        ...fallbackReasons.slice(reason_service.length)
-    ].slice(0, 4);
+    const displayedReasons = [...reason_service, ...fallbackReasons.slice(reason_service.length)].slice(0, 4);
 
     return (
         <>
             <Head title="Beranda">
-                <meta
-                    name="title"
-                    content={`${homepageData.meta?.meta_title ?? 'Beranda - HCL Pump Ponorogo'}`}
-                />
+                <meta name="title" content={`${homepageData.meta?.meta_title ?? 'Beranda - HCL Pump Ponorogo'}`} />
                 <meta
                     name="description"
                     content={
@@ -126,15 +130,10 @@ export default function Beranda({
                 />
                 <meta
                     name="keywords"
-                    content={
-                        `${homepageData.meta?.meta_keywords ?? 'pompa air, HCL Pump, pompa industri'}, distributor pompa, pompa sumur dalam, pompa submersible`
-                    }
+                    content={`${homepageData.meta?.meta_keywords ?? 'pompa air, HCL Pump, pompa industri'}, distributor pompa, pompa sumur dalam, pompa submersible`}
                 />
 
-                <meta
-                    property="og:title"
-                    content={`${homepageData.meta?.meta_title ?? 'Beranda - HCL Pump Ponorogo'}`}
-                />
+                <meta property="og:title" content={`${homepageData.meta?.meta_title ?? 'Beranda - HCL Pump Ponorogo'}`} />
                 <meta
                     property="og:description"
                     content={
@@ -174,20 +173,17 @@ export default function Beranda({
                     <div className="lg:max-w-2/3">
                         <div className="flex flex-col justify-center space-y-4">
                             <div className="space-y-2">
-                                <h1 className="text-bg-color text-center text-xl h1 font-bold tracking-tighter sm:text-5xl lg:text-start xl:text-6xl/none">
+                                <h1 className="text-bg-color h1 text-center text-xl font-bold tracking-tighter sm:text-5xl lg:text-start xl:text-6xl/none">
                                     {homepageData.title || 'HCL – Pilihan Cerdas untuk Pompa Air yang Mengalir Tanpa Henti'}
                                 </h1>
 
                                 {sanitizedContent ? (
-                                    <div
-                                        className="max-w-none force-white"
-                                        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-                                    />
+                                    <div className="force-white max-w-none" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
                                 ) : (
                                     <div className="force-white max-w-none">
-                                        HCL Water Pump hadir sebagai solusi terbaik untuk Anda yang membutuhkan pompa air dengan performa tangguh dan daya
-                                        tahan luar biasa. Dengan teknologi modern dan material berkualitas, pompa HCL mampu bekerja terus-menerus tanpa
-                                        mudah panas atau macet. Cocok untuk kebutuhan rumah tangga, industri, hingga pertanian.
+                                        HCL Water Pump hadir sebagai solusi terbaik untuk Anda yang membutuhkan pompa air dengan performa tangguh dan
+                                        daya tahan luar biasa. Dengan teknologi modern dan material berkualitas, pompa HCL mampu bekerja terus-menerus
+                                        tanpa mudah panas atau macet. Cocok untuk kebutuhan rumah tangga, industri, hingga pertanian.
                                     </div>
                                 )}
                             </div>
@@ -199,10 +195,10 @@ export default function Beranda({
             {/* Why Choose Us Section */}
             <section className="w-full py-12 md:px-6 md:py-24 lg:py-32">
                 <div className="mx-auto px-4 md:px-6">
-                    <div className="grid w-full grid-cols-1 mb-9 md:mb-0 lg:grid-cols-12">
+                    <div className="mb-9 grid w-full grid-cols-1 md:mb-0 lg:grid-cols-12">
                         <div className="lg:col-span-4">
                             <div className="w-full">
-                                <h2 className="text-primary-color font-regular pb-2 h2">Mengapa memilih kami?</h2>
+                                <h2 className="text-primary-color font-regular h2 pb-2">Mengapa memilih kami?</h2>
                             </div>
                         </div>
                         <div className="lg:col-span-8">
@@ -236,13 +232,11 @@ export default function Beranda({
                             <div className="mx-auto grid w-full grid-cols-1 lg:grid-cols-12">
                                 <div className="hidden lg:col-span-4 lg:block"></div>
                                 <div className="col-span-8">
-                                    <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-4 xl:gap-8">
+                                    <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:gap-8">
                                         {displayedReasons.map((reason) => (
                                             <div key={reason.id} className="w-full px-8 py-2">
-                                                <p className="text-primary-color pb-4 h2">{reason.title}</p>
-                                                <p className="font-regular text-text-color text-start h3">
-                                                    {reason.description}
-                                                </p>
+                                                <p className="text-primary-color h2 pb-4">{reason.title}</p>
+                                                <p className="font-regular text-text-color h3 text-start">{reason.description}</p>
                                             </div>
                                         ))}
                                     </div>
@@ -259,14 +253,12 @@ export default function Beranda({
                     <div className="grid w-full grid-cols-1 pb-8 md:pb-12 lg:grid-cols-12">
                         <div className="lg:col-span-4">
                             <div className="w-fulsl">
-                                <h2 className="text-primary-color font-regular pb-2 h2">Update Artikel</h2>
+                                <h2 className="text-primary-color font-regular h2 pb-2">Update Artikel</h2>
                             </div>
                         </div>
                         <div className="lg:col-span-8">
                             <div className="w-full">
-                                <p className="text-text-color font-regular h1">
-                                    Update Lengkap Tentang Teknologi dan Solusi Pompa Air
-                                </p>
+                                <p className="text-text-color font-regular h1">Update Lengkap Tentang Teknologi dan Solusi Pompa Air</p>
                             </div>
                         </div>
                     </div>
@@ -285,12 +277,17 @@ export default function Beranda({
                             />
                         ))
                     ) : (
-                        <p className="text-center text-gray-500 py-12">Belum ada artikel yang tersedia.</p>
+                        <p className="py-12 text-center text-gray-500">Belum ada artikel yang tersedia.</p>
                     )}
 
                     {articles.length > 0 && (
                         <div className="text-primary-color flex items-center justify-center py-12">
-                            <Link onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} href="/artikel" preserveScroll className="cursor-pointer text-lg hover:underline md:text-2xl">
+                            <Link
+                                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                                href="/artikel"
+                                preserveScroll
+                                className="cursor-pointer text-lg hover:underline md:text-2xl"
+                            >
                                 Lihat Artikel Lainnya
                             </Link>
                         </div>
@@ -299,9 +296,9 @@ export default function Beranda({
             </section>
 
             {/* CTA Section */}
-            <CtaComponent href='/kontak'/>
+            <CtaComponent href="/kontak" />
 
-            <Footer social_media={social_media} />
+            <Footer social_media={social_media} address={addressData}/>
         </>
     );
 }

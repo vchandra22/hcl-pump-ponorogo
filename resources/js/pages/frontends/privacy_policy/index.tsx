@@ -12,10 +12,15 @@ interface SocialMediaData {
     social_media_link: string;
 }
 
+interface addressData {
+    address: string[];
+}
+
 interface PrivacyPolicyIndexProps {
     social_media: SocialMediaData[];
+    addressData?: addressData[];
 }
-export default function PrivacyPolicy({ privacy_policy = {}, social_media, base_url = '' }: PrivacyPolicyIndexProps) {
+export default function PrivacyPolicy({ privacy_policy = {}, social_media, base_url = '',addressData }: PrivacyPolicyIndexProps) {
 
     const privacyPolicyData = Array.isArray(privacy_policy) ? privacy_policy[0] : privacy_policy;
 
@@ -85,7 +90,7 @@ export default function PrivacyPolicy({ privacy_policy = {}, social_media, base_
                 <div className="text-text-color"></div>
             </section>
 
-            <Footer social_media={social_media}  />
+            <Footer social_media={social_media}  address={addressData} />
         </>
     );
 }

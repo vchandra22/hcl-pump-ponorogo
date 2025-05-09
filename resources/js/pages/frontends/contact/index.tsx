@@ -11,12 +11,15 @@ interface SocialMediaData {
     title: string;
     social_media_link: string;
 }
-
+interface addressData {
+    address: string[];
+}
 interface ContactProps {
     social_media: SocialMediaData[];
+    addressData?: addressData[];
 }
 
-export default function Contact({ contacts = {}, social_media, base_url = '' }: ContactProps) {
+export default function Contact({ contacts = {}, social_media, base_url = '' ,addressData}: ContactProps) {
     // Removed flash prop
     const contactData = Array.isArray(contacts) ? contacts[0] : contacts;
 
@@ -241,7 +244,7 @@ export default function Contact({ contacts = {}, social_media, base_url = '' }: 
                 </div>
             </section>
 
-            <Footer social_media={social_media} />
+            <Footer social_media={social_media} address={addressData}/>
         </>
     );
 }

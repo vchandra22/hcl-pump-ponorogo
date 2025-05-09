@@ -39,4 +39,8 @@ class SocialMediaRepository implements SocialMediaRepositoryInterface
     {
         return $this->model->findOrFail($id)->delete();
     }
+    public function getAllExceptAddress()
+    {
+        return $this->model->where('platform', '!=', 'address')->get();
+    }
 }

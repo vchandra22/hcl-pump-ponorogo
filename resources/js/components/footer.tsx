@@ -34,11 +34,13 @@ interface SocialMediaData {
 }
 
 interface FooterProps {
-    social_media: SocialMediaData[];
+    social_media: SocialMediaData[]; // Added address prop as optional
+    address: string[];
 }
 
-export default function Footer({ social_media }: FooterProps) {
-
+export default function Footer({ social_media, address }: FooterProps) {
+    // Get address data from social_media if it's not passed directly
+    // console.log('Address Data:', address);
     return (
         <footer className="w-full">
             <div className="bg-bg-color mx-auto border border-t-slate-200 px-4 md:px-6">
@@ -53,27 +55,39 @@ export default function Footer({ social_media }: FooterProps) {
                                 alt="HCL Pump Ponorogo"
                             />
                         </div>
-                        <div className="flex items-start space-x-2 px-8">
-                            <MapPin className="mt-1 hidden h-5 w-5 flex-shrink-0 lg:block" />
-                            <p className="text-text-color font-regular text text-center text-lg md:text-xl lg:text-start">
-                                Jl. Trunojoyo No. 88, Krajan, Mangkujayan, Kec. Ponorogo, Kabupaten Ponorogo, Jawa Timur 63413
-                            </p>
+                        <div className="flex flex-col space-y-2 px-8">
+                            {address && address.length > 0 ? (
+                                address.map((addr, i) => (
+                                    <div key={i} className="flex items-start space-x-2">
+                                        <MapPin className="mt-1 hidden h-5 w-5 flex-shrink-0 lg:block" />
+                                        <p className="text-text-color font-regular text text-lg md:text-xl lg:text-start">{addr}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>Alamat tidak tersedia</p>
+                            )}
                         </div>
                     </div>
 
                     {/* Social Media Links */}
                     <div className="flex flex-col items-center justify-start space-y-6">
-                        {social_media.map((media) => {
-                            const socialMediaIcon = media.icon_social_media ? `/storage/${media.icon_social_media}` : '/favicon.ico';
-                            return (
-                                <div key={media.id} className="flex items-center space-x-2">
-                                    <img src={socialMediaIcon} alt={media.platform} className="h-6 w-6" />
-                                    <a href={media.social_media_link} target="_blank" className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl">
-                                        {media.title}
-                                    </a>
-                                </div>
-                            );
-                        })}
+                        {social_media
+                            .filter((media) => media.platform !== 'address') // Filter out address entries from social media
+                            .map((media) => {
+                                const socialMediaIcon = media.icon_social_media ? `/storage/${media.icon_social_media}` : '/favicon.ico';
+                                return (
+                                    <div key={media.id} className="flex items-center space-x-2">
+                                        <img src={socialMediaIcon} alt={media.platform} className="h-6 w-6" />
+                                        <a
+                                            href={media.social_media_link}
+                                            target="_blank"
+                                            className="font-regular text-text-color cursor-pointer text-lg hover:underline md:text-xl"
+                                        >
+                                            {media.title}
+                                        </a>
+                                    </div>
+                                );
+                            })}
                     </div>
 
                     {/* Footer Links */}

@@ -16,6 +16,9 @@ interface SocialMediaData {
     social_media_link: string;
 }
 
+interface addressData {
+    address: string[];
+}
 interface SocialMediaLink {
     social_media_link: string;
 }
@@ -24,9 +27,10 @@ interface ProductDetailProps {
     products: Product[];
     social_media: SocialMediaData[];
     social_media_link: SocialMediaLink[];
+    addressData?: addressData[];
 }
 
-export default function ProductDetail({ product, products, social_media_link, social_media }: ProductDetailProps) {
+export default function ProductDetail({ product, products, social_media_link, social_media, addressData }: ProductDetailProps) {
     const {
         props: {
             ziggy: { url },
@@ -145,7 +149,7 @@ export default function ProductDetail({ product, products, social_media_link, so
                 href={social_media_link}
             />
 
-            <Footer social_media={social_media}  />
+            <Footer social_media={social_media} address={addressData} />
         </>
     );
 }

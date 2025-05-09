@@ -19,6 +19,10 @@ interface AboutData {
     };
 }
 
+interface addressData {
+    address: string[];
+}
+
 interface ProductData {
     id: string;
     title: string;
@@ -48,9 +52,10 @@ interface AboutProps {
     product?: ProductData[];
     social_media: SocialMediaData[];
     social_media_link: SocialMediaLink[];
+    addressData?: addressData[];
 }
 
-export default function AboutUsIndex({ about, product, social_media, social_media_link, base_url = '' }: AboutProps) {
+export default function AboutUsIndex({ about, product, social_media, social_media_link, base_url = '', addressData }: AboutProps) {
     const aboutData = about[0] || {};
     const companyImage = aboutData.image_company ? `/storage/${aboutData.image_company}` : '/asset/gambar-perusahaan.png';
 
@@ -241,7 +246,7 @@ export default function AboutUsIndex({ about, product, social_media, social_medi
                 href={social_media_link || '/kontak'}
             />
 
-            <Footer social_media={social_media}  />
+            <Footer social_media={social_media} address={addressData}  />
 
         </>
     );
