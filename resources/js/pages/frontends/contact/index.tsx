@@ -93,7 +93,7 @@ export default function Contact({ contacts = {}, social_media, base_url = '' ,ad
             </section>
 
             <section className="my-15 px-4 md:px-12">
-                <div className="h-full min-h-52 w-full flex gap-4 overflow-hidden" dangerouslySetInnerHTML={{ __html: contactData.gmaps_embed_code }} />
+                <div className="h-full min-h-52 w-full block md:flex gap-4 space-y-4  md:space-y-0 overflow-hidden" dangerouslySetInnerHTML={{ __html: contactData.gmaps_embed_code }} />
             </section>
 
             <section className="mx-auto my-15 w-full px-4 md:px-12">
