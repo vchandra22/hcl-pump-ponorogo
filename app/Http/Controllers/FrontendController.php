@@ -30,14 +30,17 @@ class FrontendController extends Controller
         $this->product_service = $product_service;
     }
 
-    public function home(ProductService $productService, ArticleService $articleService, ReasonService $reasonService, SocialMediaService $socialMediaService) {
+    public function home(ProductService $productService, ArticleService $articleService, ReasonService $reasonService, SocialMediaService $socialMediaService)
+    {
         $homepage = $this->homepageService->getAllHomepages();
         $product = $productService->getFeaturedProducts();
         $articles = $articleService->getAllArticles();
-        $socialMedia = $socialMediaService->getAllSocialMedia();
+        $socialMedia = $socialMediaService->getSocialMediaWithNoAddrees();
         $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
+        $address = SocialMediaModel::where('platform', 'address')->get();
+        $sendAddress = $address->pluck('title')->toArray();
+        // dd($sendaddress);    
         $reasonService = $reasonService->getAllReasons();
-
         return Inertia::render('frontends/index', [
             'homepage' => $homepage,
             'product' => $product,
@@ -46,6 +49,7 @@ class FrontendController extends Controller
             'social_media_link' => $socialMediaLink['social_media_link'],
             'reason_service' => $reasonService,
             'social_media' => $socialMedia,
+            'addressData' => $sendAddress,
         ]);
     }
 
@@ -54,12 +58,15 @@ class FrontendController extends Controller
         $product = $this->product_service->getAllProducts();
         $socialMedia = $socialMediaService->getAllSocialMedia();
         $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
+        $address = SocialMediaModel::where('platform', 'address')->get();
+        $sendAddress = $address->pluck('title')->toArray();
 
         return Inertia::render('frontends/product/index', [
             'products' => $product,
             'social_media' => $socialMedia,
             'social_media_link' => $socialMediaLink['social_media_link'],
-            'base_url' => url('/')
+            'base_url' => url('/'),
+            'addressData' => $sendAddress,
         ]);
     }
 
@@ -72,12 +79,16 @@ class FrontendController extends Controller
             pageName: 'articles_page'
         );
         $socialMedia = $socialMediaService->getAllSocialMedia();
+        $address = SocialMediaModel::where('platform', 'address')->get();
+        $sendAddress = $address->pluck('title')->toArray();
 
         return Inertia::render('frontends/article/index', [
             'about' => $about,
             'articles' => $articles,
             'social_media' => $socialMedia,
             'base_url' => url('/'),
+            'addressData' => $sendAddress,
+
         ]);
     }
 
@@ -87,6 +98,8 @@ class FrontendController extends Controller
         $product = $productService->getFeaturedProducts();
         $socialMedia = $socialMediaService->getAllSocialMedia();
         $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->firstOrFail();
+        $address = SocialMediaModel::where('platform', 'address')->get();
+        $sendAddress = $address->pluck('title')->toArray();
 
         return Inertia::render('frontends/about_us/index', [
             'about' => $about,
@@ -94,6 +107,7 @@ class FrontendController extends Controller
             'social_media' => $socialMedia,
             'social_media_link' => $socialMediaLink['social_media_link'],
             'base_url' => url('/'),
+            'addressData' => $sendAddress,
         ]);
     }
 
@@ -102,12 +116,15 @@ class FrontendController extends Controller
         $article = $articleService->getArticleBySlug($slug);
         $listArticle = $articleService->getAllArticles();
         $socialMedia = $socialMediaService->getAllSocialMedia();
+        $address = SocialMediaModel::where('platform', 'address')->get();
+        $sendAddress = $address->pluck('title')->toArray();
 
         return Inertia::render('frontends/article/detail', [
             'article' => $article,
             'listArticle' => $listArticle,
             'social_media' => $socialMedia,
             'base_url' => url('/'),
+            'addressData' => $sendAddress,
         ]);
     }
 
@@ -115,12 +132,15 @@ class FrontendController extends Controller
     {
         $contacts = $contactService->getAllContacts();
         $socialMedia = $socialMediaService->getAllSocialMedia();
+        $address = SocialMediaModel::where('platform', 'address')->get();
+        $sendAddress = $address->pluck('title')->toArray();
 
         return Inertia::render('frontends/contact/index', [
             'contacts' => $contacts,
             'social_media' => $socialMedia,
             'base_url' => url('/'),
             'status' => session('status'),
+            'addressData' => $sendAddress,
         ]);
     }
 
@@ -158,8 +178,10 @@ class FrontendController extends Controller
             $products = $this->product_service->getAllProducts();
             $socialMedia = $socialMediaService->getAllSocialMedia();
             $socialMediaLink = SocialMediaModel::where('platform', 'whatsapp')->first();
+            $address = SocialMediaModel::where('platform', 'address')->get();
+            $sendAddress = $address->pluck('title')->toArray();
 
-            if(!$product) {
+            if (!$product) {
                 abort(404, 'Produk tidak ditemukan.');
             }
 
@@ -168,6 +190,7 @@ class FrontendController extends Controller
                 'products' => $products,
                 'social_media' => $socialMedia,
                 'social_media_link' => $socialMediaLink['social_media_link'],
+                'addressData' => $sendAddress,
             ]);
         } catch (\Exception $err) {
             return back()->with('failed', 'Produk tidak ditemukan.');
@@ -178,11 +201,14 @@ class FrontendController extends Controller
     {
         $termsCondition = $termsConditionService->getAllTermsCondition();
         $socialMedia = $socialMediaService->getAllSocialMedia();
+        $address = SocialMediaModel::where('platform', 'address')->get();
+        $sendAddress = $address->pluck('title')->toArray();
 
         return Inertia::render('frontends/terms/index', [
             'terms_condition' => $termsCondition,
             'social_media' => $socialMedia,
             'base_url' => url('/'),
+            'addressData' => $sendAddress,
         ]);
     }
 
@@ -190,11 +216,14 @@ class FrontendController extends Controller
     {
         $privacyPolicy = $privacyPolicyService->getAllPrivacyPolicy();
         $socialMedia = $socialMediaService->getAllSocialMedia();
+        $address = SocialMediaModel::where('platform', 'address')->get();
+        $sendAddress = $address->pluck('title')->toArray();
 
         return Inertia::render('frontends/privacy_policy/index', [
             'privacy_policy' => $privacyPolicy,
             'social_media' => $socialMedia,
             'base_url' => url('/'),
+            'addressData' => $sendAddress,
         ]);
     }
 
@@ -202,11 +231,14 @@ class FrontendController extends Controller
     {
         $disclaimer = $disclaimerService->getAllDisclaimer();
         $socialMedia = $socialMediaService->getAllSocialMedia();
-
+        $address = SocialMediaModel::where('platform', 'address')->get();
+        $sendAddress = $address->pluck('title')->toArray();
+        
         return Inertia::render('frontends/disclaimer/index', [
             'disclaimer' => $disclaimer,
             'social_media' => $socialMedia,
             'base_url' => url('/'),
+            'addressData' => $sendAddress,
         ]);
     }
 }

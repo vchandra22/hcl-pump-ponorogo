@@ -20,6 +20,10 @@ class SocialMediaService
         return $this->SocialMediaRepository->all();
     }
 
+    public function getSocialMediaWithNoAddrees(){
+        return $this->SocialMediaRepository->getAllExceptAddress();
+    }
+
     public function getSocialMediaById($id)
     {
         return $this->SocialMediaRepository->find($id);

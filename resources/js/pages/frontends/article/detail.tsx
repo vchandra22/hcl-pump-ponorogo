@@ -12,6 +12,10 @@ interface SocialMediaData {
     title: string;
     social_media_link: string;
 }
+
+interface addressData {
+    address: string[];
+}
 interface ArticleDetailProps {
     article: {
         title: string;
@@ -38,6 +42,7 @@ interface ArticleDetailProps {
     }[];
     social_media: SocialMediaData[];
     base_url?: string;
+    addressData?: addressData[];
 }
 
 const formatDate = (dateString: string) => {
@@ -48,7 +53,7 @@ const formatDate = (dateString: string) => {
     });
 };
 
-export default function ArticleDetail({ article, listArticle, social_media, base_url = '' }: ArticleDetailProps) {
+export default function ArticleDetail({ article, listArticle, social_media, base_url = '' ,addressData}: ArticleDetailProps) {
     const coverImage = article.image_article
         ? `/storage/${article.image_article}`
         : '/asset/gambar-ilustrasi-artikel.png';
@@ -163,7 +168,7 @@ export default function ArticleDetail({ article, listArticle, social_media, base
                 </div>
             </section>
 
-            <Footer social_media={social_media}  />
+            <Footer social_media={social_media} address={addressData} />
         </>
     );
 }

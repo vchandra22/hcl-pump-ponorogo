@@ -10,11 +10,16 @@ interface SocialMediaData {
     title: string;
     social_media_link: string;
 }
+
+interface addressData {
+    address: string[];
+}
 interface DisclaimerIndexProps {
     social_media: SocialMediaData[];
+    addressData?: addressData[];
 }
 
-export default function DisclaimerIndex({ disclaimer = {}, social_media, base_url = '' }: DisclaimerIndexProps) {
+export default function DisclaimerIndex({ disclaimer = {}, social_media, base_url = '',addressData }: DisclaimerIndexProps) {
 
     const disclaimerData = Array.isArray(disclaimer) ? disclaimer[0] : disclaimer;
 
@@ -89,7 +94,7 @@ export default function DisclaimerIndex({ disclaimer = {}, social_media, base_ur
                 <div className="text-text-color"></div>
             </section>
 
-            <Footer social_media={social_media}  />
+            <Footer social_media={social_media} address={addressData} />
         </>
     );
 }

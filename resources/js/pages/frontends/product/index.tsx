@@ -16,13 +16,18 @@ interface SocialMediaData {
 interface SocialMediaLink {
     social_media_link: string;
 }
+
+interface addressData {
+    address: string[];
+}
 interface ProductIndexProps {
     products: Product[];
     social_media: SocialMediaData[];
     social_media_link: SocialMediaLink[];
+    addressData?: addressData[];
 }
 
-export default function ProductIndex({ products, social_media, social_media_link, base_url = '' }: ProductIndexProps) {
+export default function ProductIndex({ products, social_media, social_media_link, base_url = '',addressData}: ProductIndexProps) {
     return (
         <>
             <Head title={`Produk | HCL Pump Ponorogo`}>
@@ -89,7 +94,7 @@ export default function ProductIndex({ products, social_media, social_media_link
                 href={social_media_link}
             />
 
-            <Footer social_media={social_media}  />
+            <Footer social_media={social_media} address={addressData} />
         </>
     );
 }

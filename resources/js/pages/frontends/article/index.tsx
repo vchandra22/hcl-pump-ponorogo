@@ -34,14 +34,18 @@ interface SocialMediaData {
     title: string;
     social_media_link: string;
 }
+interface addressData {
+    address: string[];
+}
 interface ArticleProps {
     about?: AboutData[];
     articles?: PaginatedArticles;
     social_media: SocialMediaData[];
     base_url?: string;
+    addressData?: addressData[];
 }
 
-export default function Article({ about = [], articles = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, social_media, base_url = '' }: ArticleProps) {
+export default function Article({ about = [], articles = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, social_media, base_url = '', addressData }: ArticleProps) {
     const aboutData = about[0] || {};
     const companyImage = aboutData.image_company
         ? `/storage/${aboutData.image_company}`
@@ -205,7 +209,7 @@ export default function Article({ about = [], articles = { data: [], current_pag
                 />
             </section>
 
-            <Footer social_media={social_media}  />
+            <Footer social_media={social_media} address={addressData} />
         </>
     );
 }
