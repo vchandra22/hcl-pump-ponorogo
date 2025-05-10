@@ -173,7 +173,7 @@ export default function Beranda({
                     src={bannerImage}
                     width="100"
                     height="100"
-                    className="absolute top-0 left-0 h-full w-full overflow-hidden object-fit object-center"
+                    className="absolute top-0 left-0 h-full w-full overflow-hidden object-cover object-right md:object-fit md:object-right"
                     alt={homepageData.meta?.image_alt ?? 'HCL Pump Ponorogo'}
                 />
                 <div className="absolute top-0 left-0 z-10 h-full w-full bg-gradient-to-r from-secondary-color/70 to-transparent"></div>
@@ -181,7 +181,7 @@ export default function Beranda({
                     <div className="lg:max-w-2/3">
                         <div className="flex flex-col justify-center space-y-4">
                             <div className="space-y-2">
-                                <h1 className="text-bg-color h1 text-center text-xl font-bold tracking-tighter sm:text-5xl lg:text-start xl:text-6xl/none">
+                                <h1 className="text-bg-color h1 text-start text-xl font-bold tracking-tighter sm:text-5xl lg:text-start xl:text-6xl/none">
                                     {homepageData.title || ''}
                                 </h1>
 

@@ -3,7 +3,7 @@ export default function HotlineWhatsapp({ href }:{ href:string}) {
         <a href={href} className={'group'} target={'_blank'}>
             <div
                 className={
-                    'bg-primary-color/90 fixed right-10 bottom-10 z-50 flex h-20 w-20 items-center cursor-pointer justify-center rounded-full transition-all duration-200 group-hover:scale-110'
+                    'bg-primary-color/90 fixed right-3 md:right-10 bottom-5 md:bottom-10 z-50 flex h-20 w-20 items-center cursor-pointer justify-center rounded-full transition-all duration-200 group-hover:scale-110'
                 }
             >
                 <svg width="70%" height="70%" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
